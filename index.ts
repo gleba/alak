@@ -1,4 +1,4 @@
-export const A = {
+const A = {
      AStart(value?, mixer?:Function) {
         let listeners = [];
         const streamFn: AStream<typeof value> = <typeof value>function (v) {
@@ -26,5 +26,9 @@ export const A = {
 
         if (value) streamFn(value)
         return streamFn;
-    }
+    },
+    "default":""
 }
+
+A.default = A
+export = A

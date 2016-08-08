@@ -1,5 +1,5 @@
 "use strict";
-exports.A = {
+var A = {
     AStart: function (value, mixer) {
         var listeners = [];
         var streamFn = function (v) {
@@ -29,6 +29,9 @@ exports.A = {
         if (value)
             streamFn(value);
         return streamFn;
-    }
+    },
+    "default": ""
 };
+A.default = A;
+module.exports = A;
 //# sourceMappingURL=index.js.map
