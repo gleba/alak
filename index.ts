@@ -1,5 +1,5 @@
 const A = {
-     AStart(value?, mixer?:Function) {
+     start(value?, mixer?:Function) {
         let listeners = [];
         const streamFn: AStream<typeof value> = <typeof value>function (v) {
             const updateValue = (v)=> {

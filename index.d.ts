@@ -1,5 +1,4 @@
-
-declare interface AStream<T> {
+interface AStream<T> {
     (value?: T): T
     value: T
     promise: PromiseLike<any>
@@ -8,12 +7,9 @@ declare interface AStream<T> {
     end: Function
 }
 
-declare interface AParser<T> {
+interface AParser<T> {
     (v: any): AStream<T>
 }
 
-declare module "alak" {
-    interface A {
-        start: <T>(v?, parser?:AParser<T>)=>AStream<T>
-    }
-}
+export const start: <T>(v?, parser?: AParser<T>)=>AStream<T>
+

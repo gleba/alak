@@ -1,6 +1,6 @@
 "use strict";
 var A = {
-    AStart: function (value, mixer) {
+    start: function (value, mixer) {
         var listeners = [];
         var streamFn = function (v) {
             var updateValue = function (v) {
