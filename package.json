@@ -1,0 +1,15 @@
+{
+  "name": "alak",
+  "version": "0.4.0",
+  "description": "Data tresses conception",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "streams"
+  ],
+  "author": "dev@gleb.pw",
+  "license": "ISC",
+  "repository":"https://github.com/gleba/alak"
+}
