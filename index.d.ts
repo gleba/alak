@@ -1,4 +1,4 @@
-interface AStream<T> {
+interface _AStream<T> {
     (value?: T): T
     value: T
     promise: PromiseLike<any>
@@ -7,9 +7,16 @@ interface AStream<T> {
     end: Function
 }
 
-interface AParser<T> {
-    (v: any): AStream<T>
+interface iAParser<T> {
+    (v: any): _AStream<T>
 }
 
-export const start: <T>(v?, parser?: AParser<T>)=>AStream<T>
 
+interface iObj<T> {
+    [p:number]:T
+    [p:string]:T
+}
+
+export const start: <T>(v?, parser?: iAParser<T>)=>_AStream<T>
+export const mix: (...ar:_AStream<any>[])=>_AStream<any[]>
+export const match: (value: any, pattern: iObj<Function>, data?)=>void
