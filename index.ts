@@ -1,4 +1,4 @@
-import {IAStream} from "./ialak";
+import {IAStream} from "./index";
 
 function start(value?, mixer?: Function):IAStream {
     let listeners = [];
@@ -83,4 +83,4 @@ const A = {
 
 
 // A.default = A
-export = A
+export default A

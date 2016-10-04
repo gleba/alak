@@ -1,9 +1,12 @@
 {
   "name": "alak",
-  "version": "0.4.11",
+  "version": "0.4.26",
   "description": "Data tresses conception",
-  "main": "alak.js",
-  "typings": "ialak.d.ts",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "typescript": {
+    "definition": "index.d.ts"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
