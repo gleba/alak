@@ -1,5 +1,4 @@
-
-interface IAStream<T> {
+export interface IAStream<T> {
     (value?: T): T
     VALUE: T
     PROMISE: PromiseLike<any>
@@ -12,7 +11,7 @@ interface IAMonad<T> {
     (v: any): IAStream<T>
 }
 
-interface iObj<T> {
+export interface AO<T> {
     [p: number]: T
     [p: string]: T
 }
@@ -21,8 +20,5 @@ export interface Static {
     once: <T>(fn?: IAMonad<T>)=>IAStream<T>
     start: <T>(v?, monadFN?: IAMonad<T>)=>IAStream<T>
     mix: (...ar: IAStream<any>[])=>IAStream<any[]>
-    match: (value: any, pattern: iObj<Function>, data?)=>void
+    match: (value: any, pattern: AO<Function>, data?)=>void
 }
-
-export const A: Static
-// export default A

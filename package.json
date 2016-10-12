@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "0.4.26",
+  "version": "0.4.28",
   "description": "Data tresses conception",
   "main": "index.js",
   "typings": "index.d.ts",
