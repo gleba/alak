@@ -1,11 +1,15 @@
-//const A = require('./alak')
-//
-//
-//let stream1 = A.start()
-//let stream2 = A.start()
-//
-//stream1.on(console.log)
-//stream1("stream1 subscribe ok")
+const A = require('./index')
+
+
+
+let stream1 = A.A.start()
+let stream2 = A.A.start()
+
+stream1.on(console.log)
+stream1.once(x=>console.log("::::once "+x))
+
+stream1("stream1 1")
+stream1("stream1 2")
 //
 //
 //A.mix(stream1, stream2).on(

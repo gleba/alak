@@ -3,6 +3,7 @@ export interface IAStream<T> {
     VALUE: T
     PROMISE: PromiseLike<any>
     on(FN: (v: T) => void)
+    once(FN: (v: T) => void)
     SILENT(fn: (v: T) => T): T
     end: Function
 }
@@ -21,4 +22,8 @@ export interface Static {
     start: <T>(v?, monadFN?: IAMonad<T>)=>IAStream<T>
     mix: (...ar: IAStream<any>[])=>IAStream<any[]>
     match: (value: any, pattern: AO<Function>, data?)=>void
+    assign: (target: any, source:any)=>void
 }
+
+export const A:Static
+export default A

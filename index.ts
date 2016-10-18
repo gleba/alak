@@ -1,12 +1,23 @@
 import {IAStream} from "./index";
 
-function start(value?, mixer?: Function):IAStream {
+
+console.log("x")
+function assign(target, source) {
+    Object.keys(source).forEach(k => target[k] = source[k])
+}
+
+function start(value?, mixer?: Function): IAStream {
     let listeners = [];
-    const streamFn = (v)=> {
-        const updateValue = (v)=> {
+    let onceListiners = []
+    let streamFn: any = (v) => {
+        const updateValue = (v) => {
             if (mixer) v = mixer(v)
-            streamFn.value = v;
-            listeners.forEach(f=>f(v));
+            streamFn.value = v
+            listeners.forEach(f => f(v))
+            console.log(onceListiners.length)
+            if (onceListiners.length>0)
+                while (onceListiners.length)
+                    onceListiners.shift()(v)
         }
         if (v) {
             if (v.then) v.then(updateValue)
@@ -15,16 +26,22 @@ function start(value?, mixer?: Function):IAStream {
         return streamFn.value;
     };
 
-    Object.assign(streamFn, {
-        on: fn=> {
+    assign(streamFn, {
+        on: fn => {
             listeners.push(fn)
             if (streamFn.value) {
                 fn(streamFn.value)
             }
         },
-        silent: fn=>streamFn.value = fn(streamFn.value),
-        promise: ()=>new Promise((done)=>streamFn.on(done)),
-        end: ()=> {
+        once: fn => {
+            if (streamFn.value) {
+                fn(streamFn.value)
+            } else {
+                onceListiners.push(fn)
+            }
+        },
+        silent: fn => streamFn.value = fn(streamFn.value),
+        end: () => {
             streamFn.value = null
             listeners = null
             streamFn = null
@@ -35,16 +52,16 @@ function start(value?, mixer?: Function):IAStream {
     return streamFn;
 }
 
-const A = {
+export const A = {
     once(come: Function){
         let wave = start()
-        come((v)=>{
+        come((v) => {
             wave(v)
             wave.end()
         })
         return wave
     },
-    start:start,
+    start: start,
     mix(...ar){
         let newStream = A.start()
         let active = new Map()
@@ -54,9 +71,9 @@ const A = {
         }
 
         ar.forEach(
-            stream=> {
+            stream => {
                 stream.on(
-                    data=> {
+                    data => {
                         active.set(stream, data)
                         emit()
                     }
@@ -78,9 +95,11 @@ const A = {
             pattern["*"](resp)
         }
     },
+    assign: assign,
     "default": ""
 }
 
 
 // A.default = A
 export default A
+// export default A

@@ -1,12 +1,21 @@
 "use strict";
+console.log("x");
+function assign(target, source) {
+    Object.keys(source).forEach(function (k) { return target[k] = source[k]; });
+}
 function start(value, mixer) {
     var listeners = [];
+    var onceListiners = [];
     var streamFn = function (v) {
         var updateValue = function (v) {
             if (mixer)
                 v = mixer(v);
             streamFn.value = v;
             listeners.forEach(function (f) { return f(v); });
+            console.log(onceListiners.length);
+            if (onceListiners.length > 0)
+                while (onceListiners.length)
+                    onceListiners.shift()(v);
         };
         if (v) {
             if (v.then)
@@ -16,15 +25,22 @@ function start(value, mixer) {
         }
         return streamFn.value;
     };
-    Object.assign(streamFn, {
+    assign(streamFn, {
         on: function (fn) {
             listeners.push(fn);
             if (streamFn.value) {
                 fn(streamFn.value);
             }
         },
+        once: function (fn) {
+            if (streamFn.value) {
+                fn(streamFn.value);
+            }
+            else {
+                onceListiners.push(fn);
+            }
+        },
         silent: function (fn) { return streamFn.value = fn(streamFn.value); },
-        promise: function () { return new Promise(function (done) { return streamFn.on(done); }); },
         end: function () {
             streamFn.value = null;
             listeners = null;
@@ -35,7 +51,7 @@ function start(value, mixer) {
         streamFn(value);
     return streamFn;
 }
-var A = {
+exports.A = {
     once: function (come) {
         var wave = start();
         come(function (v) {
@@ -50,7 +66,7 @@ var A = {
         for (var _i = 0; _i < arguments.length; _i++) {
             ar[_i - 0] = arguments[_i];
         }
-        var newStream = A.start();
+        var newStream = exports.A.start();
         var active = new Map();
         var emit = function () {
             if (active.size == ar.length)
@@ -79,8 +95,10 @@ var A = {
             pattern["*"](resp);
         }
     },
+    assign: assign,
     "default": ""
 };
-exports.__esModule = true;
-exports["default"] = A;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = exports.A;
+// export default A 
 //# sourceMappingURL=index.js.map
