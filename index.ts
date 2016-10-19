@@ -17,8 +17,8 @@ function start(value?, mixer?: Function): IAStream {
                 while (onceListiners.length)
                     onceListiners.shift()(v)
         }
-        if (v) {
-            if (v.then) v.then(updateValue)
+        if (v!=null) {
+            if (v.then!=null) v.then(updateValue)
             else updateValue(v)
         }
         return streamFn.value;
@@ -27,12 +27,12 @@ function start(value?, mixer?: Function): IAStream {
     assign(streamFn, {
         on: fn => {
             listeners.push(fn)
-            if (streamFn.value) {
+            if (streamFn.value!=null) {
                 fn(streamFn.value)
             }
         },
         once: fn => {
-            if (streamFn.value) {
+            if (streamFn.value!=null) {
                 fn(streamFn.value)
             } else {
                 onceListiners.push(fn)
@@ -46,7 +46,7 @@ function start(value?, mixer?: Function): IAStream {
         }
     })
 
-    if (value) streamFn(value)
+    if (value!=null) streamFn(value)
     return streamFn;
 }
 

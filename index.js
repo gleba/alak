@@ -1,5 +1,4 @@
 "use strict";
-console.log("x");
 function assign(target, source) {
     Object.keys(source).forEach(function (k) { return target[k] = source[k]; });
 }
@@ -12,13 +11,12 @@ function start(value, mixer) {
                 v = mixer(v);
             streamFn.value = v;
             listeners.forEach(function (f) { return f(v); });
-            console.log(onceListiners.length);
             if (onceListiners.length > 0)
                 while (onceListiners.length)
                     onceListiners.shift()(v);
         };
-        if (v) {
-            if (v.then)
+        if (v != null) {
+            if (v.then != null)
                 v.then(updateValue);
             else
                 updateValue(v);
@@ -28,12 +26,12 @@ function start(value, mixer) {
     assign(streamFn, {
         on: function (fn) {
             listeners.push(fn);
-            if (streamFn.value) {
+            if (streamFn.value != null) {
                 fn(streamFn.value);
             }
         },
         once: function (fn) {
-            if (streamFn.value) {
+            if (streamFn.value != null) {
                 fn(streamFn.value);
             }
             else {
@@ -47,7 +45,7 @@ function start(value, mixer) {
             streamFn = null;
         }
     });
-    if (value)
+    if (value != null)
         streamFn(value);
     return streamFn;
 }

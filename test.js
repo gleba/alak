@@ -2,14 +2,17 @@ const A = require('./index')
 
 
 
-let stream1 = A.A.start()
-let stream2 = A.A.start()
+let stream1 = A.A.start(true)
+let stream2 = A.A.start(false)
 
 stream1.on(console.log)
-stream1.once(x=>console.log("::::once "+x))
+//stream1.once(x=>console.log("::::once ",x))
 
-stream1("stream1 1")
-stream1("stream1 2")
+stream1( true)
+stream1( false)
+stream1( true)
+stream1( false)
+
 //
 //
 //A.mix(stream1, stream2).on(
