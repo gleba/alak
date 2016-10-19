@@ -1,7 +1,6 @@
 import {IAStream} from "./index";
 
 
-console.log("x")
 function assign(target, source) {
     Object.keys(source).forEach(k => target[k] = source[k])
 }
@@ -14,7 +13,6 @@ function start(value?, mixer?: Function): IAStream {
             if (mixer) v = mixer(v)
             streamFn.value = v
             listeners.forEach(f => f(v))
-            console.log(onceListiners.length)
             if (onceListiners.length>0)
                 while (onceListiners.length)
                     onceListiners.shift()(v)
