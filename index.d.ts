@@ -1,27 +1,27 @@
-export interface IAStream<T> {
-    (value?: T): T
+export interface AStream<T> {
+    (value?: T | boolean): T
     VALUE: T
     PROMISE: PromiseLike<any>
-    on(FN: (v: T) => void)
-    once(FN: (v: T) => void)
+    on(FN: (v: T) => void):void
+    once(FN: (v: T) => void):void
     SILENT(fn: (v: T) => T): T
     end: Function
 }
 
-interface IAMonad<T> {
-    (v: any): IAStream<T>
+interface AMonad<T> {
+    (v: any): AStream<T>
 }
 
-export interface AO<T> {
+export interface IndexOf<T> {
     [p: number]: T
     [p: string]: T
 }
 
 export interface Static {
-    once: <T>(fn?: IAMonad<T>)=>IAStream<T>
-    start: <T>(v?, monadFN?: IAMonad<T>)=>IAStream<T>
-    mix: (...ar: IAStream<any>[])=>IAStream<any[]>
-    match: (value: any, pattern: AO<Function>, data?)=>void
+    once: <T>(fn?: AMonad<T>)=>AStream<T>
+    start: <T>(v?:T, monadFN?: AMonad<T>)=>AStream<T>
+    mix: (...ar: AStream<any>[])=>AStream<any[]>
+    match: (value: any, pattern: IndexOf<Function>, data?:any)=>void
     assign: (target: any, source:any)=>void
 }
 

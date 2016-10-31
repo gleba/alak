@@ -93,6 +93,10 @@ exports.A = {
             pattern["*"](resp);
         }
     },
+    // return: (value, pattern, data) => {
+    //     console.log("x")
+    //
+    // },
     assign: assign,
     "default": ""
 };

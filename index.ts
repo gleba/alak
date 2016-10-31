@@ -1,11 +1,11 @@
-import {IAStream} from "./index";
+import {AStream} from "./index";
 
 
 function assign(target, source) {
     Object.keys(source).forEach(k => target[k] = source[k])
 }
 
-function start(value?, mixer?: Function): IAStream {
+function start(value?, mixer?: Function): AStream {
     let listeners = [];
     let onceListiners = []
     let streamFn: any = (v) => {
@@ -13,12 +13,12 @@ function start(value?, mixer?: Function): IAStream {
             if (mixer) v = mixer(v)
             streamFn.value = v
             listeners.forEach(f => f(v))
-            if (onceListiners.length>0)
+            if (onceListiners.length > 0)
                 while (onceListiners.length)
                     onceListiners.shift()(v)
         }
-        if (v!=null) {
-            if (v.then!=null) v.then(updateValue)
+        if (v != null) {
+            if (v.then != null) v.then(updateValue)
             else updateValue(v)
         }
         return streamFn.value;
@@ -27,12 +27,12 @@ function start(value?, mixer?: Function): IAStream {
     assign(streamFn, {
         on: fn => {
             listeners.push(fn)
-            if (streamFn.value!=null) {
+            if (streamFn.value != null) {
                 fn(streamFn.value)
             }
         },
         once: fn => {
-            if (streamFn.value!=null) {
+            if (streamFn.value != null) {
                 fn(streamFn.value)
             } else {
                 onceListiners.push(fn)
@@ -46,7 +46,7 @@ function start(value?, mixer?: Function): IAStream {
         }
     })
 
-    if (value!=null) streamFn(value)
+    if (value != null) streamFn(value)
     return streamFn;
 }
 
@@ -93,6 +93,10 @@ export const A = {
             pattern["*"](resp)
         }
     },
+    // return: (value, pattern, data) => {
+    //     console.log("x")
+    //
+    // },
     assign: assign,
     "default": ""
 }
