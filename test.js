@@ -1,17 +1,42 @@
 const A = require('./index')
 
 
+let stream1 = A.A.start(false)
+let stream2 = A.A.start(true)
 
-let stream1 = A.A.start(true)
-let stream2 = A.A.start(false)
-
-stream1.on(console.log)
+//stream1.on(console.log)
 //stream1.once(x=>console.log("::::once ",x))
 
-stream1( true)
-stream1( false)
-stream1( true)
-stream1( false)
+
+A.A.mix(stream1, stream2).on(
+    A.A.matchFn(
+        [[true, true], (v) => console.log("allok", v)],
+        ["*", (v) => console.log("*")]
+    )
+)
+
+
+stream2.match(
+    false, (v) => console.log("v2", v),
+    true, (v)=>console.log("v2.", v)
+)
+
+stream2(true)
+stream2(false)
+
+stream1(false)
+stream1(false)
+stream1(true)
+//stream1( false)
+//
+//
+//stream2( true)
+//stream2( false)
+//stream1( true)
+//stream2( false)
+//
+//
+
 
 //
 //

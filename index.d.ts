@@ -2,8 +2,9 @@ export interface AStream<T> {
     (value?: T | boolean): T
     VALUE: T
     PROMISE: PromiseLike<any>
-    on(FN: (v: T) => void):void
-    once(FN: (v: T) => void):void
+    on(FN: (v: T) => void): void
+    once(FN: (v: T) => void): void
+    match(...any): void
     SILENT(fn: (v: T) => T): T
     end: Function
 }
@@ -19,11 +20,12 @@ export interface IndexOf<T> {
 
 export interface Static {
     once: <T>(fn?: AMonad<T>)=>AStream<T>
-    start: <T>(v?:T, monadFN?: AMonad<T>)=>AStream<T>
+    start: <T>(v?: T, monadFN?: AMonad<T>)=>AStream<T>
     mix: (...ar: AStream<any>[])=>AStream<any[]>
-    match: (value: any, pattern: IndexOf<Function>, data?:any)=>void
-    assign: (target: any, source:any)=>void
+    match: (value: any, pattern: IndexOf<Function>, data?: any)=>void
+    matchFn: (...patterns: any[])=>(v)=>void,
+    assign: (target: any, source: any)=>void
 }
 
-export const A:Static
+export const A: Static
 export default A

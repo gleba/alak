@@ -31,6 +31,29 @@ function start(value?, mixer?: Function): AStream {
                 fn(streamFn.value)
             }
         },
+        match: (...patertn) => {
+            let keys = []
+            let fn = []
+            for (let i = 0; i < patertn.length; i++) {
+                keys.push(patertn[i])
+                i++
+                fn.push(patertn[i])
+            }
+            let isMatch = (v) => (element, index, array) => {
+                if (element == v) {
+                    fn[index](v)
+                    return true
+                }
+                return false
+            }
+            listeners.push((v) => {
+                if (!keys.some(isMatch(v))) {
+                    if (keys.indexOf("*")) {
+                        fn[keys.indexOf("*")](v)
+                    }
+                }
+            })
+        },
         once: fn => {
             if (streamFn.value != null) {
                 fn(streamFn.value)
@@ -80,6 +103,7 @@ export const A = {
         )
         return newStream
     },
+
     match(value, pattern, data): void {
         let resp = value
         if (data) resp = data
@@ -91,6 +115,22 @@ export const A = {
         }
         if (pattern["*"]) {
             pattern["*"](resp)
+        }
+    },
+    matchFn(...pattern){
+        return (values) => {
+            let anyFn
+            let vs = values.toString()
+            pattern.some(v => {
+                let pvs = v[0].toString()
+                if (vs == pvs) {
+                    v[1](values)
+                    return true
+                }
+                if (v[0] == "*") anyFn = v[1]
+                return false
+            })
+            if (anyFn) anyFn(values)
         }
     },
     // return: (value, pattern, data) => {

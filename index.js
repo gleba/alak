@@ -30,6 +30,33 @@ function start(value, mixer) {
                 fn(streamFn.value);
             }
         },
+        match: function () {
+            var patertn = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                patertn[_i - 0] = arguments[_i];
+            }
+            var keys = [];
+            var fn = [];
+            for (var i = 0; i < patertn.length; i++) {
+                keys.push(patertn[i]);
+                i++;
+                fn.push(patertn[i]);
+            }
+            var isMatch = function (v) { return function (element, index, array) {
+                if (element == v) {
+                    fn[index](v);
+                    return true;
+                }
+                return false;
+            }; };
+            listeners.push(function (v) {
+                if (!keys.some(isMatch(v))) {
+                    if (keys.indexOf("*")) {
+                        fn[keys.indexOf("*")](v);
+                    }
+                }
+            });
+        },
         once: function (fn) {
             if (streamFn.value != null) {
                 fn(streamFn.value);
@@ -92,6 +119,28 @@ exports.A = {
         if (pattern["*"]) {
             pattern["*"](resp);
         }
+    },
+    matchFn: function () {
+        var pattern = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            pattern[_i - 0] = arguments[_i];
+        }
+        return function (values) {
+            var anyFn;
+            var vs = values.toString();
+            pattern.some(function (v) {
+                var pvs = v[0].toString();
+                if (vs == pvs) {
+                    v[1](values);
+                    return true;
+                }
+                if (v[0] == "*")
+                    anyFn = v[1];
+                return false;
+            });
+            if (anyFn)
+                anyFn(values);
+        };
     },
     // return: (value, pattern, data) => {
     //     console.log("x")
