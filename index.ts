@@ -1,11 +1,12 @@
-import {AStream} from "./index";
+// import {AStream} from "./index";
+
 
 
 function assign(target, source) {
     Object.keys(source).forEach(k => target[k] = source[k])
 }
 
-function start(value?, mixer?: Function): AStream {
+function start(value?, mixer?: Function) {
     let listeners = [];
     let onceListiners = []
     let streamFn: any = (v) => {
@@ -38,7 +39,13 @@ function start(value?, mixer?: Function): AStream {
                 keys.push(patertn[i])
                 i++
                 fn.push(patertn[i])
+
+                if (!patertn[i]) {
+                    throw "A.match "+ keys[i-1] + " function is null" + this
+                }
             }
+
+            // console.log(keys,fn)
             let isMatch = (v) => (element, index, array) => {
                 if (element == v) {
                     fn[index](v)
@@ -48,7 +55,7 @@ function start(value?, mixer?: Function): AStream {
             }
             listeners.push((v) => {
                 if (!keys.some(isMatch(v))) {
-                    if (keys.indexOf("*")) {
+                    if (keys.indexOf("*")>=0) {
                         fn[keys.indexOf("*")](v)
                     }
                 }

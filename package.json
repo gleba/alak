@@ -1,8 +1,8 @@
 {
   "name": "alak",
-  "version": "0.5.43",
+  "version": "0.5.45",
   "description": "Data tresses conception",
-  "main": "index.ts",
+  "main": "index.js",
   "typings": "index.d.ts",
   "typescript": {
     "definition": "index.d.ts"
@@ -14,6 +14,8 @@
     "streams"
   ],
   "author": "dev@gleb.pw",
-  "license": "ISC",
-  "repository":"https://github.com/gleba/alak"
+  "license": "MIT",
+  "repository": "https://github.com/gleba/alak",
+  "devDependencies": {
+  }
 }
