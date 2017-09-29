@@ -1,4 +1,7 @@
 # alak
-Data streams concept
+#Data streams concept
+##for TypeScript
 
 see tests for example
+
+`npm i alak`
