@@ -1,11 +1,11 @@
 {
   "name": "alak",
-  "version": "0.5.45",
+  "version": "0.6.2",
   "description": "Data tresses conception",
-  "main": "index.js",
-  "typings": "index.d.ts",
+  "main": "dist/index.js",
+  "typings": "src/index.d.ts",
   "typescript": {
-    "definition": "index.d.ts"
+    "definition": "src/index.d.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,5 +17,10 @@
   "license": "MIT",
   "repository": "https://github.com/gleba/alak",
   "devDependencies": {
+    "chokidar": "^1.7.0",
+    "cluster": "^0.7.7",
+    "tape": "^4.8.0",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.2"
   }
 }

@@ -1,3 +1,4 @@
+
 export interface AStream<T> {
     (value?: T | boolean): T
     VALUE: T
@@ -5,6 +6,7 @@ export interface AStream<T> {
     on(FN: (v: T) => void): void
     once(FN: (v: T) => void): void
     match(...any): void
+    matchIn(inVar):any
     SILENT(fn: (v: T) => T): T
     end: Function
 }
@@ -20,7 +22,7 @@ export interface IndexOf<T> {
 
 export interface Static {
     once: <T>(fn?: AMonad<T>)=>AStream<T>
-    start: <T>(v?: T, monadFN?: AMonad<T>)=>AStream<T>
+    start: <T>(v?: T)=>AStream<T>
     mix: (...ar: AStream<any>[])=>AStream<any[]>
     match: (value: any, pattern: IndexOf<Function>, data?: any)=>void
     matchFn: (...patterns: any[])=>(v)=>void,
@@ -28,4 +30,4 @@ export interface Static {
 }
 
 export const A: Static
-export default A
+// export default A
