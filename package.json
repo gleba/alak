@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "0.6.2",
+  "version": "0.6.4",
   "description": "Data tresses conception",
   "main": "dist/index.js",
   "typings": "src/index.d.ts",
@@ -11,7 +11,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "streams"
+    "frp",
+    "Functional reactive programming",
+    "atomic updates",
+    "streams",
+    "dependency-free",
+    "pattern matching",
+    "dataflow"
   ],
   "author": "dev@gleb.pw",
   "license": "MIT",

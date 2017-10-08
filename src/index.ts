@@ -5,6 +5,16 @@ function assign(target, source) {
     Object.keys(source).forEach(k => target[k] = source[k])
 }
 
+
+function remove(target, value) {
+    let idx = target.indexOf(value);
+    if (idx != -1) {
+        // Второй параметр - число элементов, которые необходимо удалить
+        return target.splice(idx, 1);
+    }
+    return false;
+}
+
 const vnorm = (v) => {
     // console.log("vnorm", v, v.length > 2, v.length)
     if (Array.isArray(v) && v.length > 1) {
@@ -53,6 +63,13 @@ function start(...value) {
     };
 
     assign(streamFn, {
+        branch: fn => {
+            let s = start()
+            listeners.push(f =>
+                s(fn(f))
+            )
+            return s
+        },
         on: fn => {
             listeners.push(fn)
             vfn(fn, streamFn.value)
@@ -108,13 +125,15 @@ function start(...value) {
                 }
                 return false
             }
-            listeners.push((v) => {
+            let mfn = (v) => {
                 if (!keys.some(isMatch(v))) {
                     if (keys.indexOf("*") >= 0) {
                         fn[keys.indexOf("*")](v)
                     }
                 }
-            })
+            }
+            listeners.push(mfn)
+            if (streamFn.value) vfn(mfn, streamFn.value)
         },
         once: fn => {
             if (streamFn.value != null) {
@@ -126,8 +145,12 @@ function start(...value) {
         silent: fn => streamFn.value = fn(streamFn.value),
         end: () => {
             streamFn.value = null
+            console.log(listeners)
             listeners = null
             streamFn = null
+        },
+        stop: (fn) => {
+            remove(listeners, fn)
         }
     })
 

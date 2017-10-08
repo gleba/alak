@@ -3,6 +3,7 @@ export interface AStream<T> {
     (value?: T | boolean): T
     VALUE: T
     PROMISE: PromiseLike<any>
+    branch(FN: (v:T)=>any):AStream<any>
     on(FN: (v: T) => void): void
     once(FN: (v: T) => void): void
     match(...any): void
