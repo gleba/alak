@@ -1,4 +1,4 @@
-![Image of alak](http://x.gleb.pw/alak.jpg)
+
 # alak / अलक  (sanskrit)
 ### FRP Library for TypeScript
 [![npm version](https://badge.fury.io/js/alak.svg)](https://badge.fury.io/js/alak)
@@ -52,6 +52,8 @@ console.log(someNum(), squareNum(), convertedValue())
 - TypeScript
 - npm/yarn/lasso/e.t.c. package manager
 
+![Image of alak](http://x.gleb.pw/alak.jpg)
+# अलक 
 ## Multilanguage documentation
 
 Please use [Google Translate](https://translate.googleusercontent.com/translate_c?depth=1&hl=en&rurl=translate.google.com&sl=ru&sp=nmt4&tl=en&u=https://github.com/gleba/alak/) and your imagination, if you intersting The literary meaning of the concept of this library.
