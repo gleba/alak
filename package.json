@@ -1,7 +1,7 @@
 {
   "name": "alak",
   "version": "0.6.4",
-  "description": "Data tresses conception",
+  "description": "FRP Data Tresses lib (DataFlow)",
   "main": "dist/index.js",
   "typings": "src/index.d.ts",
   "typescript": {
@@ -27,6 +27,6 @@
     "cluster": "^0.7.7",
     "tape": "^4.8.0",
     "ts-node": "^3.3.0",
-    "typescript": "^2.5.2"
+    "typescript": "^2.5.3"
   }
 }
