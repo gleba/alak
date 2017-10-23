@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "0.6.4",
+  "version": "0.6.78",
   "description": "FRP Data Tresses lib (DataFlow)",
   "main": "dist/index.js",
   "typings": "src/index.d.ts",
@@ -19,7 +19,7 @@
     "pattern matching",
     "dataflow"
   ],
-  "author": "dev@gleb.pw",
+  "author": "Gleb Panteleev <dev@gleb.pw> (http://gleb.pw/)",
   "license": "MIT",
   "repository": "https://github.com/gleba/alak",
   "devDependencies": {

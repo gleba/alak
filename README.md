@@ -52,15 +52,13 @@ console.log(someNum(), squareNum(), convertedValue())
 - TypeScript
 - npm/yarn/lasso/e.t.c. package manager
 
-# alak / अलक  (sanskrit)
-## Meanings
+
+## Meanings of alak / अलक  (sanskrit)
 
 Meanings of अलक in English :
 - Curl / Forelock / Sliver 
 - (name of child) Beautiful Tresses
 - (name of child) World 
-
-Лучший способ выражать истинный смысл идей этой библиотеки на моём родном языке.
 
 Значение अलक на Русском : 
 - Локоны / Виться / Пряди  
