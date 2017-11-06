@@ -39,21 +39,15 @@ const vfn = (fn, v) => {
 function start(...value) {
     let listeners = [];
     let onceListiners = []
-    // console.log("A.start")
     let streamFn: any = (...v) => {
-        // console.log("A.streamFn.in.v:", v)
         const updateValue = (v) => {
-            // console.log(v, vnorm(v))
-
             streamFn.value = vnorm(v)
-            // console.log("A.streamFn.in.updateValue",v)
             listeners.forEach(f => vfn(f, v))
             if (onceListiners.length > 0)
                 while (onceListiners.length)
                     vfn(onceListiners.shift(), v)
         }
         if (v != null && v.length > 0) {
-            // console.log('change')
             if (v.then != null) v.then(updateValue) // Promise support
             else updateValue(v)
         }

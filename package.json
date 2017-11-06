@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "0.6.78",
+  "version": "0.7.0",
   "description": "FRP Data Tresses lib (DataFlow)",
   "main": "dist/index.js",
   "typings": "src/index.d.ts",
