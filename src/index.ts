@@ -36,12 +36,21 @@ const vfn = (fn, v) => {
     }
 }
 
+
+const deleteParams = o => {
+    Object.keys(o).forEach(k => {
+        if (o[k]) o[k] = null
+        delete o[k]
+    })
+}
+
 function start(...value) {
+
     let listeners = [];
     let onceListiners = []
-    let streamFn: any = (...v) => {
+    let runFN = (...v) => {
         const updateValue = (v) => {
-            streamFn.value = vnorm(v)
+            proxy.value = vnorm(v)
             listeners.forEach(f => vfn(f, v))
             if (onceListiners.length > 0)
                 while (onceListiners.length)
@@ -51,12 +60,26 @@ function start(...value) {
             if (v.then != null) v.then(updateValue) // Promise support
             else updateValue(v)
         }
-
-
-        return streamFn.value;
+        return proxy.value;
+    };
+    let proxy: any = (...v) => {
+        if (!runFN) {
+            console.error("call ended stream", ...v)
+            return "THE END OF STREAM"
+        }
+        return runFN(...v)
     };
 
-    assign(streamFn, {
+    const end = () => {
+        deleteParams(runFN)
+        deleteParams(proxy)
+        listeners = null
+        onceListiners = null
+        runFN = null
+        proxy = null
+    }
+
+    assign(proxy, {
         branch: fn => {
             let s = start()
             listeners.push(f =>
@@ -66,7 +89,7 @@ function start(...value) {
         },
         on: fn => {
             listeners.push(fn)
-            vfn(fn, streamFn.value)
+            vfn(fn, proxy.value)
         },
         matchIn(inVar) {
             return (...pattern) => {
@@ -127,22 +150,17 @@ function start(...value) {
                 }
             }
             listeners.push(mfn)
-            if (streamFn.value) vfn(mfn, streamFn.value)
+            if (proxy.value) vfn(mfn, proxy.value)
         },
         once: fn => {
-            if (streamFn.value != null) {
-                fn(streamFn.value)
+            if (proxy.value != null) {
+                fn(proxy.value)
             } else {
                 onceListiners.push(fn)
             }
         },
-        silent: fn => streamFn.value = fn(streamFn.value),
-        end: () => {
-            streamFn.value = null
-            console.log(listeners)
-            listeners = null
-            streamFn = null
-        },
+        silent: fn => proxy.value = fn(proxy.value),
+        end,
         stop: (fn) => {
             remove(listeners, fn)
         }
@@ -150,8 +168,8 @@ function start(...value) {
 
     // console.log(value)
 
-    if (value != null && value.length > 0) streamFn(...value)
-    return streamFn;
+    if (value != null && value.length > 0) proxy(...value)
+    return proxy;
 }
 
 export const A = {

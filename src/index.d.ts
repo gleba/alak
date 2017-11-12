@@ -3,7 +3,7 @@ export interface AStreamT<T> {
     VALUE: T
     PROMISE: PromiseLike<any>
     branch(FN: (v: T) => any): AStream<any>
-    on(FN: (v: T, ...vv) => void): void
+    on(FN: (v: T) => void): void
     once(FN: (v: T) => void): void
     match(...any): void
     matchIn(inVar): any
@@ -30,7 +30,6 @@ interface AMonad<T> {
 
 export interface IndexOf<T> {
     [p: number]: T
-
     [p: string]: T
 }
 

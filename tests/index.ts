@@ -5,6 +5,14 @@ import {test} from "./ouput.shema";
 
 test("Alak test", t => {
 
+
+    const a1 = A.start([1, 2, 4], 8)
+    a1.on((x, b) => {
+        console.log(x, b)
+    })
+    a1.end()
+    a1()
+
     const s1 = A.start(5, 8)
     s1.on((v1, v2) => {
         t.equal(v1, 5, "s1 v1");
