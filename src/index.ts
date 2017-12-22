@@ -27,7 +27,7 @@ export interface AFunctor<T extends any> {
 
 
 // function compose<T, ...U>(base: T, ...mixins: ...U): T&U {}
-export default function DFlow<T>(...a: any[]): AFunctor<T | any> {
+export default function DFlow<T>(...a: T[]): AFunctor<T> {
     type Fn = Listener<T>
     let listeners = []
     let proxy = {
@@ -83,7 +83,7 @@ export default function DFlow<T>(...a: any[]): AFunctor<T | any> {
 
     setValue(Object.values(arguments))
     Object.assign(functor, proxy)
-    return functor as any as AFunctor<T | any>
+    return functor as any as AFunctor<T>
 }
 export const AMatch = patternMatch
 export const A = {
