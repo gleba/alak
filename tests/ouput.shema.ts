@@ -1,4 +1,4 @@
-export const test = require('tape');
+export const test = require('tape') as any
 
 
 const Reset = "\x1b[0m"

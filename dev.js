@@ -3,6 +3,7 @@ const chokidar = require('chokidar')
 let cluster = require('cluster');
 
 
+
 if (cluster.isMaster) {
     let worker = cluster.fork()
     let t = Date.now()
@@ -35,7 +36,7 @@ if (cluster.isMaster) {
     });
     const ts = require('ts-node')
     ts.register({
-        fast:true,
+        //fast:true,
         cacheDirectory:".tmp"
     })
     require('./tests/index')

@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "0.7.31",
+  "version": "0.8.0",
   "description": "FRP Data Tresses lib (DataFlow)",
   "main": "dist/index.js",
   "typings": "src/index.d.ts",
@@ -12,21 +12,25 @@
   },
   "keywords": [
     "frp",
+    "pattern matching",
     "Functional reactive programming",
     "atomic updates",
     "streams",
     "dependency-free",
-    "pattern matching",
     "dataflow"
   ],
   "author": "Gleb Panteleev <dev@gleb.pw> (http://gleb.pw/)",
   "license": "MIT",
   "repository": "https://github.com/gleba/alak",
   "devDependencies": {
+    "@types/node": "^8.5.2",
     "chokidar": "^1.7.0",
     "cluster": "^0.7.7",
     "tape": "^4.8.0",
     "ts-node": "^3.3.0",
     "typescript": "^2.5.3"
+  },
+  "dependencies": {
+    "@types/core-js": "^0.9.43"
   }
 }
