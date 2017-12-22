@@ -16,4 +16,4 @@ deploy:
   skip_cleanup: true
   email: 'dev@gleb.pw'
   api_key: $NPM_TOKEN
-  file: "out/**/*"
+  file: "dist/**/*"
