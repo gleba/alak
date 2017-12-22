@@ -7,11 +7,12 @@ export const deleteParams = o => {
 
 
 export function remove(target, value) {
-    let idx = target.indexOf(value);
-    if (idx != -1) {
-        // Второй параметр - число элементов, которые необходимо удалить
-        return target.splice(idx, 1);
-    }
+    target.forEach((v, i) => {
+        if (v[1] == value){
+            return target.splice(i, 1);
+        }
+
+    })
     return false;
 }
 

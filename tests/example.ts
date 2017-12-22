@@ -1,39 +1,45 @@
 /** @autor Gleb Panteleev <dev@gleb.pw> */
-import AChannel from "../src";
+import DFlow from "../src";
 
-const convertedValue = AChannel()
-const someNum = AChannel()
-someNum.on(n => convertedValue(n + "kg"))
+//base usage
 
+const startFlow = DFlow(1)
 
-convertedValue.on(console.log)
-someNum(1)
-//output: 1 kg
-someNum(2)
-//output: 2 kg
-convertedValue.stop(console.log)
+startFlow.on(v => console.log("flow listener1", v))
+startFlow.on(v => console.log("flow listener2", v))
+startFlow.on(v => console.log("flow listener3", v))
 
-//
-const squareFn = x => x * x
-const squareNum = someNum.branch(squareFn)
-
-squareNum.on(console.log)
-someNum(7)
-//output: 79
-console.log(convertedValue())
-//output: 7kg
-squareNum.stop(console.log)
-
-someNum.match(
-    7, v => console.log("match seven done"),
-    100, v => console.log("match 100 done"),
-    "*", v => console.log("match * done"),
+startFlow.match(
+    4, v => console.log("pattern match by key", v)
 )
-//output: match seven done
-someNum(100)
-//output: match 100 done
-someNum(3)
-// output: match * done
 
-console.log(someNum(), squareNum(), convertedValue())
-//output: 3 9 '3kg'
+
+// output for :
+startFlow(10)
+startFlow(4)
+
+// flow listener1 10
+// flow listener2 10
+// flow listener3 10
+// flow listener1 4
+// flow listener2 4
+// flow listener3 4
+// pattern match by key 4
+
+startFlow.drop() //remove all listeners
+console.log("remove all listeners")
+
+
+const multiple = startFlow.branch(v => v * 2 as any)
+multiple.match((a, b) => [
+        a > 10, () => console.log("fn pattern match", a),
+        a < 0 && b == "wow", () => console.log("!WOW!", a, b),
+        (...v) => console.log("else çall", v)
+
+    ]
+)
+startFlow(161) //fn pattern match 322
+multiple(-4, "wow") //!WOW! -4 wow
+startFlow(0, 0, 0, 0) //else çall [ 0 ]
+multiple(1, 1, 1, 1) //else çall [ 1, 1, 1, 1 ]
+

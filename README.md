@@ -1,49 +1,55 @@
 
-### FRP Library for TypeScript
+### FRP DataFlow & Pattern Matching
 [![npm version](https://badge.fury.io/js/alak.svg)](https://badge.fury.io/js/alak)
 [![travis status](https://travis-ci.org/gleba/alak.svg?branch=master)](https://travis-ci.org/gleba/alak)
 [![dependencies](https://david-dm.org/ramda/ramda.svg)](https://david-dm.org/ramda/ramda)
 [![Downloads](https://img.shields.io/npm/dt/git-status.svg)](https://www.npmjs.com/package/git-status)
 ###### Example
 ```javascript
-import {A} from "alak"
+import DFlow from "alak";
 
-const convertedValue = A.start()
-const someNum = A.start()
-someNum.on(n => convertedValue(n + "kg"))
-convertedValue.on(console.log)
-someNum(1)
-//output: 1 kg
-someNum(2)
-//output: 2 kg
-convertedValue.stop(console.log)
+const startFlow = DFlow(1)
 
-const squareNum = someNum.branch(x => x * x)
-squareNum.on(console.log)
-someNum(7)
-//output: 79
-squareNum.stop(console.log)
-
-someNum.match(
-    7, v => console.log("match seven done"),
-    100, v => console.log("match 100 done"),
-    "*", v => console.log("match * done")
+startFlow.on(v => console.log("flow listener1", v))
+startFlow.on(v => console.log("flow listener2", v))
+startFlow.on(v => console.log("flow listener3", v))
+startFlow.match(
+    4, v => console.log("pattern match by key", v)
 )
-//output: match seven done
-someNum(100)
-//output: match 100 done
-someNum(3)
-//output: match * done
 
-console.log(someNum(), squareNum(), convertedValue())
-//output: 3 9 '3kg'
+startFlow(10)
+startFlow(4)
+// output:
+// flow listener1 10
+// flow listener2 10
+// flow listener3 10
+// flow listener1 4
+// flow listener2 4
+// flow listener3 4
+// pattern match by key 4
+
+startFlow.drop() //remove all listeners
+
+const multiple = startFlow.branch(v => v * 2 as any)
+multiple.match((a, b) => [
+        a > 10, () => console.log("fn pattern match", a),
+        a < 0 && b == "wow", () => console.log("!WOW!", a, b),
+        (...v) => console.log("else çall", v)
+
+    ]
+)
+startFlow(161) //fn pattern match 322
+multiple(-4, "wow") //!WOW! -4 wow
+startFlow(0, 0, 0, 0) //else çall [ 0 ]
+multiple(1, 1, 1, 1) //else çall [ 1, 1, 1, 1 ]
 ```
-[other tests here](https://github.com/gleba/alak/blob/master/tests/index.ts)
+[more](https://github.com/gleba/alak/blob/master/tests/)
 
 ## Instalation 
 `npm i alak -S`
 
 ## Development
+TypeScript based source
 - clone repo
 - `npm i`
 - `node dev`
@@ -51,9 +57,7 @@ console.log(someNum(), squareNum(), convertedValue())
 
 ## Dependencies 
 - dependency-free library
-- TypeScript
 - npm/yarn/lasso/e.t.c. package manager
-
 
 ## Meanings of alak / अलक  (sanskrit)
 
@@ -67,7 +71,7 @@ Meanings of अलक in English :
 - (имя ребёнка) Красивые завитки
 - (имя ребёнка) Приятная вселенная
 
-## Inspiration / Вдохновение
+## Inspiration 
 - [Functional reactive programming](https://en.wikipedia.org/wiki/Functional_reactive_programming)
 - [Purely functional data structure](https://en.wikipedia.org/wiki/Purely_functional_data_structure)
 - Atomic updates

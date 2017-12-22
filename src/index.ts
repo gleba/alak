@@ -21,6 +21,8 @@ export interface AFunctor<T extends any> {
     branch<U>(fn: (...a: any[]) => U): AFunctor<U>
 
     stop(fn): void
+
+    drop(): void
 }
 
 //, ...b: any[]
@@ -53,12 +55,12 @@ export default function DFlow<T>(...a: T[]): AFunctor<T> {
         match: function () {
             proxy.on(AMatch(arguments))
         },
-        stop: (fn) => {
+        drop: () => listeners = [],
+        stop(fn) {
             remove(listeners, fn)
         },
         branch(f) {
             let newCn = DFlow()
-            console.log(f)
             proxy.on((...v) => newCn(f(...v)))
             return newCn
         },

@@ -39,6 +39,6 @@ if (cluster.isMaster) {
         //fast:true,
         cacheDirectory:".tmp"
     })
-    require('./tests/index')
+    require('./tests')
 }
 
