@@ -3,9 +3,9 @@
   "version": "0.8.3",
   "description": "FRP DataChannels/DataFlow/Pattern Matching",
   "main": "dist/index.js",
-  "typings": "src/index.d.ts",
+  "typings": "dist/index.d.ts",
   "typescript": {
-    "definition": "src/index.d.ts"
+    "definition": "dist/index.d.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

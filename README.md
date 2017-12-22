@@ -1,7 +1,7 @@
 
-![Image of alak](http://x.gleb.pw/935545702ce4e52c5255a017b87a7f3d.jpg)
 ### FRP Library for TypeScript
 [![npm version](https://badge.fury.io/js/alak.svg)](https://badge.fury.io/js/alak)
+[![npm version](https://travis-ci.org/gleba/alak.svg?branch=master)](https://travis-ci.org/gleba/alak)
 ###### Example
 ```javascript
 import {A} from "alak"
@@ -25,7 +25,7 @@ squareNum.stop(console.log)
 someNum.match(
     7, v => console.log("match seven done"),
     100, v => console.log("match 100 done"),
-    "*", v => console.log("match * done"),
+    "*", v => console.log("match * done")
 )
 //output: match seven done
 someNum(100)

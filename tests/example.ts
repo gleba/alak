@@ -1,11 +1,11 @@
 /** @autor Gleb Panteleev <dev@gleb.pw> */
+import AChannel from "../src";
 
-
-import {A} from "../src/index";
-
-const convertedValue = A.start()
-const someNum = A.start()
+const convertedValue = AChannel()
+const someNum = AChannel()
 someNum.on(n => convertedValue(n + "kg"))
+
+
 convertedValue.on(console.log)
 someNum(1)
 //output: 1 kg
@@ -13,9 +13,10 @@ someNum(2)
 //output: 2 kg
 convertedValue.stop(console.log)
 
-
+//
 const squareFn = x => x * x
 const squareNum = someNum.branch(squareFn)
+
 squareNum.on(console.log)
 someNum(7)
 //output: 79
@@ -32,7 +33,7 @@ someNum.match(
 someNum(100)
 //output: match 100 done
 someNum(3)
-//output: match * done
+// output: match * done
 
 console.log(someNum(), squareNum(), convertedValue())
 //output: 3 9 '3kg'
