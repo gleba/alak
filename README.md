@@ -90,7 +90,7 @@ startFlow.on(v => console.log("flow listener1", v))
 
 #### `match`
 `match(...pattern: any[]): void`
--See pattern matching examples in header.
+- See pattern matching examples in header and bottom.
 
 
 #### `end`
