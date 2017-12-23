@@ -96,24 +96,24 @@ Meanings of अलक in English :
 
 ## API
 
-## DFlow`function DFlow<T>(...a: T[]): DChannel<T>`
+#### DFlow`function DFlow<T>(...a: T[]): DChannel<T>`
 Create new channel
 ```
 const startFlow = DFlow(1) 
 ``` 
-## Channels property
-### `data: T[]`
+### Data Channels property :
+#### `data: T[]`
 Just get current data (never use)
-### `on(fn: Listener<T>): DChannel<T>`
+#### `on(fn: Listener<T>): DChannel<T>`
 Subscribe function to data flow updates
 ```
 startFlow.on(v => console.log("flow listener1", v))
 ```
-### `stop(fn: any): void`
+#### `stop(fn: any): void`
 Unsubscribe function from data flow updates
 (i never use)
 
-### `mutate(fn: (...v:T[])=>any[]): void`
+#### `mutate(fn: (...v:T[])=>any[]): void`
 Mutate data flow value and emit channel
 always return array as  
 ```
@@ -123,11 +123,11 @@ always return array as
     })
 
 ```
-### `branch<U>(fn: (...a: any[]) => U[]): DChannel<U>`
+#### `branch<U>(fn: (...a: any[]) => U[]): DChannel<U>`
 Create a new channel based on the current 
 
-### `match(...pattern: any[]): void`
+#### `match(...pattern: any[]): void`
 See pattern matching examples in header.
 
-### `end(): void;`
+#### `end(): void;`
 Destroy. Remove all data and listeners.
