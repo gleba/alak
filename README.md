@@ -10,6 +10,18 @@ Easy and simple fast.
 Zero-dependency.
 Prefect for state machines.
 
+## Meanings of alak / अलक  (sanskrit)
+
+Meanings of अलक in English :
+- Curl / Forelock / Sliver 
+- (name of child) Beautiful Tresses
+- (name of child) World 
+
+Значение अलक на Русском : 
+- Локоны / Виться / Пряди  
+- Завитки
+- Вселенная
+
 ###### Example
 ```javascript
 import DFlow from "alak";
@@ -34,27 +46,13 @@ channel("one", {1: 1}) // one { '1': 1 }
 `npm i alak -S`
 
 ## Development
-TypeScript based source
-- clone repo
+TypeScript based source 
 - `npm i`
 - `node dev`
-
 
 ## Dependencies 
 - dependency-free library
 - npm/yarn/lasso/e.t.c. package manager
-
-## Meanings of alak / अलक  (sanskrit)
-
-Meanings of अलक in English :
-- Curl / Forelock / Sliver 
-- (name of child) Beautiful Tresses
-- (name of child) World 
-
-Значение अलक на Русском : 
-- Локоны / Виться / Пряди  
-- Завитки
-- Вселенная
 
 ## API
 
