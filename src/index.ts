@@ -5,12 +5,12 @@ import {patternMatch} from "./match";
 export type Listener<T extends any> = (...a: T[]) => any
 export type TypeFN<T> = (...a: any[]) => T
 
-export interface AFunctor<T extends any> {
+export interface DChannel<T extends any> {
     (...a: T[]): T
 
-    value: T
+    data: T
 
-    on(fn: Listener<T>): AFunctor<T>
+    on(fn: Listener<T>): DChannel<T>
 
     end(): void
 
@@ -18,7 +18,7 @@ export interface AFunctor<T extends any> {
 
     mutate(fn: Listener<T>): T
 
-    branch<U>(fn: (...a: any[]) => U): AFunctor<U>
+    branch<U>(fn: (...a: any[]) => U): DChannel<U>
 
     stop(fn): void
 
@@ -29,18 +29,18 @@ export interface AFunctor<T extends any> {
 
 
 // function compose<T, ...U>(base: T, ...mixins: ...U): T&U {}
-export default function DFlow<T>(...a: T[]): AFunctor<T> {
+export default function DFlow<T>(...a: T[]): DChannel<T> {
     type Fn = Listener<T>
     let listeners = []
     let proxy = {
-        value: [],
+        data: [],
         get v(): T {
             return getValue()
         },
         on: function (fn: Fn) {
             listeners.push([this, fn])
-            if (proxy.value.length > 0)
-                fn.apply(this, proxy.value)
+            if (proxy.data.length > 0)
+                fn.apply(this, proxy.data)
         },
         end: () => {
             deleteParams(functor)
@@ -49,7 +49,7 @@ export default function DFlow<T>(...a: T[]): AFunctor<T> {
             proxy = null
         },
         mutate: function (fn: Fn) {
-            let newValue = fn.apply(this, proxy.value)
+            let newValue = fn.apply(this, proxy.data)
             setValue(newValue)
         },
         match: function () {
@@ -66,10 +66,10 @@ export default function DFlow<T>(...a: T[]): AFunctor<T> {
         },
     }
 
-    const getValue = () => proxy.value ? proxy.value.length > 1 ? proxy.value : proxy.value[0] : null
+    const getValue = () => proxy.data ? proxy.data.length > 1 ? proxy.data : proxy.data[0] : null
     const setValue = v => {
         if (v.length > 0) {
-            proxy.value = v
+            proxy.data = v
             listeners.forEach(f => f[1].apply(f[0], v))
         }
     }
@@ -85,7 +85,7 @@ export default function DFlow<T>(...a: T[]): AFunctor<T> {
 
     setValue(Object.values(arguments))
     Object.assign(functor, proxy)
-    return functor as any as AFunctor<T>
+    return functor as any as DChannel<T>
 }
 export const AMatch = patternMatch
 export const A = {

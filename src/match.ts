@@ -13,7 +13,7 @@ function parsePattern(pattern) {
             case "function" :
                 fn[j] = v
                 j++
-                if (pattern.length == i && lastFnIndex == i - 1)
+                if (pattern.length - 1 == i && lastFnIndex == i - 1)
                     o.else = v
                 else
                     keys[j] = []
@@ -29,12 +29,12 @@ function parsePattern(pattern) {
 
 export function patternMatch(arg) {
     let a = arg
-
-
     if (a.length >= 2) {
         let p = parsePattern(a)
         return (...value) => {
+
             let matchFn = p.map[value.join(',')]
+            if (!matchFn) matchFn = p.map[value[0]]
             if (matchFn) matchFn.apply(matchFn, value)
             else if (p.else) p.else.apply(matchFn, value)
         }
@@ -56,7 +56,7 @@ export function patternMatch(arg) {
                     if (isFunction(pattern[l - 1]) && isFunction(pattern[l - 2])) {
                         runFns.push(pattern[l - 1])
                     }
-                } 
+                }
                 runFns.forEach(f => f.apply(fn, value))
             }
         }

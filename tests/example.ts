@@ -27,8 +27,6 @@ startFlow(4)
 // pattern match by key 4
 
 startFlow.drop() //remove all listeners
-console.log("remove all listeners")
-
 
 const multiple = startFlow.branch(v => v * 2 as any)
 multiple.match((a, b) => [
@@ -43,3 +41,19 @@ multiple(-4, "wow") //!WOW! -4 wow
 startFlow(0, 0, 0, 0) //else çall [ 0 ]
 multiple(1, 1, 1, 1) //else çall [ 1, 1, 1, 1 ]
 
+
+
+
+
+const channel = DFlow()
+channel.match(
+    "one", console.log,
+    "one", 1000, () => console.log("..."),
+    "two", (a, b) => console.log(b),
+    (...v) => console.log('else', v)
+)
+
+channel("there", "fo") // else [ 'there', 'fo' ]
+channel("two", ["some data"]) // [ 'some data' ]
+channel("one", 1000) //...
+channel("one", {1: 1}) // one { '1': 1 }
