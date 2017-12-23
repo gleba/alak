@@ -94,7 +94,7 @@ See pattern matching examples in header.
 #### `end(): void;`
 Destroy. Remove all data and listeners.
 
-```
+```javascript
 // Basic 
 
 const startFlow = DFlow(1)
