@@ -52,26 +52,30 @@ TypeScript based source
 
 ## API
 
-#### DFlow`function DFlow<T>(...a: T[]): DChannel<T>`
+#### DFlow 
 Create new channel
+`DFlow function DFlow<T>(...a: T[]): DChannel<T>`
 ```
 const startFlow = DFlow(1) 
 ``` 
 ### Data Channels property :
-#### `data: T[]`
-Just get current data (never use)
-#### `on(fn: Listener<T>): DChannel<T>`
-Subscribe function to data flow updates
+#### `data`
+`data: T[]`
+- Just get current data (never use)
+
+#### `on`
+`on(fn: Listener<T>): DChannel<T>`
+- Subscribe function to data flow updates
 ```
 startFlow.on(v => console.log("flow listener1", v))
 ```
-#### `stop(fn: any): void`
-Unsubscribe function from data flow updates
-(i never use)
+#### `stop`
+`stop(fn: any): void`
+- Unsubscribe function from data flow updates (i never use)
 
-#### `mutate(fn: (...v:T[])=>any[]): void`
-Mutate data flow value and emit channel
-always return array as  
+#### `mutate`
+`mutate(fn: (...v:T[])=>any[]): void`
+- Mutate data flow value and emit channel array always
 ```
     s5.mutate((...v) => {        
         v[2] = false
@@ -79,14 +83,19 @@ always return array as
     })
 
 ```
-#### `branch<U>(fn: (...a: any[]) => U[]): DChannel<U>`
-Create a new channel based on the current 
+#### `branch`
+`branch<U>(fn: (...a: any[]) => U[]): DChannel<U>`
+- Create a new channel based on the current 
 
-#### `match(...pattern: any[]): void`
-See pattern matching examples in header.
 
-#### `end(): void;`
-Destroy. Remove all data and listeners.
+#### `match`
+`match(...pattern: any[]): void`
+-See pattern matching examples in header.
+
+
+#### `end`
+`end(): void;`
+- Destroy. Remove all data and listeners.
 
 
 ###### Other Examples
