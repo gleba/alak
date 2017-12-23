@@ -94,6 +94,8 @@ See pattern matching examples in header.
 #### `end(): void;`
 Destroy. Remove all data and listeners.
 
+
+###### Other Examples
 ```javascript
 // Basic 
 
