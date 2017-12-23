@@ -18,7 +18,7 @@ export interface DChannel<T extends any> {
 
     mutate(fn: Listener<T>): T
 
-    branch<U>(fn: (...a: any[]) => U): DChannel<U>
+    branch<U>(fn: (...a: any[]) => U[]): DChannel<U>
 
     stop(fn): void
 
@@ -61,7 +61,7 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
         },
         branch(f) {
             let newCn = DFlow()
-            proxy.on((...v) => newCn(f(...v)))
+            proxy.on((...v) => newCn(...f(...v)))
             return newCn
         },
     }

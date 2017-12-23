@@ -122,7 +122,7 @@ startFlow.drop() //remove all listeners
 
 // Advanced
 
-const multiple = startFlow.branch(v => v * 2 as any)
+const multiple = startFlow.branch((...v) => v.map(i => i * 2) as any)
 multiple.match((a, b) => [
         a > 10, () => console.log("fn pattern match", a),
         a < 0 && b == "wow", () => console.log("!WOW!", a, b),
@@ -131,6 +131,6 @@ multiple.match((a, b) => [
 )
 startFlow(161) //fn pattern match 322
 multiple(-4, "wow") //!WOW! -4 wow
-startFlow(0, 0, 0, 0) //else çall [ 0 ]
+startFlow(0, 1, 2, 3) //else çall [ 0, 2, 4, 6 ]
 multiple(1, 1, 1, 1) //else çall [ 1, 1, 1, 1 ]
 ```
