@@ -13,14 +13,10 @@ Prefect for state machines.
 ## Meanings of alak / अलक  (sanskrit)
 
 Meanings of अलक in English :
-- Curl / Forelock / Sliver 
-- (name of child) Beautiful Tresses
-- (name of child) World 
+Curl, Forelock, Sliver, Beautiful Tresses, World 
 
 Значение अलक на Русском : 
-- Локоны / Виться / Пряди  
-- Завитки
-- Вселенная
+Локоны, Виться, Пряди, Завитки, Вселенная
 
 ###### Example
 ```javascript
