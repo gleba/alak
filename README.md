@@ -10,14 +10,6 @@ Easy and simple fast.
 Zero-dependency.
 Prefect for state machines.
 
-## Meanings of alak / अलक  (sanskrit)
-
-Meanings of अलक in English :
-- Curl, Forelock, Sliver, Beautiful Tresses, World 
-
-Значение अलक на Русском : 
-- Локоны, Виться, Пряди, Завитки, Вселенная
-
 ###### Example
 ```javascript
 import DFlow from "alak";
