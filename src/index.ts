@@ -29,6 +29,7 @@ export interface DChannel<T extends any> {
     reject(obj): void
 }
 
+
 //, ...b: any[]
 
 
@@ -71,7 +72,9 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
         },
         inject(obj: any, key?: string) {
             if (!mapObjects) mapObjects = new Map<any, Function>()
-            let fn = v => obj[key] = v
+            let fn = key
+                ? v => obj[key] = v
+                : v => Object.keys(v).forEach(k => obj[k] = v[k])
             mapObjects.set(obj, fn)
             proxy.on(fn)
         },
