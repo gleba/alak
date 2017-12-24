@@ -28,6 +28,7 @@ export interface DChannel<T extends any> {
     inject(obj: any, key?: string): void
 
     reject(obj): void
+    multidim:Boolean
 }
 
 
@@ -47,7 +48,7 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
     let proxy = {
         data: [],
         get multidim(): Boolean {
-            return proxy.data.length > 1
+            return multidim
         },
         get v(): T {
             return getValue()
@@ -64,7 +65,6 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
             proxy = null
         },
         mutate: function (fn: Fn) {
-            console.log(fn.arguments)
             let newValue
             if (multidim) {
                 newValue = fn.apply(this, proxy.data)
