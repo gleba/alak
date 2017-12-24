@@ -8,7 +8,8 @@ export type TypeFN<T> = (...a: any[]) => T
 export interface DChannel<T extends any> {
     (...a: T[]): T
 
-    data: T
+    v: T
+    data: T[]
 
     on(fn: Listener<T>): DChannel<T>
 
@@ -30,16 +31,24 @@ export interface DChannel<T extends any> {
 }
 
 
-//, ...b: any[]
+export class DInjectableFlow {
+    inject() {
+        this
+    }
+}
 
 
 // function compose<T, ...U>(base: T, ...mixins: ...U): T&U {}
 export default function DFlow<T>(...a: T[]): DChannel<T> {
     type Fn = Listener<T>
     let listeners = []
+    let multidim: Boolean = false
     let mapObjects: Map<any, Function>
     let proxy = {
         data: [],
+        get multidim(): Boolean {
+            return proxy.data.length > 1
+        },
         get v(): T {
             return getValue()
         },
@@ -55,8 +64,15 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
             proxy = null
         },
         mutate: function (fn: Fn) {
-            let newValue = fn.apply(this, proxy.data)
-            setValue(newValue)
+            console.log(fn.arguments)
+            let newValue
+            if (multidim) {
+                newValue = fn.apply(this, proxy.data)
+                setValues(newValue)
+            } else {
+                newValue = fn.apply(this, getValue())
+                setValues([newValue])
+            }
         },
         match: function () {
             proxy.on(AMatch(arguments))
@@ -87,7 +103,7 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
     }
 
     const getValue = () => proxy.data ? proxy.data.length > 1 ? proxy.data : proxy.data[0] : null
-    const setValue = v => {
+    const setValues = v => {
         if (v.length > 0) {
             proxy.data = v
             listeners.forEach(f => f[1].apply(f[0], v))
@@ -99,11 +115,15 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
             console.error("emit ended channel: " + a)
             return
         }
-        setValue(Object.values(arguments))
+        setValues(Object.values(arguments))
         return getValue()
     }
 
-    setValue(Object.values(arguments))
+    let v = Object.values(arguments)
+    setValues(v)
+    if (v.length > 1) {
+        multidim = true
+    }
     Object.assign(functor, proxy)
     return functor as any as DChannel<T>
 }
