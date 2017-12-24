@@ -23,6 +23,10 @@ export interface DChannel<T extends any> {
     stop(fn): void
 
     drop(): void
+
+    inject(obj: any, key?: string): void
+
+    reject(obj): void
 }
 
 //, ...b: any[]
@@ -32,6 +36,7 @@ export interface DChannel<T extends any> {
 export default function DFlow<T>(...a: T[]): DChannel<T> {
     type Fn = Listener<T>
     let listeners = []
+    let mapObjects: Map<any, Function>
     let proxy = {
         data: [],
         get v(): T {
@@ -64,6 +69,18 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
             proxy.on((...v) => newCn(...f(...v)))
             return newCn
         },
+        inject(obj: any, key?: string) {
+            if (!mapObjects) mapObjects = new Map<any, Function>()
+            let fn = v => obj[key] = v
+            mapObjects.set(obj, fn)
+            proxy.on(fn)
+        },
+        reject(obj) {
+            if (mapObjects.has(obj)) {
+                proxy.stop(mapObjects.get(obj))
+                mapObjects.delete(obj)
+            }
+        }
     }
 
     const getValue = () => proxy.data ? proxy.data.length > 1 ? proxy.data : proxy.data[0] : null
