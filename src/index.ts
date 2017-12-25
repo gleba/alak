@@ -32,12 +32,6 @@ export interface DChannel<T extends any> {
 }
 
 
-export class DInjectableFlow {
-    inject() {
-        this
-    }
-}
-
 
 // function compose<T, ...U>(base: T, ...mixins: ...U): T&U {}
 export default function DFlow<T>(...a: T[]): DChannel<T> {
@@ -119,7 +113,49 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
     Object.assign(functor, proxy)
     return functor as any as DChannel<T>
 }
-export const AMatch = patternMatch
+
+
+export class DInjectableFlow {
+    mapObjects: Map<any, Function>
+
+    inject(obj?) {
+        if (!obj) obj = {}
+        if (!this.mapObjects) this.mapObjects = new Map<any, Function>()
+        Object.keys(this).forEach(k => {
+            let f = this[k]
+            if (f.on) {
+                obj[k] = f.data[0]
+                let fn = v => obj[k] = v
+                f.on(fn)
+                this.mapObjects.set(obj, fn)
+            }
+        })
+        return obj
+    }
+}
+
+
 export const A = {
-    start: DFlow
+    start: DFlow,
+    mix(...ar) {
+        let newStream = DFlow()
+        let active = new Map()
+        const emit = () => {
+            if (active.size == ar.length)
+                newStream(Array.from(active.values()))
+        }
+
+        ar.forEach(
+            stream => {
+                stream.on(
+                    data => {
+                        active.set(stream, data)
+                        emit()
+                    }
+                )
+            }
+        )
+        return newStream
+    },
+    match: patternMatch
 }
