@@ -50,9 +50,6 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
         get multidim(): Boolean {
             return multidim
         },
-        get v(): T {
-            return getValue()
-        },
         on: function (fn: Fn) {
             listeners.push([this, fn])
             if (proxy.data.length > 0)
@@ -105,7 +102,8 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
     const getValue = () => proxy.data ? proxy.data.length > 1 ? proxy.data : proxy.data[0] : null
     const setValues = v => {
         if (v.length > 0) {
-            proxy.data = v
+            functor['data'] = proxy.data = v
+            functor['v'] = v ? v.length > 1 ? v : v[0] : null
             listeners.forEach(f => f[1].apply(f[0], v))
         }
     }

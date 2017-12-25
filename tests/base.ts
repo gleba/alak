@@ -70,4 +70,10 @@ test("Alak test", (t: any) => {
         v[0] = "_"
         return v
     })
+
+    let s6 = DFlow(1)
+    console.log(s6.data, s6.v)
+    s6(2)
+    console.log(s6.data, s6.v)
+
 })
