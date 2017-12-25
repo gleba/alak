@@ -63,7 +63,7 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
             }
         },
         match: function () {
-            proxy.on(AMatch(arguments))
+            proxy.on(A.match(arguments))
         },
         drop: () => listeners = [],
         stop(fn) {
