@@ -17,8 +17,6 @@ test("Alak test", (t: any) => {
     })
 
 
-
-
     const s2 = DFlow()
     s2.on(x => {
         t.ok(x == 4, "base+ " + x);
@@ -75,5 +73,9 @@ test("Alak test", (t: any) => {
     console.log(s6.data, s6.v)
     s6(2)
     console.log(s6.data, s6.v)
+
+    s6.mutate(x => x+1)
+    console.log(s6.data, s6.v)
+
 
 })

@@ -28,7 +28,7 @@ export interface DChannel<T extends any> {
     inject(obj: any, key?: string): void
 
     reject(obj): void
-    multidim:Boolean
+
 }
 
 
@@ -43,13 +43,9 @@ export class DInjectableFlow {
 export default function DFlow<T>(...a: T[]): DChannel<T> {
     type Fn = Listener<T>
     let listeners = []
-    let multidim: Boolean = false
     let mapObjects: Map<any, Function>
     let proxy = {
         data: [],
-        get multidim(): Boolean {
-            return multidim
-        },
         on: function (fn: Fn) {
             listeners.push([this, fn])
             if (proxy.data.length > 0)
@@ -63,11 +59,12 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
         },
         mutate: function (fn: Fn) {
             let newValue
-            if (multidim) {
+
+            if (proxy.data.length > 1) {
                 newValue = fn.apply(this, proxy.data)
                 setValues(newValue)
             } else {
-                newValue = fn.apply(this, getValue())
+                newValue = fn.apply(this, [getValue()])
                 setValues([newValue])
             }
         },
@@ -119,9 +116,6 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
 
     let v = Object.values(arguments)
     setValues(v)
-    if (v.length > 1) {
-        multidim = true
-    }
     Object.assign(functor, proxy)
     return functor as any as DChannel<T>
 }
