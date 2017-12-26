@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "0.8.19",
+  "version": "0.8.20",
   "description": "FRP DataChannels/DataFlow/Pattern Matching",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

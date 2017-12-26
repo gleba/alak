@@ -74,13 +74,15 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
             proxy.on((...v) => newCn(...f(...v)))
             return newCn
         },
-        inject(obj: any, key?: string) {
+        inject(obj?: any, key?: string) {
+            if (!obj) obj = {}
             if (!mapObjects) mapObjects = new Map<any, Function>()
             let fn = key
                 ? v => obj[key] = v
                 : v => Object.keys(v).forEach(k => obj[k] = v[k])
             mapObjects.set(obj, fn)
             proxy.on(fn)
+            return obj
         },
         reject(obj) {
             if (mapObjects.has(obj)) {
