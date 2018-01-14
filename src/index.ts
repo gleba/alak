@@ -137,6 +137,15 @@ export class DInjectableFlow {
         return obj
     }
 
+    to(obj) {
+        Object.keys(this).forEach(k=>{
+            let flow = this[k]
+            if (flow.on){
+                flow.on(obj[k])
+            }
+        })
+    }
+    
     from(obj) {
         Object.keys(this).forEach(k=>{
             let flow = obj[k]
