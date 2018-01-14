@@ -2,9 +2,6 @@ import {deleteParams, remove} from "./utils";
 import {patternMatch} from "./match";
 
 
-export type Listener<T extends any> = (...a: T[]) => any
-export type TypeFN<T> = (...a: any[]) => T
-
 export interface DChannel<T extends any> {
     (...a: T[]): T
 
@@ -14,6 +11,7 @@ export interface DChannel<T extends any> {
     on(fn: Listener<T>): DChannel<T>
 
     end(): void
+    emit(): void
 
     match(...pattern)
 
@@ -32,12 +30,13 @@ export interface DChannel<T extends any> {
 }
 
 
-
-// function compose<T, ...U>(base: T, ...mixins: ...U): T&U {}
+/**
+ * Create new channel
+ */
 export default function DFlow<T>(...a: T[]): DChannel<T> {
     type Fn = Listener<T>
     let listeners = []
-    let mapObjects: Map<any, Function>
+    let mapObjects: any //Map<any, Function>
     let proxy = {
         data: [],
         on: function (fn: Fn) {
@@ -50,6 +49,9 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
             deleteParams(proxy)
             listeners = null
             proxy = null
+        },
+        emit: () => {
+            listeners.forEach(f => f[1].apply(f[0], proxy.data))
         },
         mutate: function (fn: Fn) {
             let newValue
@@ -134,6 +136,15 @@ export class DInjectableFlow {
         })
         return obj
     }
+
+    from(obj) {
+        Object.keys(this).forEach(k=>{
+            let flow = obj[k]
+            if (flow.on){
+                flow.on(this[k])
+            }
+        })
+    }
 }
 
 
@@ -161,3 +172,6 @@ export const A = {
     },
     match: patternMatch
 }
+
+export type Listener<T extends any> = (...a: T[]) => any
+type TypeFN<T> = (...a: any[]) => T

@@ -1,3 +1,4 @@
-require('./base')
-require('./example')
+// require('./base')
+// require('./example')
+require('./injectable')
 

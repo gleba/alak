@@ -25,6 +25,12 @@ test("Alak test", (t: any) => {
     s2(4, 0)
 
 
+    const s3 = DFlow()
+    s3.on(x=>{
+        t.ok(true, "emit ok")
+    })
+
+    s3.emit()
     const s4 = DFlow()
 
     s4.match(
