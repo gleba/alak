@@ -51,10 +51,6 @@ Create new channel
 const startFlow = DFlow(1) 
 ``` 
 ### Data Channels property :
-#### `data`
-`data: T[]`
-- Just get current data (never use)
-
 #### `on`
 `on(fn: Listener<T>): DChannel<T>`
 - Subscribe function to data flow updates
@@ -63,7 +59,7 @@ startFlow.on(v => console.log("flow listener1", v))
 ```
 #### `stop`
 `stop(fn: any): void`
-- Unsubscribe function from data flow updates (i never use)
+- Unsubscribe function from data flow updates 
 
 #### `mutate`
 `mutate(fn: (...v:T[])=>any[]): void`
@@ -75,15 +71,17 @@ startFlow.on(v => console.log("flow listener1", v))
     })
 
 ```
+#### `data`
+`data: T[]`
+- Just get current data 
+
 #### `branch`
 `branch<U>(fn: (...a: any[]) => U[]): DChannel<U>`
 - Create a new channel based on the current 
 
-
 #### `match`
 `match(...pattern: any[]): void`
 - See pattern matching examples in header and bottom.
-
 
 #### `end`
 `end(): void;`
