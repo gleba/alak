@@ -1,9 +1,9 @@
 /** @autor Gleb Panteleev <dev@gleb.pw> */
-import DFlow from "../src";
+import AFlow from "../src";
 
 
-const convertedValue = DFlow()
-const someNum = DFlow()
+const convertedValue = AFlow()
+const someNum = AFlow()
 someNum.on(n => convertedValue(n + "kg"))
 
 

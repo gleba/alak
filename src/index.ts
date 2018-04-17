@@ -2,19 +2,21 @@ import {deleteParams, remove} from "./utils";
 import {patternMatch} from "./match";
 
 
-export interface DChannel<T extends any> {
+export interface IAFlow<T extends any> {
   (...a: T[]): T
 
   v: T
   data: T[]
 
-  on(fn: Listener<T>): DChannel<T>
+  on(fn: Listener<T>): IAFlow<T>
 
-  off(fn: Listener<T>): DChannel<T>
+  weakOn(fn: Listener<T>): IAFlow<T>
 
-  stateless(v?: boolean): DChannel<T>
+  off(fn: Listener<T>): IAFlow<T>
 
-  emitter(v?: boolean): DChannel<T>
+  stateless(v?: boolean): IAFlow<T>
+
+  emitter(v?: boolean): IAFlow<T>
 
   end(): void
 
@@ -24,7 +26,7 @@ export interface DChannel<T extends any> {
 
   mutate(fn: Listener<T>): T
 
-  branch<U>(fn: (...a: any[]) => U[]): DChannel<U>
+  branch<U>(fn: (...a: any[]) => U[]): IAFlow<U>
 
   stop(fn): void
 
@@ -41,18 +43,33 @@ export interface DChannel<T extends any> {
 /**
  * Create new channel
  */
-export default function DFlow<T>(...a: T[]): DChannel<T> {
+export default function AFlow<T>(...a: T[]): IAFlow<T> {
   type Fn = Listener<T>
   let listeners = []
   let state = true
   let emitter = false
   let mapObjects: any //Map<any, Function>
+  let weakListeners = new WeakMap()
+  let weakUid = []
   let proxy = {
     data: [],
-    on: function (fn: Fn) {
+    on: (fn: Fn) => {
+      listeners.push([fn, fn])
+      if (proxy.data.length > 0)
+        fn.apply(fn, proxy.data)
+    },
+    curryOn: function (fn: Fn) {
       listeners.push([this, fn])
       if (proxy.data.length > 0)
         fn.apply(this, proxy.data)
+    },
+    weakOn: (where, f: Fn) => {
+      let ws = new WeakSet()
+      ws.add(where)
+      weakListeners.set(where, f)
+      weakUid.push(ws)
+      if (proxy.data.length > 0)
+        f.apply(f, proxy.data)
     },
     end: () => {
       deleteParams(functor)
@@ -82,7 +99,7 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
       remove(listeners, fn)
     },
     branch(f) {
-      let newCn = DFlow()
+      let newCn = AFlow()
       proxy.on((...v) => newCn(...f(...v)))
       return newCn
     },
@@ -122,7 +139,17 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
         functor['data'] = proxy.data = v
         functor['v'] = v ? v.length > 1 ? v : v[0] : null
       }
+      if (emitter && !v) v = true
       listeners.forEach(f => f[1].apply(f[0], v))
+      if (weakUid.length) {
+        weakUid.forEach(uid => {
+          if (weakListeners.has(uid)) {
+            let f = weakListeners.get(uid)
+            f.apply(f, v)
+          }
+        })
+      }
+
     }
   }
 
@@ -143,11 +170,11 @@ export default function DFlow<T>(...a: T[]): DChannel<T> {
     off: proxy.stop,
   })
   Object.assign(functor, proxy)
-  return functor as any as DChannel<T>
+  return functor as any as IAFlow<T>
 }
 
 
-export class DInjectableFlow {
+export class AFlowInjectable {
   mapObjects: Map<any, Function>
 
   inject(obj?) {
@@ -186,12 +213,12 @@ export class DInjectableFlow {
 
 
 export const A = {
-  start: DFlow,
-  flow: DFlow,
-  stateless: () => DFlow().stateless(true),
-  emitter: (...ar) => DFlow(...ar).emitter(true),
+  start: AFlow,
+  flow: AFlow,
+  stateless: () => AFlow().stateless(true),
+  emitter: (...ar) => AFlow(...ar).emitter(true),
   mix(...ar) {
-    let newStream = DFlow()
+    let newStream = AFlow()
     let active = new Map()
     const emit = () => {
       if (active.size == ar.length)
@@ -212,6 +239,8 @@ export const A = {
   },
   match: patternMatch
 }
+
+export const DFlow = AFlow
 
 export type Listener<T extends any> = (...a: T[]) => any
 type TypeFN<T> = (...a: any[]) => T

@@ -1,9 +1,9 @@
 /** @autor Gleb Panteleev <dev@gleb.pw> */
-import DFlow from "../src";
+import AFlow from "../src";
 
 //base usage
 
-const startFlow = DFlow(1)
+const startFlow = AFlow(1)
 
 startFlow.on(v => console.log("flow listener1", v))
 startFlow.on(v => console.log("flow listener2", v))
@@ -43,7 +43,7 @@ multiple(1, 1, 1, 1) //else çall [ 1, 1, 1, 1 ]
 
 
 //
-// const channel = DFlow()
+// const channel = AFlow()
 // channel.match(
 //     "one", console.log,
 //     "one", 1000, () => console.log("..."),

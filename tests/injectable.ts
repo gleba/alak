@@ -1,15 +1,15 @@
 import {test} from "./ouput.shema"
 import {isArray, isNumber, isString} from "util";
-import DFlow, {DInjectableFlow} from "../src";
+import AFlow, {DInjectableFlow} from "../src";
 
 
 class InjetableClass extends DInjectableFlow {
-    s1 = DFlow()
-    s2 = DFlow()
+    s1 = AFlow()
+    s2 = AFlow()
 }
 
 
-test("injectable", (t: any) => {
+test("InjetableClass", (t: any) => {
 
     const a1 = new InjetableClass()
     const a2 = new InjetableClass()
@@ -18,9 +18,10 @@ test("injectable", (t: any) => {
     a2.from(a1)
 
     a2.s1.on(v=>{
-        t.ok(true, "injectable form")
+        t.ok(true, "form")
     })
 
     a1.s1.emit()
     a1.s1(2)
+
 })
