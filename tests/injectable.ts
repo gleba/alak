@@ -1,9 +1,10 @@
 import {test} from "./ouput.shema"
 import {isArray, isNumber, isString} from "util";
-import AFlow, {DInjectableFlow} from "../src";
+import {default as AFlow, AFlowInjectable} from "../src";
 
 
-class InjetableClass extends DInjectableFlow {
+
+class InjetableClass extends AFlowInjectable {
     s1 = AFlow()
     s2 = AFlow()
 }
