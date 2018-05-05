@@ -1,5 +1,6 @@
 import {flow} from "./Aflow";
 
+
 export const Aproxy = new Proxy({
   start: flow,
   flow: flow,
@@ -12,6 +13,7 @@ export const Aproxy = new Proxy({
 
     switch (key) {
       case "f":
+      case "flow":
         return flow()
       case "fn":
         let f = flow()

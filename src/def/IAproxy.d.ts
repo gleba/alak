@@ -1,17 +1,20 @@
-import {IAflow} from "./IAflow";
+import {IFlow} from "./Iflow";
+
 
 type RT<T> = T extends (...args: any[]) => any ? ReturnType<T> : any
+
 // type RA<T> = T & { (args?: any): Promise<any> } & { (...args: any[]): Promise<any> }
-type MixedArgs<T> = {[K in keyof T]: RT<T[K]>}
+type MixedArgs<T> = {[K in keyof T]: number}
+// type MetaFlow<T> = T extends (...args: any[]) => any ? ReturnType<T> : any
+// type RT<T> = T extends (...args: any[]) => any ? ReturnType<T> : any
+//
+// type MetaFlow<T> = T extends MixedArgs<T> ? any : IFlow<T>
 
-type flowStarter = {
-  <T>(a?: T): IAflow<T>
-  [s: string]: flowStarter
+export type flowStarter = {
+  <T>(a?: T): IFlow<T>
+  [s: string]: any
 }
-
-
 export interface IAproxy {
-  flow: flowStarter
-  f: IAflow<any>
-  fn: any
+  flow: IFlow<any>
+  f: flowStarter
 }

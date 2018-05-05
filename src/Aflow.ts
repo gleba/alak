@@ -1,10 +1,7 @@
-import {IAflow} from "./def/IAflow";
+
 import {deleteParams, remove} from "./utils";
 import {patternMatch} from "./match";
-import {Listener} from "./def";
-
-export function flow<T>(...a: T[]): IAflow<T> {
-  type Fn = Listener<T>
+export function flow(a?) {
   let listeners = []
   let metaList = []
   let keepState = true
@@ -14,17 +11,17 @@ export function flow<T>(...a: T[]): IAflow<T> {
   // let weakUid = []
   let proxy = {
     data: [],
-    on: (fn: Fn) => {
+    on: fn => {
       listeners.push([fn, fn])
       if (proxy.data.length > 0)
         fn.apply(fn, proxy.data)
     },
-    curryOn: function (fn: Fn) {
+    curryOn: function (fn) {
       listeners.push([this, fn])
       if (proxy.data.length > 0)
         fn.apply(this, proxy.data)
     },
-    weakOn: (where, f: Fn) => {
+    weakOn: (where, f) => {
       let ws = new WeakSet()
       ws.add(where)
       // weakListeners.set(where, f)
@@ -41,7 +38,7 @@ export function flow<T>(...a: T[]): IAflow<T> {
     emit: () => {
       listeners.forEach(f => f[1].apply(f[0], proxy.data))
     },
-    mutate: function (fn: Fn) {
+    mutate: function (fn) {
       let newValue
 
       if (proxy.data.length > 1) {
@@ -193,5 +190,5 @@ export function flow<T>(...a: T[]): IAflow<T> {
       }
     }
   })
-  return afn as any as IAflow<T>
+  return afn
 }
