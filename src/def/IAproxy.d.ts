@@ -1,4 +1,4 @@
-import {IFlow} from "./Iflow";
+import {IFlow} from "./IFlow";
 
 
 type RT<T> = T extends (...args: any[]) => any ? ReturnType<T> : any
