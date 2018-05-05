@@ -1,6 +1,7 @@
 import {test} from "./ouput.shema"
 import {isArray, isNumber, isString} from "util";
-import AFlow from "../src";
+import {AFlow} from "../src";
+// import AFlow from "../src";
 
 
 test("Alak test", (t: any) => {
@@ -104,4 +105,5 @@ test("Alak test", (t: any) => {
   s7.emitter(true)
   s7()
 
+  t.end()
 })

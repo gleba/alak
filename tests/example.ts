@@ -1,5 +1,7 @@
 /** @autor Gleb Panteleev <dev@gleb.pw> */
-import AFlow from "../src";
+import {AFlow} from "../src";
+
+// import AFlow from "../src";
 
 //base usage
 
