@@ -17,6 +17,7 @@ type MayBeflow<T> = T extends AFlow <T> ? AFlow <T> : any
 export type IflowStarter = {
   <T>(a?: T): AFlow<T>
   <K>(...a: K[]): AFlow<K>
+  (...a: any[]): AFlow<any>
   [s: string]:  IflowStarter
 }
 
@@ -32,6 +33,7 @@ export interface IAproxy {
   m: IflowStarter
   stateless: IflowStarter
   emitter: IflowStarter
+  install: IflowStarter
   [s: string]:  IflowStarter
 }
 // let xx:AFlow<number>

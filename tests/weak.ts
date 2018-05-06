@@ -29,6 +29,18 @@ test("weak", (t: any) => {
   t.ok(m3.isFlow("on"), "m3.isFlow('on')")
   t.ok(m3.isFlow(), "m3.isFlow()")
   t.ok(!m3.isFlow("onz"), "!m3.isFlow('onz')")
+
+  let coolParams = ["2",2]
+  let isCool
+  A.install('cool', (...a)=>{
+    isCool = coolParams
+  })
+  t.ok(A.cool, "A.cool")
+  A.cool(...coolParams)
+  t.ok(isCool == coolParams, "A very cool")
+
+
+  // A.cool("xx")
   //
   //
   //

@@ -39,7 +39,7 @@ export const Aproxy = new Proxy({
         return v => p
       default :
         if (metaExtends[key])
-          return target[key]
+          return metaExtends[key]
         return target[key]
     }
   }
