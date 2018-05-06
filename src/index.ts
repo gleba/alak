@@ -1,13 +1,9 @@
-///// <reference path="./def/index.d.ts" />
-import {Aproxy} from "./Aproxy";
-import {flowStarter, IAproxy} from "./def/IAproxy";
-import {flow} from "./Aflow";
-import {IFlow} from "./def/IFlow";
 
+import {IflowStarter, IAproxy} from "./def/IAproxy";
+import {Aproxy} from "./Aproxy";
+import {flow} from "./Aflow";
 
 export const A = Aproxy as IAproxy
-export const AFlow = flow as flowStarter
+export const Al = flow as any as IflowStarter
+export const DFlow = flow as any as IflowStarter
 export default Aproxy as IAproxy
-
-
-// export const DFlow = AFlow

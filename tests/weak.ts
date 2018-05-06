@@ -1,24 +1,21 @@
 import {test} from "./ouput.shema"
-import {A, AFlow} from "../src";
+import {A} from "../src";
+// import {A, AFlow} from "../src";
 
 
 test("weak", (t: any) => {
 
-  let m1 = A.f.meta1
-  // m1.meta1
-  // console.log(m1)
-
-  // let mz = A.f
-
-  //
+  let m1 = A.meta.meta1
   t.ok(m1.isMeta("meta1"), "A.f.meta1")
-  //
-  let m2 = A.flow("value").meta2 //A.f("value").meta2//("value")
-  //
-  t.ok(m2.isMeta("meta2"), "A.f(\"value\").meta2 - isMeta(\"meta2\")")
-  t.ok(m2.isValue("value"), "A.f(\"value\").meta2 - isValue(\"value\")")
-  //
-  //
+
+  let m2 = A.m.meta2('value')
+
+
+
+  t.ok(m2.isMeta("meta2"), "A.f.meta2('value') - isMeta(\"meta2\")")
+  t.ok(m2.isValue("value"), "A.f.meta2('value') - isValue(\"value\")")
+  // //
+  // //
   let v = {s: "s"}
   let m3 = A.f({s: "s"})
   let o = m3.immutable

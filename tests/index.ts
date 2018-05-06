@@ -1,6 +1,7 @@
-// require('./base')
+require('./base')
 // require('./example')
 // require('./injectable')
 require('./weak')
 
 
+// console.log("-!")

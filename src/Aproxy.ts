@@ -4,8 +4,8 @@ import {flow} from "./Aflow";
 export const Aproxy = new Proxy({
   start: flow,
   flow: flow,
-  // stateless: () => flow().stateless(true),
-  // emitter: (...ar) => flow(...ar).emitter(true),
+  stateless: () => flow().stateless(),
+  emitter: (...ar) => flow(...ar).emitter(),
   toString: () => 'Alak Fantasy FRP Library'
 }, {
   get(target, key) {
@@ -14,6 +14,9 @@ export const Aproxy = new Proxy({
     switch (key) {
       case "f":
       case "flow":
+        return flow()
+      case "m":
+      case "meta":
         return flow()
       case "fn":
         let f = flow()
