@@ -11,6 +11,7 @@
 // type MetaFlow<T> = T extends MixedArgs<T> ? any : IFlow<T>
 
 import {AFlow} from "./AFlow";
+import {flow} from "../Aflow";
 
 type MayBeflow<T> = T extends AFlow <T> ? AFlow <T> : any
 export type IflowStarter = {
@@ -22,12 +23,15 @@ export type IflowStarter = {
 export type IAnyflowStarter = {
   (a: any): IAnyflowStarter
   [s: string]:  IAnyflowStarter
+
 }
 export interface IAproxy {
   flow: IflowStarter
   f: IflowStarter
   meta: IAnyflowStarter
   m: IAnyflowStarter
+  stateless: IflowStarter
+  emitter: IflowStarter
 }
 // let xx:AFlow<number>
 

@@ -1,6 +1,6 @@
-
 import {deleteParams, remove} from "./utils";
 import {patternMatch} from "./match";
+
 export function flow(a?) {
   let listeners = []
   let metaList = []
@@ -156,6 +156,8 @@ export function flow(a?) {
       if (f[pk])
         return f[pk]
       switch (pk) {
+        case "v":
+          return getValue()
         case "immutable":
           let v = getValue()
           switch (typeof v) {

@@ -1,5 +1,5 @@
 import {test} from "./ouput.shema"
-import {A} from "../src";
+import {A, DFlow} from "../src";
 // import {A, AFlow} from "../src";
 
 
@@ -10,6 +10,9 @@ test("weak", (t: any) => {
 
   let m2 = A.m.meta2('value')
 
+  let d = DFlow("f")
+
+  console.log(d.v)
 
 
   t.ok(m2.isMeta("meta2"), "A.f.meta2('value') - isMeta(\"meta2\")")
