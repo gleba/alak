@@ -1,12 +1,15 @@
 import {flow} from "./Aflow";
 
 
+let metaExtends = {}
+
 export const Aproxy = new Proxy({
   start: flow,
   flow: flow,
   stateless: () => flow().stateless(),
   emitter: (...ar) => flow(...ar).emitter(),
-  toString: () => 'Alak Fantasy FRP Library'
+  toString: () => 'Alak Fantasy FRP Library',
+  install: (key, fn) => metaExtends[key] = fn
 }, {
   get(target, key) {
     // console.log(key)
@@ -33,11 +36,12 @@ export const Aproxy = new Proxy({
             }
           }
         })
-        return v=>p
+        return v => p
       default :
+        if (metaExtends[key])
+          return target[key]
         return target[key]
     }
-
   }
 }) as any
 // Aproxy.prototype.['toString'] = zx=>"xxx"

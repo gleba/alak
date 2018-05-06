@@ -28,10 +28,11 @@ export type IAnyflowStarter = {
 export interface IAproxy {
   flow: IflowStarter
   f: IflowStarter
-  meta: IAnyflowStarter
-  m: IAnyflowStarter
+  meta: IflowStarter
+  m: IflowStarter
   stateless: IflowStarter
   emitter: IflowStarter
+  [s: string]:  IflowStarter
 }
 // let xx:AFlow<number>
 
