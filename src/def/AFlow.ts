@@ -16,7 +16,7 @@ type LinkedList<T> = T & { next: LinkedList<T> };
 //   [s: string]: AFlow<any>
 // }
 
-export type  AFlow<T> = {
+export interface  AFlow<T> {
   (...a: T[]): T
   v: T
   data: T[]
