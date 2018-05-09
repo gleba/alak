@@ -9,7 +9,8 @@ export function flow(a?) {
   let mapObjects: any //Map<any, Function>
   // let weakListeners = new WeakMap()
   // let weakUid = []
-  let proxy = {
+  let proxy = Object.create(null)
+  proxy = {
     data: [],
     on: fn => {
       listeners.push([fn, fn])
@@ -114,7 +115,7 @@ export function flow(a?) {
     // console.log(...a)
 
     if (!proxy) {
-      console.error("emit ended channel: " + a)
+      console.error("try to emit closed channel: " + a)
       return
     }
     setValues(Object.values(arguments))
@@ -128,6 +129,7 @@ export function flow(a?) {
   setValues(v)
 
 
+  let x = Symbol.toPrimitive
   Object.assign(proxy, {
     off: proxy.remove,
     meta(...meta) {
@@ -147,6 +149,12 @@ export function flow(a?) {
         return Object.keys(proxy).indexOf(key) > -1
       else
         return true
+    },
+    setId(id){
+      proxy.id = id
+    },
+    setMetaObj(o){
+      proxy.o = o
     }
   })
 
@@ -158,6 +166,10 @@ export function flow(a?) {
       switch (pk) {
         case "v":
           return getValue()
+        case "o":
+          return proxy.o
+        case "id":
+          return proxy.id
         case "immutable":
           let v = getValue()
           switch (typeof v) {
@@ -186,11 +198,39 @@ export function flow(a?) {
               })
           }
 
+
         default :
           afn.meta(pk)
           return afn
       }
     }
   })
+
+
+  Object.assign(afn, {
+    [Symbol.toPrimitive](hint) {
+      console.log(hint)
+      console.log(hint)
+
+      // if (hint == 'number') {
+      //   return 10;
+      // }
+      // if (hint == 'string') {
+      //   return 'AFlow';
+      // }
+      return 'AFlow';
+      // return true;
+    },
+    toString() {
+      return {name:"ss"}
+    },
+
+    // for hint="number" or "default"
+    valueOf() {
+      return {name:"ss"}
+    }
+  })
+  console.log()
+
   return afn
 }

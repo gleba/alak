@@ -21,22 +21,6 @@ export const Aproxy = new Proxy({
       case "m":
       case "meta":
         return flow()
-      case "fn":
-        let f = flow()
-        let metas = []
-        let p = new Proxy({}, {
-          get(px, k) {
-            console.log("get px", k)
-            if (f.isFlow(k)) {
-              f.meta(...metas)
-              return "xx"
-            } else {
-              metas.push(k)
-              return p
-            }
-          }
-        })
-        return v => p
       default :
         if (metaExtends[key])
           return metaExtends[key]

@@ -19,6 +19,8 @@ type LinkedList<T> = T & { next: LinkedList<T> };
 export interface  AFlow<T> {
   (...a: T[]): T
   v: T
+  id: any
+  o: any
   data: T[]
   immutable: T
   meta(...meta): AFlow<T>
@@ -39,6 +41,8 @@ export interface  AFlow<T> {
   drop(): void
   inject(obj: any, key?: string): void
   reject(obj): void
+  setId(name:string): void
+  setMetaObj(obj): void
 };
 
 
