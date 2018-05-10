@@ -19,6 +19,7 @@ type LinkedList<T> = T & { next: LinkedList<T> };
 export interface  AFlow<T> {
   (...a: T[]): T
   v: T
+  imv: T
   id: any
   o: any
   data: T[]

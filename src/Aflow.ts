@@ -167,6 +167,8 @@ export function flow(a?) {
       switch (pk) {
         case "v":
           return getValue()
+        case "imv":
+          return deepClone(getValue())
         case "o":
           return proxy.o
         case "id":
