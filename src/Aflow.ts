@@ -1,9 +1,10 @@
-import {deleteParams, remove} from "./utils";
+import {deepClone, deleteParams, remove} from "./utils";
 import {patternMatch} from "./match";
 
 export function flow(a?) {
   let listeners = []
   let metaList = []
+  let imListeners = new Map()
   let keepState = true
   let emitter = false
   let mapObjects: any //Map<any, Function>
@@ -17,18 +18,21 @@ export function flow(a?) {
       if (proxy.data.length > 0)
         fn.apply(fn, proxy.data)
     },
-    curryOn: function (fn) {
-      listeners.push([this, fn])
-      if (proxy.data.length > 0)
-        fn.apply(this, proxy.data)
+    off(fn) {
+      if (imListeners.has(fn)) {
+        remove(listeners, imListeners.get(fn))
+        imListeners.delete(fn)
+      } else {
+        remove(listeners, fn)
+      }
     },
-    weakOn: (where, f) => {
-      let ws = new WeakSet()
-      ws.add(where)
-      // weakListeners.set(where, f)
-      // weakUid.push(ws)
-      if (proxy.data.length > 0)
-        f.apply(f, proxy.data)
+    im: function (fn) {
+      let imFn = (...a) => fn.apply(this, a.map(deepClone))
+      imListeners.set(fn, imFn)
+      listeners.push([this, imFn])
+      if (proxy.data.length > 0) {
+        fn.apply(this, proxy.data.map(deepClone))
+      }
     },
     end: () => {
       deleteParams(functor)
@@ -37,7 +41,8 @@ export function flow(a?) {
       proxy = null
     },
     emit: () => {
-      listeners.forEach(f => f[1].apply(f[0], proxy.data))
+      let v = emitter ? true : proxy.data
+      listeners.forEach(f => f[1].apply(f[0], v))
     },
     mutate: function (fn) {
       let newValue
@@ -54,9 +59,6 @@ export function flow(a?) {
       proxy.on(patternMatch(arguments))
     },
     drop: () => listeners = [],
-    remove(fn) {
-      remove(listeners, fn)
-    },
     branch(f) {
       let newCn = flow()
       proxy.on((...v) => newCn(...f(...v)))
@@ -131,7 +133,6 @@ export function flow(a?) {
 
   let x = Symbol.toPrimitive
   Object.assign(proxy, {
-    off: proxy.remove,
     meta(...meta) {
       if (meta.length) {
         metaList.push(...meta)
@@ -150,10 +151,10 @@ export function flow(a?) {
       else
         return true
     },
-    setId(id){
+    setId(id) {
       proxy.id = id
     },
-    setMetaObj(o){
+    setMetaObj(o) {
       proxy.o = o
     }
   })
@@ -209,25 +210,7 @@ export function flow(a?) {
 
   Object.assign(afn, {
     [Symbol.toPrimitive](hint) {
-      console.log(hint)
-      console.log(hint)
-
-      // if (hint == 'number') {
-      //   return 10;
-      // }
-      // if (hint == 'string') {
-      //   return 'AFlow';
-      // }
-      return 'AFlow';
-      // return true;
-    },
-    toString() {
-      return {name:"ss"}
-    },
-
-    // for hint="number" or "default"
-    valueOf() {
-      return {name:"ss"}
+      return `AFlow<${afn.v ? typeof afn.v : 'any'}>`;
     }
   })
   console.log()

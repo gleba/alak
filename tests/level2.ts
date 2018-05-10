@@ -3,7 +3,7 @@ import {A, DFlow} from "../src";
 // import {A, AFlow} from "../src";
 
 
-test("weak", (t: any) => {
+test("level2", (t: any) => {
 
   let m2 = A.m.meta2('value')
 

@@ -1,7 +1,4 @@
-require('./base')
-// require('./example')
-// require('./injectable')
-require('./weak')
+require('./level3')
 
 
 // console.log("-!")

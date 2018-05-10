@@ -28,6 +28,7 @@ export interface  AFlow<T> {
   isFlow(key?): Boolean
   isValue(value?): Boolean
   on(fn: Listener<T>): AFlow<T>
+  im(fn: Listener<T>): AFlow<T>
   weakOn(fn: Listener<T>): AFlow<T>
   off(fn: Listener<T>): AFlow<T>
   stateless(v?: boolean): AFlow<T>
