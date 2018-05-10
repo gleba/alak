@@ -18,25 +18,26 @@ test("level2", (t: any) => {
     }
   }
   let f = A.f(o1)
-
-  const deepInc = (o,p="") => Object.keys(o).forEach(k=>{
+  //
+  const deepInc = (o, p = "") => Object.keys(o).forEach(k => {
     let ok = o[k]
     // console.log(p)
-    switch (typeof ok){
+    switch (typeof ok) {
       case "object":
-        deepInc(ok,p+"."+k)
+        deepInc(ok, p + "." + k)
         break
       default:
         o[k]++
     }
   })
-
-
+  //
+  //
   let off = false
   const imF = v => {
+
     deepInc(v)
     t.ok(v.a3.b1 != o1.a3.b1, "A.immutable")
-    if (off){
+    if (off) {
       t.ok(false, "A.immutable off")
     }
   }
@@ -48,6 +49,13 @@ test("level2", (t: any) => {
   off = true
   f(o1)
 
+  let f2 = A.f([1, 2])
+  t.ok(Array.isArray(f2.v) == Array.isArray(f2.imv), "immutable array")
+  //
+  let o3 = {a: ["oxxx"], sp: true}
+  let f3 = A.f(o3)
+
+  t.ok(f3.imv.a[0] == o3.a[0] , "immutable object")
   t.end()
 
 })
