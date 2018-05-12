@@ -87,7 +87,7 @@ export function flow(a?) {
       emitter = on
       return this
     },
-    silent(v) {
+    silent(...v) {
       functor['data'] = proxy.data = v
       functor['v'] = v ? v.length > 1 ? v : v[0] : null
     }

@@ -62,6 +62,15 @@ test("level2", (t: any) => {
 
   t.ok(imv != o3 , "imv")
 
+  let o4 = A.f
+  o4.on(v=>{
+    t.ok(false, "silent")
+  })
+
+  let os = {a:1,b:2} as any
+  o4.silent(os)
+  t.ok(o4.v == os, "silent")
+
 
   t.end()
 
