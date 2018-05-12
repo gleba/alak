@@ -30,12 +30,12 @@ export interface  AFlow<T> {
   isValue(value?): Boolean
   on(fn: Listener<T>): AFlow<T>
   im(fn: Listener<T>): AFlow<T>
-  weakOn(fn: Listener<T>): AFlow<T>
   off(fn: Listener<T>): AFlow<T>
   stateless(v?: boolean): AFlow<T>
   emitter(v?: boolean): AFlow<T>
   end(): void
   emit(): void
+  silent(...a: T[]): T
   match(...pattern)
   mutate(fn: Listener<T>): T
   branch<U>(fn: (...a: any[]) => U[]): AFlow<any>
@@ -45,6 +45,7 @@ export interface  AFlow<T> {
   reject(obj): void
   setId(name:string): void
   setMetaObj(obj): void
+  extend(key:string, obj): void
 };
 
 

@@ -49,13 +49,20 @@ test("level2", (t: any) => {
   off = true
   f(o1)
 
-  let f2 = A.f([1, 2])
+  let f2 = A.f([":lljljlkjkllj", 2])
   t.ok(Array.isArray(f2.v) == Array.isArray(f2.imv), "immutable array")
+  t.ok(Array.isArray(f2.v[0]) == Array.isArray(f2.imv[0]), "immutable array")
+  // f2.im(v=> console.log(v))
   //
   let o3 = {a: ["oxxx"], sp: true}
   let f3 = A.f(o3)
-
   t.ok(f3.imv.a[0] == o3.a[0] , "immutable object")
+  let imv = f3.imv
+  imv.a.push("zzz")
+
+  t.ok(imv != o3 , "imv")
+
+
   t.end()
 
 })

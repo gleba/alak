@@ -46,7 +46,6 @@ export function flow(a?) {
     },
     mutate: function (fn) {
       let newValue
-
       if (proxy.data.length > 1) {
         newValue = fn.apply(this, proxy.data)
         setValues(newValue)
@@ -87,6 +86,10 @@ export function flow(a?) {
     emitter(on = true) {
       emitter = on
       return this
+    },
+    silent(v) {
+      functor['data'] = proxy.data = v
+      functor['v'] = v ? v.length > 1 ? v : v[0] : null
     }
   }
 
@@ -156,6 +159,9 @@ export function flow(a?) {
     },
     setMetaObj(o) {
       proxy.o = o
+    },
+    extend(key, o) {
+      proxy[key] = o
     }
   })
 
