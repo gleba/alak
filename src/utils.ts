@@ -5,14 +5,15 @@ const newO = v => {
 
 const dc = (value, key?, parent?) => {
   let clone
-  // console.log(":", key, value)
-
+  // console.log(":", key, value, typeof value)
   switch (typeof value) {
     case "object":
       // console.log("object", key, value)
       if (Array.isArray(value)) {
         clone = []
         value.forEach((i, index) => dc(i, index, clone))
+      } else if (value == null) {
+        clone = null
       } else {
         clone = Object.create(null)
         Object.keys(value).forEach(k => dc(value[k], k, clone))

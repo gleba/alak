@@ -71,6 +71,13 @@ test("level2", (t: any) => {
   o4.silent(os)
   t.ok(o4.v == os, "silent")
 
+  let o5= A.f
+  o5.im(x=>{
+    console.log(x)
+  })
+
+  o5(null)
+
 
   t.end()
 
