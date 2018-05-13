@@ -211,8 +211,6 @@ export function flow(a?) {
     [Symbol.toPrimitive](hint) {
       return `AFlow<${afn.v ? typeof afn.v : 'any'}>`;
     }
-  })
-  console.log()
-
+  })  
   return afn
 }

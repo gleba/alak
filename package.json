@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "0.10.18",
+  "version": "0.10.19",
   "description": "Fantasy FRP DataChannels/DataFlow/Pattern Matching",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
