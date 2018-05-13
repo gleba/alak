@@ -13,10 +13,10 @@ export function flow(a?) {
   let proxy = Object.create(null)
   proxy = {
     data: [],
-    on: fn => {
-      listeners.push([fn, fn])
+    on(fn) {
+      listeners.push([this, fn])
       if (proxy.data.length > 0)
-        fn.apply(fn, proxy.data)
+        fn.apply(this, proxy.data)
     },
     off(fn) {
       if (imListeners.has(fn)) {
@@ -26,7 +26,7 @@ export function flow(a?) {
         remove(listeners, fn)
       }
     },
-    im: function (fn) {
+    im(fn) {
       let imFn = (...a) => fn.apply(this, a.map(deepClone))
       imListeners.set(fn, imFn)
       listeners.push([this, imFn])
@@ -104,15 +104,6 @@ export function flow(a?) {
       }
       if (emitter && !v) v = true
       listeners.forEach(f => f[1].apply(f[0], v))
-      // if (weakUid.length) {
-      //   weakUid.forEach(uid => {
-      //     if (weakListeners.has(uid)) {
-      //       let f = weakListeners.get(uid)
-      //       f.apply(f, v)
-      //     }
-      //   })
-      // }
-
     }
   }
 
