@@ -1,6 +1,12 @@
 export type Listener<T extends any> = (...a: T[]) => any
 
 
+export declare const A: IAproxy;
+export declare const Al: IflowStarter;
+export declare const DFlow: IflowStarter;
+declare const _default: IAproxy;
+export default _default;
+
 export interface AFlow<T> {
   /**
    * Witch arguments:
