@@ -1,11 +1,11 @@
 {
   "name": "alak",
-  "version": "0.10.19",
+  "version": "0.10.20",
   "description": "Fantasy FRP DataChannels/DataFlow/Pattern Matching",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "typings": "index.d.ts",
   "typescript": {
-    "definition": "dist/index.d.ts"
+    "definition": "index.d.ts"
   },
   "keywords": [
     "frp",

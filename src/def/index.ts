@@ -1,1 +1,0 @@
-export type Listener<T extends any> = (...a: T[]) => any

@@ -10,10 +10,12 @@ test("level2", (t: any) => {
   t.ok(m2.isMeta("meta2"), "A.f.meta2('value') - isMeta(\"meta2\")")
   t.ok(m2.isValue("value"), "A.f.meta2('value') - isValue(\"value\")")
   let v = {s: "s"}
-  let m3 = A.f({s: "s"})
+  let m3 = A.f(v)
   let o = m3.immutable
   t.ok(o.s == v.s, "immutable object")
   m3({s: "v"})
+  console.log(v)
+
   t.ok(o.s == "v", "immutable object 2")
   t.ok(m3.isFlow, "m3.isFlow")
   t.ok(m3.isFlow("on"), "m3.isFlow('on')")
