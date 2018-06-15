@@ -3,7 +3,7 @@
     "lib": ["ES2017", "DOM"],
     "module": "commonjs",
     "target": "es5",
-    "declaration": true,
+    "declaration": false,
     "outDir": "dist"
   },
   "exclude": [
