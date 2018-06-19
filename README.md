@@ -84,8 +84,6 @@ Prefect for state machines.
 -  subscribe listener,
 -  call function on every flow date update,
 -  `f.on(v=>...)`,
-  - ` @param {Listener<T>} fn`,
-  - ` @returns {AFlow<T>}`
 ```javascript
   im(fn: Listener<T>): AFlow<T>;
 ```
@@ -108,7 +106,6 @@ Prefect for state machines.
 -  Remove edge,
 -  unsubscribe listener,
 -  same as `off`,
-  - ` @param fn`
 ```javascript
   stateless(v?: boolean): AFlow<T>;
 ```
@@ -177,8 +174,6 @@ Prefect for state machines.
 ```
 
 -  Bind key in object to flow data value,
-  - ` @param obj`,
-  - ` @param {string} key`
 ```javascript
   reject(obj: any): void;
 ```
