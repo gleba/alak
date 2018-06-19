@@ -60,29 +60,22 @@ Prefect for state machines.
 -  ...maybe depricated,
 -  Set flow meta name,
 -  just call if need enable it,
-  - ` @param ...meta string`,
-  - ` @returns {AFlow<T>}`
 ```javascript
   isMeta(metaName: string): Boolean;
 ```
 
 -  Check flow meta name,
-  - ` @metaName string name of meta`,
-  - ` @returns Boolean`
 ```javascript
   isFlow(key?: any): Boolean;
 ```
 
 -  Check object is flow,
-  - ` @returns {Boolean}`
 ```javascript
   isValue(value?: any): Boolean;
 ```
 
 -  Check Value,
 -  same as flow.v === value,
-  - ` @param value`,
-  - ` @returns {Boolean}`
 ```javascript
   on(fn: Listener<T>): AFlow<T>;
 ```
@@ -101,8 +94,6 @@ Prefect for state machines.
 -  subscribe listener,
 -  call function on every flow date update,
 -  with clone value,
-  - ` @param {Listener<T>} fn`,
-  - ` @returns {AFlow<T>}`
 ```javascript
   off(fn: Listener<T>): AFlow<T>;
 ```
@@ -110,8 +101,6 @@ Prefect for state machines.
 -  Remove edge,
 -  unsubscribe listener,
 -  same as `stop`,
-  - ` @param {Listener<T>} fn`,
-  - ` @returns {AFlow<T>}`
 ```javascript
   stop(fn: any): void;
 ```
@@ -127,8 +116,6 @@ Prefect for state machines.
 -  Make flow as eventbus,
 -  do not save values and data in flow,
 -  set true if need enable it,
-  - ` @param {boolean} v`,
-  - ` @returns {AFlow<T>}`
 ```javascript
   emitter(v?: boolean): AFlow<T>;
 ```
@@ -136,8 +123,6 @@ Prefect for state machines.
 -  Make flow as dispatcher,
 -  notify all edges/listeners when call flow() without arguments,
 -  set true if need enable it,
-  - ` @param {boolean} v`,
-  - ` @returns {AFlow<T>}`
 ```javascript
   end(): void;
 ```
@@ -155,42 +140,33 @@ Prefect for state machines.
 ```
 
 -  Updtate data without notify edges/listeners,
-  - ` @param {T} a`,
-  - ` @returns {T}`
 ```javascript
   match(...pattern: any[]): any;
 ```
 
 -  Patterm maching,
-  - ` @example`,
--  ```,
--  flow.match(,
--     1, ()=>oneFunction(),,
--     2, v => v===2 ,,
--     v=>elseFuntion(),
--  ),
--  ```,
-  - ` @param pattern`,
-  - ` @returns {any}`
+  ```,
+  flow.match(,
+     1, ()=>oneFunction(),,
+     2, v => v===2 ,,
+     v=>elseFuntion(),
+  ),
+  ```,
+  
 ```javascript
   mutate(fn: Listener<T>): T;
 ```
 
 -  Mutate data value,
--  and notify edges/listeners,
-  - ` @example`,
--  ```,
--  flow.mutate(v=>v+1),
--  ```,
-  - ` @param {Listener<T>} fn`,
-  - ` @returns {T}`
+-  and notify edges/listeners, 
+  ```,
+  flow.mutate(v=>v+1),
+  ```,
 ```javascript
   branch<U>(fn: (...a: any[]) => U[]): AFlow<any>;
 ```
 
 -  Create new flow edged on current,
-  - ` @param {(...a: any[]) => U[]} fn`,
-  - ` @returns {AFlow<any>}`
 ```javascript
   drop(): void;
 ```
@@ -208,16 +184,13 @@ Prefect for state machines.
 ```
 
 -  Unbind injected object,
-  - ` @param obj`
 ```javascript
   setId(name: string): void;
 ```
 
 -  set id param to flow,
-  - ` @param {string} name`
 ```javascript
   setMetaObj(obj: any): void;
 ```
 
 -  set any meta data as object in flow,
-  - ` @param obj`
