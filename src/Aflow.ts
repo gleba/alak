@@ -11,15 +11,11 @@ export function flow(a?) {
   let effector = null
   let mapObjects: any //Map<any, Function>
 
-  const fx = (...v) => {
-    if (effector) {
+  const fx = (v) => {
+    if (effector && v.length) {
         return v.map(effector)
     }
     return v
-  }
-  const emit = ()=>{
-    let v = emitter ? true : proxy.data
-    listeners.forEach(f => f[1].apply(f[0], fx(...v)))
   }
   let proxy = Object.create(null)
   proxy = {
@@ -30,7 +26,7 @@ export function flow(a?) {
     on(fn, context) {
       listeners.push([context?context:fn, fn])
       if (proxy.data.length > 0)
-        fn.apply(context, fx(...proxy.data))
+        fn.apply(context, fx(proxy.data))
     },
     off(fn) {
       if (imListeners.has(fn)) {
@@ -45,7 +41,7 @@ export function flow(a?) {
       imListeners.set(fn, imFn)
       listeners.push([fn, imFn])
       if (proxy.data.length > 0) {
-        fn.apply(this, fx(...proxy.data.map(deepClone)))
+        fn.apply(this, fx(proxy.data.map(deepClone)))
       }
     },
     end: () => {
@@ -54,7 +50,11 @@ export function flow(a?) {
       listeners = null
       proxy = null
     },
-    emit,
+    emit: () => {
+      let v = emitter ? true : proxy.data
+      if (Array.isArray(v)) v = fx(v)
+      listeners.forEach(f => f[1].apply(f[0], v))
+    },
     mutate: function (fn) {
       let newValue
       if (proxy.data.length > 1) {
@@ -113,7 +113,9 @@ export function flow(a?) {
         functor['data'] = proxy.data = v
         functor['v'] = v ? v.length > 1 ? v : v[0] : null
       }
-      proxy.emit()
+      if (emitter && !v) v = true
+      if (Array.isArray(v)) v = fx(v)
+      listeners.forEach(f => f[1].apply(f[0], v))
     }
   }
 
