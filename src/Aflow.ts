@@ -13,8 +13,11 @@ export function flow(a?) {
   let proxy = Object.create(null)
   proxy = {
     data: [],
-    on(fn) {
-      listeners.push([this, fn])
+    next(fn, context) {
+      listeners.push([context?context:fn, fn])
+    },
+    on(fn, context) {
+      listeners.push([context?context:fn, fn])
       if (proxy.data.length > 0)
         fn.apply(this, proxy.data)
     },
@@ -153,6 +156,49 @@ export function flow(a?) {
     },
     extend(key, o) {
       proxy[key] = o
+    },
+    push(value) {
+      let v = getValue()
+      if (Array.isArray(v)) {
+        v.push(value)
+        proxy.emit()
+      }
+    },
+    set(ki, value) {
+      let v = getValue()
+      v[ki] = value
+      proxy.emit()
+    },
+    each(f:(value, ki)=>void) {
+      let v = getValue()
+      if (Array.isArray(v)) {
+        let i = v.length
+        while (i--) f(v[i], i)
+      } else {
+        Object.keys(v).forEach(k=>f(v[k],k))
+      }
+      proxy.emit()
+    },
+    map(f:(value, ki)=>any) {
+      let v = getValue()
+      if (Array.isArray(v)) {
+        return v.map((v,i)=>f(v,i))
+      } else {
+        let o = {}
+        Object.keys(v).forEach(k=>o[k]=f(v[k],k))
+        return o
+      }
+      proxy.emit()
+    },
+    remove(ki) {
+      let v = getValue()
+      if (Array.isArray(v)) {
+        v.splice(v.indexOf(ki), 1);
+        proxy.emit()
+      } else {
+        delete v[ki]
+        proxy.emit()
+      }
     }
   })
 
@@ -211,6 +257,6 @@ export function flow(a?) {
     [Symbol.toPrimitive](hint) {
       return `AFlow<${afn.v ? typeof afn.v : 'any'}>`;
     }
-  })  
+  })
   return afn
 }

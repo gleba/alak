@@ -75,9 +75,22 @@ export interface AFlow<T> {
   isValue(value?: any): Boolean;
 
   /**
+   * Remove key or index in object or array
+   * @param value
+   * @returns {Boolean}
+   */
+  remove(ki?: any);
+
+  set(ki: string|number, item:any);
+  push(item:any);
+
+  map(f:(item:any,ki)=>any);
+
+
+  /**
    * Add edge
    * subscribe listener
-   * call function on every flow date update
+   * call function on every flow data update
    * `f.on(v=>...)`
    * @param {Listener<T>} fn
    * @returns {AFlow<T>}
@@ -85,9 +98,18 @@ export interface AFlow<T> {
   on(fn: Listener<T>): AFlow<T>;
 
   /**
+   * Subscribe listener
+   * call function on every next flow update
+   * `f.on(v=>...)`
+   * @param {Listener<T>} fn
+   * @returns {AFlow<T>}
+   */
+  next(fn: Listener<T>): AFlow<T>;
+
+  /**
    * Add Immutable edge
    * subscribe listener
-   * call function on every flow date update
+   * call function on every flow update
    * with clone value
    * @param {Listener<T>} fn
    * @returns {AFlow<T>}
