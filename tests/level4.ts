@@ -5,7 +5,6 @@ import {DFlow} from "../src";
 
 
 
-
 test("level4 - Collections", (t: any) => {
 
 
@@ -28,6 +27,7 @@ test("level4 - Collections", (t: any) => {
     arrayFlow.remove("two")
 
 
+
     objectFlow.next(function (v) {
         t.ok(v.two, "set object item")
     })
@@ -37,13 +37,31 @@ test("level4 - Collections", (t: any) => {
 
     arrayFlow.set(0, "three")
     arrayFlow.push("four")
-    t.ok(arrayFlow()[0]=="three", "set array item")
-    t.ok(arrayFlow()[1]=="four", "push array item")
+    t.ok(arrayFlow()[0]==="three", "set array item")
+    t.ok(arrayFlow()[1]==="four", "push array item")
 
     t.ok(arrayFlow.map((i,k)=>k)[1]==1,"map array")
     t.ok(objectFlow.map((i,k)=>k).two=="two","map object")
 
 
+    // console.log(arrayFlow.v)
+
+    // arrayFlow.on(x=>{
+    //     console.log("1 arrayFlow.on", x)
+    // })
+
+
+    arrayFlow.next(x=>{
+        console.log("next effect", x)
+    })
+
+    arrayFlow.effect(v=> v.map(i => 0))
+    arrayFlow.on(x=>{
+        console.log("arrayFlow.on", x)
+    })
+    arrayFlow.mutate(v=>v)
+    console.log(arrayFlow.v)
+    arrayFlow.clearEffect()
     t.end()
 
 })

@@ -1,5 +1,6 @@
 import {deepClone, deleteParams, remove} from "./utils";
 import {patternMatch} from "./match";
+import {isFunction} from "util";
 
 export function flow(a?) {
   let listeners = []
@@ -7,9 +8,19 @@ export function flow(a?) {
   let imListeners = new Map()
   let keepState = true
   let emitter = false
+  let effector = null
   let mapObjects: any //Map<any, Function>
-  // let weakListeners = new WeakMap()
-  // let weakUid = []
+
+  const fx = (...v) => {
+    if (effector) {
+        return v.map(effector)
+    }
+    return v
+  }
+  const emit = ()=>{
+    let v = emitter ? true : proxy.data
+    listeners.forEach(f => f[1].apply(f[0], fx(...v)))
+  }
   let proxy = Object.create(null)
   proxy = {
     data: [],
@@ -19,7 +30,7 @@ export function flow(a?) {
     on(fn, context) {
       listeners.push([context?context:fn, fn])
       if (proxy.data.length > 0)
-        fn.apply(this, proxy.data)
+        fn.apply(context, fx(...proxy.data))
     },
     off(fn) {
       if (imListeners.has(fn)) {
@@ -29,12 +40,12 @@ export function flow(a?) {
         remove(listeners, fn)
       }
     },
-    im(fn) {
-      let imFn = (...a) => fn.apply(this, a.map(deepClone))
+    im(fn, e) {
+      let imFn = (...a) => fn.apply(fn, fx(a.map(deepClone)))
       imListeners.set(fn, imFn)
-      listeners.push([this, imFn])
+      listeners.push([fn, imFn])
       if (proxy.data.length > 0) {
-        fn.apply(this, proxy.data.map(deepClone))
+        fn.apply(this, fx(...proxy.data.map(deepClone)))
       }
     },
     end: () => {
@@ -43,10 +54,7 @@ export function flow(a?) {
       listeners = null
       proxy = null
     },
-    emit: () => {
-      let v = emitter ? true : proxy.data
-      listeners.forEach(f => f[1].apply(f[0], v))
-    },
+    emit,
     mutate: function (fn) {
       let newValue
       if (proxy.data.length > 1) {
@@ -105,8 +113,7 @@ export function flow(a?) {
         functor['data'] = proxy.data = v
         functor['v'] = v ? v.length > 1 ? v : v[0] : null
       }
-      if (emitter && !v) v = true
-      listeners.forEach(f => f[1].apply(f[0], v))
+      proxy.emit()
     }
   }
 
@@ -188,7 +195,6 @@ export function flow(a?) {
         Object.keys(v).forEach(k=>o[k]=f(v[k],k))
         return o
       }
-      proxy.emit()
     },
     remove(ki) {
       let v = getValue()
@@ -199,6 +205,14 @@ export function flow(a?) {
         delete v[ki]
         proxy.emit()
       }
+    },
+    effect(fn) {
+      effector = fn
+      setValues([getValue()])
+    },
+    clearEffect() {
+      effector = null
+      setValues([getValue()])
     }
   })
 

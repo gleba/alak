@@ -106,6 +106,9 @@ export interface AFlow<T> {
    */
   next(fn: Listener<T>): AFlow<T>;
 
+  effect(fn: Listener<T>): any;
+  clearEffect(): void;
+
   /**
    * Add Immutable edge
    * subscribe listener
