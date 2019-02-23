@@ -183,7 +183,7 @@ export function flow(a?) {
       if (Array.isArray(v)) {
         v.forEach((item,i)=>f(item,i,v))
       } else {
-        Object.keys(v).forEach(k=>f(v[k],k))
+        Object.keys(v).forEach(k=>f(v[k],k,v))
       }
       proxy.emit()
     },
