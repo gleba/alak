@@ -183,6 +183,7 @@ export function flow(a?) {
       } else {
         Object.keys(v).forEach(k=>f(v[k],k))
       }
+      proxy.emit()
     },
     map(f:(value, ki)=>any) {
       let v = getValue()
