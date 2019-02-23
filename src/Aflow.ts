@@ -178,10 +178,10 @@ export function flow(a?) {
       v[ki] = value
       proxy.emit()
     },
-    each(f:(value, ki)=>void) {
+    each(f:(value, ki, target)=>void) {
       let v = getValue()
       if (Array.isArray(v)) {
-        v.forEach((v,i)=>f(v,i))
+        v.forEach((item,i)=>f(item,i,v))
       } else {
         Object.keys(v).forEach(k=>f(v[k],k))
       }
