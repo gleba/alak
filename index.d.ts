@@ -85,7 +85,10 @@ export interface AFlow<T> {
   push(item:any);
 
   map(f:(item:any,ki)=>any);
+  each(f:(item:any,ki)=>void);
 
+  effect(fn: Listener<T>): any;
+  clearEffect(): void;
 
   /**
    * Add edge
@@ -105,9 +108,6 @@ export interface AFlow<T> {
    * @returns {AFlow<T>}
    */
   next(fn: Listener<T>): AFlow<T>;
-
-  effect(fn: Listener<T>): any;
-  clearEffect(): void;
 
   /**
    * Add Immutable edge

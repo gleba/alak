@@ -62,6 +62,11 @@ test("level4 - Collections", (t: any) => {
     arrayFlow.mutate(v=>v)
     console.log(arrayFlow.v)
     arrayFlow.clearEffect()
+    arrayFlow.each((v,i)=>{
+        console.log(v,i)
+
+    })
+
     t.end()
 
 })

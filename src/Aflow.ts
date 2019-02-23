@@ -179,12 +179,10 @@ export function flow(a?) {
     each(f:(value, ki)=>void) {
       let v = getValue()
       if (Array.isArray(v)) {
-        let i = v.length
-        while (i--) f(v[i], i)
+        v.forEach((v,i)=>f(v,i))
       } else {
         Object.keys(v).forEach(k=>f(v[k],k))
       }
-      proxy.emit()
     },
     map(f:(value, ki)=>any) {
       let v = getValue()
