@@ -56,15 +56,14 @@ test("level4 - Collections", (t: any) => {
     })
 
     arrayFlow.effect(v=> v.map(i => 0))
-    arrayFlow.on(x=>{
-        console.log("arrayFlow.on", x)
-    })
-    arrayFlow.mutate(v=>v)
-    console.log(arrayFlow.v)
-    arrayFlow.clearEffect()
+    // arrayFlow.on(x=>{
+    //     console.log("arrayFlow.on", x)
+    // })
+    // arrayFlow.mutate(v=>v)
+    // console.log(arrayFlow.v)
+    // arrayFlow.clearEffect()
     arrayFlow.each((v,i)=>{
         console.log(v,i)
-
     })
 
     t.end()

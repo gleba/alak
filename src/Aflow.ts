@@ -212,8 +212,10 @@ export function flow(a?) {
       setValues([getValue()])
     },
     clearEffect() {
-      effector = null
-      setValues([getValue()])
+      if (effector){
+        effector = null
+        setValues([getValue()])
+      }
     }
   })
 
