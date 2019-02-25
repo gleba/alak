@@ -87,7 +87,7 @@ export interface AFlow<T> {
   map(f:(item:any,ki)=>any);
   each(f:(item:any,ki)=>void);
 
-  effect(fn: Listener<T>): any;
+  effect(fn: Listener<T>, mutable?:boolean): any;
   clearEffect(): void;
 
   /**

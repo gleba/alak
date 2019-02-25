@@ -30,6 +30,7 @@ test("level4 - Collections", (t: any) => {
 
     objectFlow.next(function (v) {
         t.ok(v.two, "set object item")
+        objectFlow.off(this)
     })
     objectFlow.set("two", true)
 
@@ -52,19 +53,22 @@ test("level4 - Collections", (t: any) => {
 
 
     arrayFlow.next(x=>{
-        console.log("next effect", x)
+        t.ok(x[0]==="x", "effected value")
+        t.ok(arrayFlow()[1]==="four", "imutable effect")
     })
 
-    arrayFlow.effect(v=> v.map(i => 0))
-    // arrayFlow.on(x=>{
-    //     console.log("arrayFlow.on", x)
-    // })
-    // arrayFlow.mutate(v=>v)
-    // console.log(arrayFlow.v)
-    // arrayFlow.clearEffect()
-    arrayFlow.each((v,i)=>{
-        console.log(v,i)
+    arrayFlow.effect(v=> v.map(i => "x"))
+
+    objectFlow.effect(v=>{
+        return {
+            four:true
+        }
+    }, true)
+
+    objectFlow.each((v,key)=>{
+        t.ok(key=="four", "effected each mutable")
     })
+    t.ok(objectFlow.v['four'], "effected mutable")
 
     t.end()
 

@@ -7,6 +7,7 @@ export function flow(a?) {
   let metaList = []
   let imListeners = new Map()
   let keepState = true
+  let mutableFx = false
   let emitter = false
   let effector = null
   let mapObjects: any //Map<any, Function>
@@ -52,7 +53,7 @@ export function flow(a?) {
     },
     emit: () => {
       let v = emitter ? true : proxy.data
-      if (Array.isArray(v)) v = fx(v)
+      if (Array.isArray(v) && !mutableFx) v = fx(v)
       listeners.forEach(f => f[1].apply(f[0], v))
     },
     mutate: function (fn) {
@@ -110,11 +111,12 @@ export function flow(a?) {
   const setValues = v => {
     if (v.length > 0 || emitter) {
       if (keepState) {
+        if (mutableFx) v = fx(v)
         functor['data'] = proxy.data = v
         functor['v'] = v ? v.length > 1 ? v : v[0] : null
       }
       if (emitter && !v) v = true
-      if (Array.isArray(v)) v = fx(v)
+      if (Array.isArray(v) && !mutableFx) v = fx(v)
       listeners.forEach(f => f[1].apply(f[0], v))
     }
   }
@@ -207,13 +209,15 @@ export function flow(a?) {
         proxy.emit()
       }
     },
-    effect(fn) {
+    effect(fn, mutable = false) {
       effector = fn
+      mutableFx = mutable
       setValues([getValue()])
     },
     clearEffect() {
       if (effector){
         effector = null
+        mutableFx = false
         setValues([getValue()])
       }
     }
@@ -226,13 +230,16 @@ export function flow(a?) {
         return f[pk]
       switch (pk) {
         case "v":
+        case "value":
           return getValue()
         case "imv":
+        case "immutableValue":
           return deepClone(getValue())
-        case "o":
-          return proxy.o
         case "id":
           return proxy.id
+        case "o":
+        case "metaData":
+          return proxy.o
         case "immutable":
           let v = getValue()
           switch (typeof v) {
