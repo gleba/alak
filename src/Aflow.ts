@@ -212,7 +212,9 @@ export function flow(a?) {
     effect(fn, mutable = false) {
       effector = fn
       mutableFx = mutable
-      setValues([getValue()])
+      let v = getValue()
+      if (v!=null)
+        setValues([v])
     },
     clearEffect() {
       if (effector){
