@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "0.10.32",
+  "version": "0.10.33",
   "description": "Fantasy FRP DataChannels/DataFlow/Pattern Matching",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -21,11 +21,11 @@
   "license": "MIT",
   "repository": "https://github.com/gleba/alak",
   "devDependencies": {
-    "@types/core-js": "^0.9.43",
-    "@types/node": "^10.0.4",
+    "@types/core-js": "^2.5.0",
+    "@types/node": "^11.9.5",
     "tape": "^4.8.0",
-    "ts-node": "^6.0.2",
-    "typescript": "^2.8.3"
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.3333"
   },
   "dependencies": {}
 }
