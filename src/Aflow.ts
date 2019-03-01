@@ -132,7 +132,8 @@ export function flow(a?) {
     if (a.length) {
       return afn
     }
-    return fx(getValue())
+    let v = fx([getValue()])[0]
+    return v
   }
 
   let v = Object.values(arguments)

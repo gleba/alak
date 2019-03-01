@@ -54,7 +54,7 @@ test("level4 - Collections", (t: any) => {
 
     arrayFlow.next(x=>{
         t.ok(x[0]==="x", "effected value")
-        t.ok(arrayFlow()[1]==="four", "imutable effect")
+        t.ok(arrayFlow.v[1]==="four", "imutable effect")
     })
 
     arrayFlow.effect(v=> v.map(i => "x"))
