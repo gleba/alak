@@ -65,7 +65,7 @@ export function flow(a?) {
       if (Array.isArray(v) && !mutableFx) v = fx(v)
       listeners.forEach(f => f[1].apply(f[0], v))
       while (onceListeners.length>0) {
-        remove(listeners, onceListeners.shift)
+        remove(listeners, onceListeners.shift())
       }
         // remove(listeners, onceListeners.shift)
     },
