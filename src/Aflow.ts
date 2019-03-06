@@ -64,7 +64,7 @@ export function flow(a?) {
       let v = emitter ? true : proxy.data
       if (Array.isArray(v) && !mutableFx) v = fx(v)
       listeners.forEach(f => f[1].apply(f[0], v))
-      while (onceListeners.length) {
+      while (onceListeners.length>0) {
         remove(listeners, onceListeners.shift)
       }
         // remove(listeners, onceListeners.shift)
@@ -131,7 +131,7 @@ export function flow(a?) {
       if (emitter && !v) v = true
       if (Array.isArray(v) && !mutableFx) v = fx(v)
       listeners.forEach(f => f[1].apply(f[0], v))
-      while (onceListeners.length)
+      while (onceListeners.length>0)
         remove(listeners, onceListeners.shift)
     }
   }
