@@ -93,16 +93,21 @@ test("Alak test", (t: any) => {
   s7.match(
     'stateless', v=>t.ok(true, 's7: stateless'),
   )
+  s7.on((...v)=>{
+    console.log('1')
+
+    console.log(v)
+  })
 
 
-  s7('stateless')
+  // s7('stateless')
   s7.on(neverFn)
   s7()
   s7.off(neverFn)
   s7.on(v=>{
     t.ok(true, 's7: emitter')
   })
-  s7.emitter(true)
+  s7.emitter()
   s7()
 
   t.end()

@@ -101,6 +101,16 @@ export interface AFlow<T> {
   on(fn: Listener<T>): AFlow<T>;
 
   /**
+   * Add edge only once
+   * subscribe listener
+   * call function on every flow data update
+   * `f.on(v=>...)`
+   * @param {Listener<T>} fn
+   * @returns {AFlow<T>}
+   */
+  once(fn: Listener<T>): AFlow<T>;
+
+  /**
    * Subscribe listener
    * call function on every next flow update
    * `f.on(v=>...)`

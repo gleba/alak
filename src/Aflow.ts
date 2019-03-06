@@ -6,6 +6,7 @@ export function flow(a?) {
   let listeners = []
   let metaList = []
   let imListeners = new Map()
+  let onceListeners = []
   let keepState = true
   let mutableFx = false
   let emitter = false
@@ -23,6 +24,14 @@ export function flow(a?) {
     data: [],
     next(fn, context) {
       listeners.push([context?context:fn, fn])
+    },
+    once(fn, context) {
+      if (proxy.data.length > 0)
+        fn.apply(context, fx(proxy.data))
+      else {
+        onceListeners.push(fn)
+        listeners.push([context?context:fn, fn])
+      }
     },
     on(fn, context) {
       listeners.push([context?context:fn, fn])
@@ -55,6 +64,10 @@ export function flow(a?) {
       let v = emitter ? true : proxy.data
       if (Array.isArray(v) && !mutableFx) v = fx(v)
       listeners.forEach(f => f[1].apply(f[0], v))
+      while (onceListeners.length) {
+        remove(listeners, onceListeners.shift)
+      }
+        // remove(listeners, onceListeners.shift)
     },
     mutate: function (fn) {
       let newValue
@@ -118,6 +131,8 @@ export function flow(a?) {
       if (emitter && !v) v = true
       if (Array.isArray(v) && !mutableFx) v = fx(v)
       listeners.forEach(f => f[1].apply(f[0], v))
+      while (onceListeners.length)
+        remove(listeners, onceListeners.shift)
     }
   }
 
