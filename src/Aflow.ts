@@ -11,6 +11,7 @@ export function flow(a?) {
   let mutableFx = false
   let emitter = false
   let effector = null
+  let wrapper = null
   let mapObjects: any //Map<any, Function>
 
   const fx = (v) => {
@@ -122,6 +123,7 @@ export function flow(a?) {
     return proxy.data ? proxy.data.length > 1 ? proxy.data : proxy.data[0] : null
   }
   const setValues = v => {
+    // console.log("setValues", v)
     if (v.length > 0 || emitter) {
       if (keepState) {
         if (mutableFx) v = fx(v)
@@ -143,12 +145,17 @@ export function flow(a?) {
       console.error("try to emit closed channel: " + a)
       return
     }
-    setValues(Object.values(arguments))
+
+
+    if (wrapper && a.length) {
+      setValues([wrapper(...Object.values(arguments), getValue())])
+    } else {
+      setValues(Object.values(arguments))
+    }
     if (a.length) {
       return afn
     }
-    let v = fx([getValue()])[0]
-    return v
+    return fx([getValue()])[0]
   }
 
   let v = Object.values(arguments)
@@ -224,6 +231,12 @@ export function flow(a?) {
         delete v[ki]
         proxy.emit()
       }
+    },
+    wrap(fn) {
+      wrapper = fn
+    },
+    unwrap() {
+      wrapper = null
     },
     effect(fn, mutable = false) {
       effector = fn

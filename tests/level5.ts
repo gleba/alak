@@ -8,10 +8,6 @@ import {DFlow} from "../src";
 test("level4 - Collections", (t: any) => {
 
 
-    let objectFlow = DFlow({
-        one: true,
-        two: true
-    })
     let arrayFlow = DFlow(["one", "two"])
 
     arrayFlow.once(function (v) {
@@ -20,50 +16,23 @@ test("level4 - Collections", (t: any) => {
 
     arrayFlow.remove("two")
     arrayFlow.remove("two")
-    //
-    //
-    //
-    // objectFlow.next(function (v) {
-    //     t.ok(v.two, "set object item")
-    //     objectFlow.off(this)
-    // })
-    // objectFlow.set("two", true)
-    //
-    //
-    //
-    // arrayFlow.set(0, "three")
-    // arrayFlow.push("four")
-    // t.ok(arrayFlow()[0]==="three", "set array item")
-    // t.ok(arrayFlow()[1]==="four", "push array item")
-    //
-    // t.ok(arrayFlow.map((i,k)=>k)[1]==1,"map array")
-    // t.ok(objectFlow.map((i,k)=>k).two=="two","map object")
-    //
-    //
-    // // console.log(arrayFlow.v)
-    //
-    // // arrayFlow.on(x=>{
-    // //     console.log("1 arrayFlow.on", x)
-    // // })
-    //
-    //
-    // arrayFlow.next(x=>{
-    //     t.ok(x[0]==="x", "effected value")
-    //     t.ok(arrayFlow.v[1]==="four", "imutable effect")
-    // })
-    //
-    // arrayFlow.effect(v=> v.map(i => "x"))
-    //
-    // objectFlow.effect(v=>{
-    //     return {
-    //         four:true
-    //     }
-    // }, true)
-    //
-    // objectFlow.each((v,key)=>{
-    //     t.ok(key=="four", "effected each mutable")
-    // })
-    // t.ok(objectFlow.v['four'], "effected mutable")
+
+
+    let oflow = <any>DFlow({
+        one: true,
+        two: true
+    })
+
+    oflow.wrap((newValue, old)=>{
+        Object.keys(old).forEach(k=>{
+            newValue[k] = old[k]
+        })
+        return newValue
+    })
+    oflow({four:true})
+
+
+    t.ok(oflow.v.four && oflow.v.one, "wrap")
 
     t.end()
 
