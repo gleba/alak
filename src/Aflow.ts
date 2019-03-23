@@ -255,7 +255,11 @@ export function flow(a?) {
     let mutator = af[af.length-1].isFlow ? false : af.pop()
     let s = new Map()
     let allTrue = false
-    // console.log({af})
+    if (af.length == 1 ){
+      if (Array.isArray(af[0])) {
+        af = af[0]
+      }
+    }
 
     af.forEach(f=>{
       // console.log(f.isFlow)

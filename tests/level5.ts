@@ -41,13 +41,21 @@ test("level5 - Once Warp Mix", (t: any) => {
     let mixed = DFlow()
 
     flow2(2)
-    mixed.iMix(flow1,flow2, flow3, (f1,f2,f3)=>{
-        return f1+f2+f3
+    mixed.iMix(flow1,flow2, (f1,f2)=>{
+        return f1+f2
     })
     flow1(1)
+
+    t.ok(mixed.v==3, "integralMix")
+
+
+    let mixed2 = DFlow()
+    mixed2.iMix([flow1,flow2, flow3], (f1,f2,f3)=>{
+        return f1+f2+f3
+    })
     flow3(3)
 
-    t.ok(mixed.v==6, "integralMix")
+    t.ok(mixed2.v==6, "integralMix 2")
     t.end()
 
 })
