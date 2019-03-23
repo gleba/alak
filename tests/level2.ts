@@ -18,9 +18,6 @@ test("level2", (t: any) => {
 
   t.ok(o.s == "v", "immutable object 2")
   t.ok(m3.isFlow, "m3.isFlow")
-  t.ok(m3.isFlow("on"), "m3.isFlow('on')")
-  t.ok(m3.isFlow(), "m3.isFlow()")
-  t.ok(!m3.isFlow("onz"), "!m3.isFlow('onz')")
 
   let coolParams = ["2",2]
   let isCool

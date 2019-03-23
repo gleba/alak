@@ -88,10 +88,15 @@ export interface AFlow<T> {
   each(f:(item:any,ki)=>void);
 
   effect(fn: Listener<T>, mutable?:boolean): any;
-
   clearEffect(): void;
+
   wrap(fn: Listener<T>): any;
+
   unwrap(): any;
+
+  iMix( ...f): any;
+  integralMix(fn: Listener<any>): any;
+  mix(fn: Listener<any>): any;
   /**
    * Add edge
    * subscribe listener

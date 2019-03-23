@@ -176,12 +176,6 @@ export function flow(a?) {
     isValue(...value) {
       return getValue() == value
     },
-    isFlow(key?) {
-      if (key)
-        return Object.keys(proxy).indexOf(key) > -1
-      else
-        return true
-    },
     setId(id) {
       proxy.id = id
     },
@@ -255,6 +249,40 @@ export function flow(a?) {
   })
 
   Object.assign(functor, proxy)
+
+  const integralMix = (...af:any) =>{
+
+    let mutator = af[af.length-1].isFlow ? false : af.pop()
+    let s = new Map()
+    let allTrue = false
+    // console.log({af})
+
+    af.forEach(f=>{
+      // console.log(f.isFlow)
+      f.on(v=>{
+        if (!allTrue) {
+          s.set(f, true)
+          if (s.size == af.length){
+            allTrue = true
+            s.clear()
+          }
+        }
+        if (allTrue) {
+          let mixedValue = af.map(f=>f.v)
+          if (mutator) {
+            mixedValue.push(getValue())
+            let mutatedValue = mutator(...mixedValue)
+            if (mutatedValue===undefined) {
+              throw "Mixed Integral mutation function returns an undefined value."
+            }
+             setValues([mutatedValue])
+          } else {
+            setValues(mixedValue)
+          }
+        }
+      })
+    })
+  }
   const afn = new Proxy(functor, {
     get(f, pk) {
       if (f[pk])
@@ -263,11 +291,17 @@ export function flow(a?) {
         case "v":
         case "value":
           return getValue()
+        case "iMix":
+        case "integralMix":
+        case "mixedIntegral":
+          return integralMix
         case "imv":
         case "immutableValue":
           return deepClone(getValue())
         case "id":
           return proxy.id
+        case "isFlow":
+          return true
         case "o":
         case "metaData":
           return proxy.o
