@@ -300,8 +300,9 @@ export function flow(a?) {
         case "mixedIntegral":
           return integralMix
         case "imv":
+        case "cloneValue":
         case "immutableValue":
-          return deepClone(getValue())
+          return JSON.parse(JSON.stringify(getValue()))
         case "id":
           return proxy.id
         case "isFlow":
@@ -309,35 +310,6 @@ export function flow(a?) {
         case "o":
         case "metaData":
           return proxy.o
-        case "immutable":
-          let v = getValue()
-          switch (typeof v) {
-            case "string":
-            case "number":
-              return v
-            default:
-              // console.log("typeof v", typeof v)
-              return new Proxy({}, {
-                get(d, dk) {
-                  v = getValue()
-                  // console.log("proxy get Value", dk, getValue())
-                  if (v) {
-                    // console.log("is v ", v, v[dk])
-                    if (v.hasOwnProperty(dk)) {
-                      // console.log("is dk")
-                      return v[dk]
-                    } else {
-                      // console.log("is one", v)
-                      return v
-                    }
-                  } else {
-                    return undefined
-                  }
-                }
-              })
-          }
-
-
         default :
           afn.meta(pk)
           return afn

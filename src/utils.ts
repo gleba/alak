@@ -31,9 +31,7 @@ const dc = (value, key?, parent?) => {
   return clone
 }
 
-export const deepClone = <T>(o: T): T => {
-  return dc(o) as any as T
-}
+export const deepClone = v => JSON.parse(JSON.stringify(v))
 export const deleteParams = o => {
   Object.keys(o).forEach(k => {
     if (o[k]) o[k] = null

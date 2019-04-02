@@ -42,7 +42,6 @@ export interface AFlow<T> {
   /**
    * Make created flow always immutable
    */
-  immutable: T;
 
   /**
    * ...maybe depricated
