@@ -8,6 +8,7 @@ export function flow(a?) {
   let imListeners = new Map()
   let onceListeners = []
   let keepState = true
+  let immutable = false
   let mutableFx = false
   let emitter = false
   let effector = null
@@ -120,10 +121,11 @@ export function flow(a?) {
   }
 
   const getValue = () => {
-    return proxy.data ? proxy.data.length > 1 ? proxy.data : proxy.data[0] : null
+    let v = proxy.data ? proxy.data.length > 1 ? proxy.data : proxy.data[0] : null
+    return immutable ? deepClone(v) : v
   }
   const setValues = v => {
-    // console.log("setValues", v)
+    v = immutable ? deepClone(v) : v
     if (v.length > 0 || emitter) {
       if (keepState) {
         if (mutableFx) v = fx(v)
@@ -299,10 +301,18 @@ export function flow(a?) {
         case "integralMix":
         case "mixedIntegral":
           return integralMix
+
+        case "immutable":
+          immutable = true
+          let v = getValue()
+          return ()=>{
+
+            setValues([v])
+          }
         case "imv":
         case "cloneValue":
         case "immutableValue":
-          return JSON.parse(JSON.stringify(getValue()))
+          return deepClone(getValue())
         case "id":
           return proxy.id
         case "isFlow":

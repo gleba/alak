@@ -22,6 +22,14 @@ test("level2", (t: any) => {
   let o = m3.imv
   t.ok(o.x == 1, "immutable get imv");
 
+  let m4 = A.f(v);
+  m4.immutable
+  v.x = 2
+  t.ok(m4().x == 2, "immutable");
+  m4.immutable()
+  v.x = 3
+  t.ok(m4().x == 2, "immutable()");
+
   let coolParams = ["2", 2];
   let isCool;
   A.install("cool", (...a) => {

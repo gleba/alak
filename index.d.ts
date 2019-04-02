@@ -26,6 +26,8 @@ export interface AFlow<T> {
    * get value clone
    */
   imv: T;
+  cloneValue: T;
+  immutable: any;
   /**
    * Get id
    * only if `setId` has been inited
