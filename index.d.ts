@@ -21,6 +21,7 @@ export interface AFlow<T> {
    * get current flow value
    */
   v: T;
+  value: T;
   /**
    * Immutable
    * get value clone
