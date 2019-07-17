@@ -37,6 +37,7 @@ export interface AFlow<T> {
    * Meta object data
    */
   o: any;
+  metaData: any;
   /**
    * Get value flow as array arguments
    */
