@@ -294,6 +294,9 @@ export function flow(a?) {
       if (f[pk])
         return f[pk]
       switch (pk) {
+        case "link":
+        case "to":
+          return proxy.on
         case "v":
         case "value":
           return getValue()
@@ -305,8 +308,7 @@ export function flow(a?) {
         case "immutable":
           immutable = true
           let v = getValue()
-          return ()=>{
-
+          return ()=> {
             setValues([v])
           }
         case "imv":

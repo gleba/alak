@@ -107,6 +107,8 @@ export interface AFlow<T> {
    * @param {Listener<T>} fn
    * @returns {AFlow<T>}
    */
+  link(fn: Listener<T>): AFlow<T>;
+  to(fn: Listener<T>): AFlow<T>;
   on(fn: Listener<T>): AFlow<T>;
 
   /**
