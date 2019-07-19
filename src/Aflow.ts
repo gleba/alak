@@ -255,6 +255,10 @@ export function flow(a?) {
     loopSafe(v){
       if (v!== getValue())
         setValues([v])
+    },
+    clear(){
+      functor['data'] = proxy.data = []
+      functor['v'] = undefined
     }
   })
 

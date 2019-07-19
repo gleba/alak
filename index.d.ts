@@ -203,11 +203,17 @@ export interface AFlow<T> {
   emit(): void;
 
   /**
+   * Delete data value without notify edges/listeners
+   * - data value will be undefined
+   */
+  clear(): void;
+
+  /**
    * Update data value without notify edges/listeners
    * @param {T} a
-   * @returns {T}
+   * @returns {void}
    */
-  silent(...a: T[]): T;
+  silent(...a: T[]): void;
 
   /**
    * Patterm maching

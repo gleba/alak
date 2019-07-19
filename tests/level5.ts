@@ -56,9 +56,15 @@ test("level5 - Once Warp Mix", (t: any) => {
     flow3(3)
 
 
-    console.log(flow1.isValue(flow1()))
-
     t.ok(mixed2.v==6, "integralMix 2")
+
+    let ff = DFlow(1)
+    ff.clear()
+    t.ok(ff.v==undefined && ff()==undefined, "clear")
+
+    ff(1)
+    t.ok(ff.v==1 && ff()==1, "after cleaning works fine")
+
     t.end()
 
 })
