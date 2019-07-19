@@ -10,7 +10,7 @@ export default _default;
 export interface AFlow<T> {
   /**
    * Witch arguments:
-   * set flow value and notify child listiners
+   * set flow value and notify child listeners
    * Without arguments :
    * return current flow value
    */
@@ -31,7 +31,7 @@ export interface AFlow<T> {
   immutable: any;
   /**
    * Get id
-   * only if `setId` has been inited
+   * only if `setId` has been initialized
    */
   id: any;
   /**
@@ -78,6 +78,20 @@ export interface AFlow<T> {
   isValue(value?: any): Boolean;
 
   /**
+   * set flow value and notify child listeners if value not null and undefined
+   * @param value
+   * @returns {Boolean}
+   */
+  nullSafe(value: T | null ): void;
+
+  /**
+   * set flow value and notify child listeners if value not equal current flow value
+   * @param value
+   * @returns {Boolean}
+   */
+  loopSafe(value: T ): void;
+
+  /**
    * Remove key or index in object or array
    * @param value
    * @returns {Boolean}
@@ -108,8 +122,8 @@ export interface AFlow<T> {
    * @param {Listener<T>} fn
    * @returns {AFlow<T>}
    */
-  link(fn: Listener<T>): AFlow<T>;
-  to(fn: Listener<T>): AFlow<T>;
+  // link(fn: Listener<T>): AFlow<T>;
+  // to(fn: Listener<T>): AFlow<T>;
   on(fn: Listener<T>): AFlow<T>;
 
   /**
@@ -189,7 +203,7 @@ export interface AFlow<T> {
   emit(): void;
 
   /**
-   * Updtate data without notify edges/listeners
+   * Update data value without notify edges/listeners
    * @param {T} a
    * @returns {T}
    */

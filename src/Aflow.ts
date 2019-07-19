@@ -247,6 +247,14 @@ export function flow(a?) {
         mutableFx = false
         setValues([getValue()])
       }
+    },
+    nullSafe(v){
+      if (v!==null && v!==undefined)
+        setValues([v])
+    },
+    loopSafe(v){
+      if (v!== getValue())
+        setValues([v])
     }
   })
 
