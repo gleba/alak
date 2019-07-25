@@ -32,7 +32,6 @@ export function patternMatch(arg) {
     if (a.length >= 2) {
         let p = parsePattern(a)
         return (...value) => {
-
             let matchFn = p.map[value.join(',')]
             if (!matchFn) matchFn = p.map[value[0]]
             if (matchFn) matchFn.apply(matchFn, value)
@@ -40,6 +39,7 @@ export function patternMatch(arg) {
         }
     } else {
         a = a[0]
+
         if (isFunction(a)) {
             let fn = a as any as Function
             return (...value) => {

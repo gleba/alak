@@ -8,75 +8,18 @@ declare const _default: IAproxy;
 export default _default;
 
 export interface AFlow<T> {
-  /**
-   * Witch arguments:
-   * set flow value and notify child listeners
-   * Without arguments :
-   * return current flow value
-   */
   (...a: T[]): T;
-
-  /**
-   * Get Value
-   * get current flow value
-   */
   v: T;
   value: T;
-  /**
-   * Immutable
-   * get value clone
-   */
+
   imv: T;
   cloneValue: T;
   immutable: any;
-  /**
-   * Get id
-   * only if `setId` has been initialized
-   */
   id: any;
-  /**
-   * Meta object data
-   */
   o: any;
   metaData: any;
-  /**
-   * Get value flow as array arguments
-   */
   data: T[];
-  /**
-   * Make created flow always immutable
-   */
-
-  /**
-   * ...maybe depricated
-   * Set flow meta name
-   * just call if need enable it
-   * @param ...meta string
-   * @returns {AFlow<T>}
-   */
-  meta(...meta: string[]): AFlow<T>;
-
-  /**
-   * Check flow meta name
-   * @metaName string name of meta
-   * @returns Boolean
-   */
-  isMeta(metaName: string): Boolean;
-
-  /**
-   * Check object is flow
-   * @returns {Boolean}
-   */
-  isFlow(key?: any): Boolean;
-
-  /**
-   * Check Value
-   * same as flow.v === value
-   * @param value
-   * @returns {Boolean}
-   */
   isValue(value?: any): Boolean;
-
   /**
    * set flow value and notify child listeners if value not null and undefined
    * @param value
@@ -125,6 +68,9 @@ export interface AFlow<T> {
   // link(fn: Listener<T>): AFlow<T>;
   // to(fn: Listener<T>): AFlow<T>;
   on(fn: Listener<T>): AFlow<T>;
+  up(fn: Listener<T>): AFlow<T>;
+  $(fn: Listener<T>): AFlow<T>;
+  feed(fn: Listener<T>): AFlow<T>;
 
   /**
    * Add edge only once
@@ -195,6 +141,7 @@ export interface AFlow<T> {
    * remove all data
    * kill object
    */
+  kill(): void;
   end(): void;
 
   /**
@@ -283,14 +230,10 @@ export interface AFlow<T> {
 }
 
 
-
-type MayBeflow<T> = T extends AFlow <T> ? AFlow <T> : any
-
 export type IflowStarter = {
   <T>(a?: T): AFlow<T>
   <K>(...a: K[]): AFlow<K>
   (...a: any[]): AFlow<any>
-  [s: string]:  IflowStarter
 }
 
 export type IAnyflowStarter = {

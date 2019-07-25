@@ -3,13 +3,7 @@ import {flow} from "./Aflow";
 
 let metaExtends = {}
 
-export const Aproxy = new Proxy({
-  start: flow,
-  flow: flow,
-  stateless: () => flow().stateless(),
-  emitter: (...ar) => flow(...ar).emitter(),
-  toString: () => 'Alak Fantasy FRP Library',
-  install: (key, fn) => metaExtends[key] = fn
+export const AFacadeProxy = new Proxy({
 }, {
   get(target, key) {
     // console.log(key)
@@ -17,7 +11,7 @@ export const Aproxy = new Proxy({
     switch (key) {
       case "f":
       case "flow":
-        return flow()
+        return flow
       case "m":
       case "meta":
         return flow()
