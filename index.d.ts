@@ -1,5 +1,4 @@
-export type Listener<T extends any> = (...a: T[]) => any
-
+export type Listener<T extends any> = (...a: T[]) => any;
 
 export declare const A: IAproxy;
 export declare const Al: IflowStarter;
@@ -8,10 +7,8 @@ declare const _default: IAproxy;
 export default _default;
 
 export interface AFlow<T> {
-  (...a: T[]): T;
   v: T;
   value: T;
-
   imv: T;
   cloneValue: T;
   immutable: any;
@@ -19,20 +16,25 @@ export interface AFlow<T> {
   o: any;
   metaData: any;
   data: T[];
+  isAsync: boolean;
+
+  (...a: T[]): T;
+
   isValue(value?: any): Boolean;
+
   /**
    * set flow value and notify child listeners if value not null and undefined
    * @param value
    * @returns {Boolean}
    */
-  nullSafe(value: T | null ): void;
+  nullSafe(value: T | null): void;
 
   /**
    * set flow value and notify child listeners if value not equal current flow value
    * @param value
    * @returns {Boolean}
    */
-  loopSafe(value: T ): void;
+  loopSafe(value: T): void;
 
   /**
    * Remove key or index in object or array
@@ -41,22 +43,25 @@ export interface AFlow<T> {
    */
   remove(ki?: any);
 
-  set(ki: string|number, item:any);
-  push(item:any);
+  set(ki: string | number, item: any);
 
-  map(f:(item:any,ki)=>any);
-  each(f:(item:any,ki)=>void);
+  push(item: any);
 
-  effect(fn: Listener<T>, mutable?:boolean): any;
-  clearEffect(): void;
+  map(f: (item: any, ki) => any);
+
+  // effect(fn: Listener<T>, mutable?:boolean): any;
+  // clearEffect(): void;
+
+  each(f: (item: any, ki) => void);
 
   wrap(fn: Listener<T>): any;
 
+  // iMix( ...f): any;
+  // integralMix(fn: Listener<any>): any;
+
   unwrap(): any;
 
-  iMix( ...f): any;
-  integralMix(fn: Listener<any>): any;
-  mix(fn: Listener<any>): any;
+  // mix(fn: Listener<any>): any;
   /**
    * Add edge
    * subscribe listener
@@ -68,12 +73,19 @@ export interface AFlow<T> {
   // link(fn: Listener<T>): AFlow<T>;
   // to(fn: Listener<T>): AFlow<T>;
   on(fn: Listener<T>): AFlow<T>;
+
   up(fn: Listener<T>): AFlow<T>;
+
   $(fn: Listener<T>): AFlow<T>;
 
-  useBornFx(fn: Promise<T>): void
+  useFx(fxName: string, f: (fn: Promise<T>) => T): void;
+
+  addFx(fxName: string, fn: Listener<any>): void;
+
+  removeFx(fxName: string, fn: Listener<any>): void;
 
   upSafe(fn: Listener<T>): AFlow<T>;
+
   /**
    * Add edge only once
    * subscribe listener
@@ -111,6 +123,7 @@ export interface AFlow<T> {
    * @returns {AFlow<T>}
    */
   down(fn: Listener<T>): AFlow<T>;
+
   off(fn: Listener<T>): AFlow<T>;
 
   /**
@@ -145,6 +158,7 @@ export interface AFlow<T> {
    * kill object
    */
   kill(): void;
+
   end(): void;
 
   /**
@@ -232,25 +246,27 @@ export interface AFlow<T> {
   extend(key: string, obj: any): void;
 }
 
-
-export type IflowStarter = {
-  <T>(a?: T): AFlow<T>
-} | {
-  (...a: any[]): AFlow<any>
+export type IflowStarter =
+  | {
+  <T>(a?: T): AFlow<T>;
 }
+  | {
+  (...a: any[]): AFlow<any>;
+};
 
 export type IAnyflowStarter = {
-  (a: any): IAnyflowStarter
-  [s: string]:  IAnyflowStarter
+  (a: any): IAnyflowStarter;
+  [s: string]: IAnyflowStarter;
+};
 
-}
 export interface IAproxy {
-  flow: IflowStarter
-  f: IflowStarter
-  meta: IflowStarter
-  m: IflowStarter
-  stateless: IflowStarter
-  emitter: IflowStarter
-  install: IflowStarter
-  [s: string]:  IflowStarter
+  flow: IflowStarter;
+  f: IflowStarter;
+  meta: IflowStarter;
+  m: IflowStarter;
+  stateless: IflowStarter;
+  emitter: IflowStarter;
+  install: IflowStarter;
+
+  [s: string]: IflowStarter;
 }

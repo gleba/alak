@@ -1,3 +1,4 @@
+import {AFX, effects} from "./AFX";
 
 
 export function setFunctorValue(functor: AFunctor, ...a) {
@@ -33,11 +34,8 @@ export const newAFunctor = () => {
     if (a.length)
       setFunctorValue(functor, ...a)
     else {
-      if (functor.meta && functor.meta.born) {
-        return new Promise(async done=>{
-          await functor.meta.born()
-          done()
-        })
+      if (functor.meta && functor.meta[AFX.BornFx]) {
+        return effects.run(functor, AFX.BornFx)
       }
       return functor.value
     }
@@ -57,6 +55,8 @@ export interface AFunctor {
   childs: Set<AChildFlow>
   grandChilds: Map<AChildFlow, AChildFlow>
   meta: any
+  metaMap: Map<string, Set<any>>
+  // metaListeners: Map<string, Set<any>>
   value: any
   id: string
   (...a: any[]): void

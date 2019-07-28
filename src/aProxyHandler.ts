@@ -1,16 +1,15 @@
 import { AFunctor, notifyTheChildren, setFunctorValue } from "./aFunctor";
 import { deleteParams } from "./utils";
 import { patternMatch } from "./match";
+import {effects} from "./AFX";
 
 export const alive = v => (v !== undefined && v !== null) as boolean;
 export const isTruth = v => !!v;
 export const nullFilter = f => v => (alive(v) ? f(v) : null);
 export const someFilter = f => v => (!alive(v) ? f(v) : null);
 
-function addMeta(f, key, meta) {
-  if (!f.meta) f.meta = {};
-  f.meta[key] = meta;
-}
+
+
 export const aProxyHandler: ProxyHandler<AFunctor> = {
   get(functor: AFunctor, prop: string) {
     switch (prop) {
@@ -25,8 +24,15 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           functor.childs.add(f);
           if (functor.value && functor.value.length) f.apply(f, functor.value);
         };
-      case "useBornFx":
-        return f => addMeta(functor, "born", f);
+      case "isAsync": return functor.meta && functor.meta.born
+      case "useFx":
+        return (name, f) => effects.use(functor, name, f);
+      case "addFx":
+        return (name, f) => effects.add(functor, name, f);
+      case "removeFx":
+        return (name, f) => effects.remove(functor, name, f);
+      // case "onFx":
+      //   return (name, f) => onFx(functor, name, f);
       case "ifSome":
         return f => {
           functor.grandChilds.set(f, nullFilter(f));

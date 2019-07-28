@@ -1,14 +1,19 @@
 import { test } from "./ouput.shema";
-import { A, DFlow } from "../src";
+import {A, AFX, DFlow} from "../src";
+
+// import {AFX} from "../src/AFX";
 // import {A, AFlow} from "../src";
 
 test("level2", async (t: any) => {
   let m2 = A.flow()
-  m2.useBornFx(async ()=>new Promise(done=>{
+  m2.useFx(AFX.BornFx, ()=>new Promise(done=>{
     console.log("?")
     setTimeout(done, 400)
   }))
-  console.log("↓")
+  m2.addFx(AFX.Borning, v =>{
+    console.log(v, AFX.Borning)
+  })
+  console.log("↓", m2.isAsync)
   await m2()
   console.log("↑")
 
