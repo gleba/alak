@@ -2,7 +2,7 @@ import { AFunctor } from "./aFunctor";
 
 export enum AFX {
   BornFx = "bornFx",
-  Borning = "boring"
+  Busy = "busy"
 }
 
 export const effects = {
@@ -37,9 +37,9 @@ function toFxHolders(f: AFunctor, fxName, v) {
 const knownEffects = {
   async [AFX.BornFx](f: AFunctor) {
     return new Promise(async done => {
-      toFxHolders(f, AFX.Borning, true);
+      toFxHolders(f, AFX.Busy, true);
       let v = await f.meta[AFX.BornFx]();
-      toFxHolders(f, AFX.Borning, false);
+      toFxHolders(f, AFX.Busy, false);
       done(v);
     });
     return null;

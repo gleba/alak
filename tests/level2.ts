@@ -6,17 +6,19 @@ import {A, AFX, DFlow} from "../src";
 
 test("level2", async (t: any) => {
   let m2 = A.flow()
-  m2.useFx(AFX.BornFx, ()=>new Promise(done=>{
-    console.log("?")
+  let i1 = 0
+  const l2 = ()=>new Promise(done=>{
     setTimeout(done, 400)
-  }))
-  m2.addFx(AFX.Borning, v =>{
-    console.log(v, AFX.Borning)
   })
-  console.log("↓", m2.isAsync)
+  const bFx = v =>{
+    console.log("bFx:", v,i1++)
+  }
+  m2.useFx(AFX.BornFx, l2)
+  m2.addFx(AFX.Busy,bFx)
   await m2()
-  console.log("↑")
-
+  m2.removeFx(AFX.Busy, bFx)
+  await m2()
+  t.ok(i1 == 2, "AFX");
 
   // t.ok(m2.isMeta("meta2"), "A.f.meta2('value') - isMeta(\"meta2\")");
   // t.ok(m2.isValue("value"), "A.f.meta2('value') - isValue(\"value\")");
