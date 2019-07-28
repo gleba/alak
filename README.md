@@ -1,6 +1,6 @@
 
 # A Proxy Functor
-### Fantasy DataFlow 
+### Proxy DataFlow 
 [![npm version](https://badge.fury.io/js/alak.svg)](https://badge.fury.io/js/alak)
 [![travis status](https://travis-ci.org/gleba/alak.svg?branch=master)](https://travis-ci.org/gleba/alak)
 [![dependencies](https://david-dm.org/gleba/alak.svg)](https://david-dm.org/gleba/alak)
