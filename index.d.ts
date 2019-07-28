@@ -70,8 +70,8 @@ export interface AFlow<T> {
   on(fn: Listener<T>): AFlow<T>;
   up(fn: Listener<T>): AFlow<T>;
   $(fn: Listener<T>): AFlow<T>;
-  feed(fn: Listener<T>): AFlow<T>;
 
+  upSafe(fn: Listener<T>): AFlow<T>;
   /**
    * Add edge only once
    * subscribe listener
@@ -108,6 +108,7 @@ export interface AFlow<T> {
    * @param {Listener<T>} fn
    * @returns {AFlow<T>}
    */
+  down(fn: Listener<T>): AFlow<T>;
   off(fn: Listener<T>): AFlow<T>;
 
   /**
@@ -232,7 +233,7 @@ export interface AFlow<T> {
 
 export type IflowStarter = {
   <T>(a?: T): AFlow<T>
-  <K>(...a: K[]): AFlow<K>
+} | {
   (...a: any[]): AFlow<any>
 }
 

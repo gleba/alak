@@ -2,7 +2,10 @@ import {AFunctor, notifyTheChildren, setFunctorValue} from "./aFunctor";
 import {deleteParams} from "./utils";
 import {patternMatch} from "./match";
 
-let metaExtends = {}
+export const alive = (v) => (v !== undefined && v !== null) as boolean
+export const isTruth = (v) => !!v
+export const nullFilter = f => v => alive(v) ? f(v) : null
+export const someFilter = f => v => !alive(v) ? f(v) : null
 
 export const aProxyHandler: ProxyHandler<AFunctor> = {
   get(functor: AFunctor, prop: string) {
@@ -19,10 +22,32 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           if (functor.value && functor.value.length)
             f.apply(f, functor.value)
         }
+      case "ifSome":
+        return f => {
+          functor.grandChilds.set(f, nullFilter(f))
+          let v = functor.value[0]
+          if (alive(v))
+            f.apply(f, nullFilter(v))
+        }
+      case "ifNone":
+        return f => {
+          functor.grandChilds.set(f, someFilter(f))
+          let v = functor.value[0]
+          if (!alive(v))
+            f.apply(f, someFilter(v))
+        }
+      case "nullSafe":
+        return v => {
+          if (alive(v))
+            setFunctorValue(functor, v)
+        }
       case "down" :
       case "off" :
         return f => {
-          functor.childs.delete(f)
+          if (functor.childs.has(f))
+            functor.childs.delete(f)
+          else if (functor.grandChilds.has(f))
+            functor.grandChilds.delete(f)
         }
       case "kill" :
       case "end" :
@@ -35,13 +60,22 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
         return () => notifyTheChildren(functor)
       case "match" :
         return (...pattern) => {
-          functor.childs.add(patternMatch(pattern))
+          let f = patternMatch(pattern)
+          functor.childs.add(f)
+          if (functor.value && functor.value.length)
+            f.apply(f, functor.value)
         }
       case "mutate" :
         return f => {
           setFunctorValue(functor, ...f(...functor.value))
         }
+      case "setId" :
+        return id => {
+          functor.id = id
+        }
+      case "id" :
+        return functor.id
     }
-    return true
+    return false
   }
 };

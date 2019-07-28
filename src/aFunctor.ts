@@ -3,7 +3,7 @@
 export function setFunctorValue(functor: AFunctor, ...a) {
 
   if (!functor.childs){
-    console.error("Attempt to pass in the killed flow")
+    console.error("Attempt to pass in the killed flow ", functor.id ? functor.id : "")
     console.warn("it's possible memory leak in application")
     return
   }
@@ -18,17 +18,25 @@ export function notifyTheChildren(functor:AFunctor ) {
       f.apply(f, functor.value)
     })
   }
+  if (functor.grandChilds.size > 0) {
+    functor.grandChilds.forEach(f => {
+      f.apply(f, functor.value)
+    })
+  }
 }
 
 
 export const newAFunctor = () => {
   let childs = new Set<AChildFlow>()
+  let grandChilds = new Map<AChildFlow, AChildFlow>()
   const functor = function (...a) {
     if (a.length)
       setFunctorValue(functor, ...a)
     else return functor.value
   } as AFunctor
   functor.childs = childs
+  functor.grandChilds = grandChilds
+  functor.value = []
 
   return functor as AFunctor
 }
@@ -39,7 +47,9 @@ export type AChildFlow = {
 
 export interface AFunctor {
   childs: Set<AChildFlow>
+  grandChilds: Map<AChildFlow, AChildFlow>
   // passIn: (v: any) => void
   value: any
+  id: string
   (...a: any[]): void
 }

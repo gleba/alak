@@ -29,6 +29,7 @@ function parsePattern(pattern) {
 
 export function patternMatch(arg) {
     let a = arg
+
     if (a.length >= 2) {
         let p = parsePattern(a)
         return (...value) => {

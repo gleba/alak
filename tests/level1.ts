@@ -4,44 +4,44 @@ import {A} from "../src";
 import {isNumber, isArray, isString} from "util";
 
 test("Alak test", (t: any) => {
-  // const a1 = A.flow()
-  // a1.up(_ => t.fail("kill test"))
-  // a1.kill()
-  // a1(5) //error message test
+  const a1 = A.flow()
+  a1.up(_ => t.fail("kill test"))
+  a1.kill()
+  a1(5) //error message test
+
+  const s1 = A.flow([0, 0, 0], 5 as any)
+  s1.up((v1: any, v2) => {
+    t.ok(v1.length == 3 && v2 == 5, "base");
+  })
+
+  const s2 = A.flow()
+  s2.up(x => {
+    t.ok(x == 4, "base+ " + x);
+  })
+  s2(4)
+  s2(4, 0)
+
+  const s3 = A.flow()
+  s3.up(x => {
+    t.ok(true, "emit ok")
+  })
+  s3.emit()
+
+  const s4 = A.flow()
   //
-  // const s1 = A.flow([0, 0, 0], 5 as any)
-  // s1.up((v1: any, v2) => {
-  //   t.ok(v1.length == 3 && v2 == 5, "base");
-  // })
-  //
-  // const s2 = A.flow()
-  // s2.up(x => {
-  //   t.ok(x == 4, "base+ " + x);
-  // })
-  // s2(4)
-  // s2(4, 0)
-  //
-  // const s3 = A.flow()
-  // s3.up(x => {
-  //   t.ok(true, "emit ok")
-  // })
-  // s3.emit()
-  //
-  // const s4 = A.flow()
-  // //
-  // s4.match(
-  //   3, x => t.ok(3 == x, "pattern matching by key"),
-  //   "never", x => t.fail("silent pattern matching *", x)
-  // )
-  // s4.match(v => [
-  //   isNumber(v), v => t.ok(typeof v == "number", "fn pattern matching isNumber"),
-  //   isArray(v), v => t.fail("fn pattern matching"),
-  //   v == 3, v => t.ok(v == 3, "fn pattern matching +"),
-  //   v => t.pass('fn pattern matching else')
-  // ])
-  // s4(3)
-  // s4(1)
-  // s4("8")
+  s4.match(
+    3, x => t.ok(3 == x, "pattern matching by key"),
+    "never", x => t.fail("silent pattern matching *", x)
+  )
+  s4.match(v => [
+    isNumber(v), v => t.ok(typeof v == "number", "fn pattern matching isNumber"),
+    isArray(v), v => t.fail("fn pattern matching"),
+    v == 3, v => t.ok(v == 3, "fn pattern matching +"),
+    v => t.pass('fn pattern matching else')
+  ])
+  s4(3)
+  s4(1)
+  s4("8")
 
 
   let state1 = [5, true, "1"]
@@ -76,6 +76,15 @@ test("Alak test", (t: any) => {
   s6(2)
   s6.mutate(x => x + 1)
   t.ok(3 == s6() && s6.data == s6.v as any, 's6')
+
+
+  let s61 = A.flow("not")
+  s61.match(
+    "ok", ()=>{
+      console.log("ok!")
+    }
+  )
+  s61("ok")
   //
   //
   // let s7 = DFlow().stateless()
