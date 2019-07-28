@@ -2,8 +2,17 @@ import { test } from "./ouput.shema";
 import { A, DFlow } from "../src";
 // import {A, AFlow} from "../src";
 
-test("level2", (t: any) => {
-  // let m2 = A.m.meta2("value");
+test("level2", async (t: any) => {
+  let m2 = A.flow()
+  m2.useBornFx(async ()=>new Promise(done=>{
+    console.log("?")
+    setTimeout(done, 400)
+  }))
+  console.log("↓")
+  await m2()
+  console.log("↑")
+
+
   // t.ok(m2.isMeta("meta2"), "A.f.meta2('value') - isMeta(\"meta2\")");
   // t.ok(m2.isValue("value"), "A.f.meta2('value') - isValue(\"value\")");
 
@@ -42,5 +51,5 @@ test("level2", (t: any) => {
   // console.log(m2.id);
 
   // t.ok(m2.id == "im a name", "named");
-  // t.end();
+  t.end();
 });

@@ -32,7 +32,15 @@ export const newAFunctor = () => {
   const functor = function (...a) {
     if (a.length)
       setFunctorValue(functor, ...a)
-    else return functor.value
+    else {
+      if (functor.meta && functor.meta.born) {
+        return new Promise(async done=>{
+          await functor.meta.born()
+          done()
+        })
+      }
+      return functor.value
+    }
   } as AFunctor
   functor.childs = childs
   functor.grandChilds = grandChilds
@@ -48,7 +56,7 @@ export type AChildFlow = {
 export interface AFunctor {
   childs: Set<AChildFlow>
   grandChilds: Map<AChildFlow, AChildFlow>
-  // passIn: (v: any) => void
+  meta: any
   value: any
   id: string
   (...a: any[]): void

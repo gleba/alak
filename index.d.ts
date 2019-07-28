@@ -71,6 +71,8 @@ export interface AFlow<T> {
   up(fn: Listener<T>): AFlow<T>;
   $(fn: Listener<T>): AFlow<T>;
 
+  useBornFx(fn: Promise<T>): void
+
   upSafe(fn: Listener<T>): AFlow<T>;
   /**
    * Add edge only once
