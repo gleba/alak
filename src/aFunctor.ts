@@ -34,8 +34,8 @@ export const newAFunctor = () => {
     if (a.length)
       setFunctorValue(functor, ...a)
     else {
-      if (functor.meta && functor.meta[AFX.BornFx]) {
-        return effects.run(functor, AFX.BornFx)
+      if (functor.meta && functor.meta[AFX.Born]) {
+        return effects.run(functor, AFX.Born)
       }
       return functor.value
     }

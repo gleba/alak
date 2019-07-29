@@ -13,7 +13,7 @@ test("level2", async (t: any) => {
   const bFx = v =>{
     console.log("bFx:", v,i1++)
   }
-  m2.useFx(AFX.BornFx, l2)
+  m2.useFx(AFX.Born, l2)
   m2.addFx(AFX.Busy,bFx)
   await m2()
   m2.removeFx(AFX.Busy, bFx)
