@@ -1,15 +1,13 @@
 import { AFunctor, notifyTheChildren, setFunctorValue } from "./aFunctor";
 import { deleteParams } from "./utils";
 import { patternMatch } from "./match";
-import {effects} from "./AFX";
+import { effects } from "./AFX";
 
 export const alive = v => (v !== undefined && v !== null) as boolean;
 export const isTruth = v => !!v;
 export const nullFilter = f => v => (alive(v) ? f(v) : null);
 export const someFilter = f => v => (!alive(v) ? f(v) : null);
 export const trueFilter = f => v => (isTruth(v) ? f(v) : null);
-
-
 
 export const aProxyHandler: ProxyHandler<AFunctor> = {
   get(functor: AFunctor, prop: string) {
@@ -18,6 +16,11 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case "value":
       case "data":
         return functor.value.length > 1 ? functor.value : functor.value[0];
+      case "apply":
+        return (context, v) => {
+          functor.bind(context)
+          setFunctorValue(functor, v[0])
+        };
       case "up":
       case "$":
       case "on":
@@ -25,14 +28,16 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           functor.childs.add(f);
           if (functor.value && functor.value.length) f.apply(f, functor.value);
         };
-      case "is": return v =>{
-        if (functor.value && functor.value.length) {
-          return functor.value[0] === v
-        } else {
-          return v === null || v === undefined
-        }
-      }
-      case "isAsync": return functor.meta && functor.meta.born
+      case "is":
+        return v => {
+          if (functor.value && functor.value.length) {
+            return functor.value[0] === v;
+          } else {
+            return v === null || v === undefined;
+          }
+        };
+      case "isAsync":
+        return functor.meta && functor.meta.born;
       case "useFx":
         return (name, f) => effects.use(functor, name, f);
       case "addFx":

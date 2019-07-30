@@ -5,17 +5,25 @@ import {A, DFlow} from "../src";
 
 test("level3", (t: any) => {
   let l3 = A.flow()
+  let f3 = A.flow()
   const testTrue = v => t.ok(v, "testTrue")
   const testFalse = v => t.ok(!v, "testFalse")
-  l3.ifTrue(testTrue)
+  l3.upTrue(testTrue)
   l3(false)
   l3(true)
-  l3.ifSome(testTrue)
+  l3.upSome(testTrue)
   l3.down(testTrue)
-  l3.ifTrue(testTrue)
+  l3.upTrue(testTrue)
   l3(null)
-  l3.ifNone(testFalse)
+  l3.upNone(testFalse)
   l3(false)
-  l3.ifSome(testFalse)
+  l3.upSome(testFalse)
+
+
+  l3.up(f3)
+
+  t.ok(l3.value === f3.value, "==")
+  console.log(l3.value , f3.value)
+
   t.end()
 })
