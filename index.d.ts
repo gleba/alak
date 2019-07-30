@@ -21,6 +21,7 @@ export interface AFlow<T> {
   (...a: T[]): T;
 
   is(value?: any): Boolean;
+  safe(value?: T): void;
 
   /**
    * set flow value and notify child listeners if value not null and undefined
@@ -88,7 +89,7 @@ export interface AFlow<T> {
 
   removeFx(fxName: string, fn: Listener<any>): void;
 
-  upSafe(fn: Listener<T>): AFlow<T>;
+
 
   /**
    * Add edge only once

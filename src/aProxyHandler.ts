@@ -60,6 +60,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           if (!alive(v)) f.apply(f, [v]);
         };
       case "nullSafe":
+      case "safe":
         return v => {
           if (alive(v)) setFunctorValue(functor, v);
         };
