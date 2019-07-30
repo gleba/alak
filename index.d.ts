@@ -20,7 +20,7 @@ export interface AFlow<T> {
 
   (...a: T[]): T;
 
-  isValue(value?: any): Boolean;
+  is(value?: any): Boolean;
 
   /**
    * set flow value and notify child listeners if value not null and undefined

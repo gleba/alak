@@ -25,6 +25,13 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           functor.childs.add(f);
           if (functor.value && functor.value.length) f.apply(f, functor.value);
         };
+      case "is": return v =>{
+        if (functor.value && functor.value.length) {
+          return functor.value[0] === v
+        } else {
+          return v === null || v === undefined
+        }
+      }
       case "isAsync": return functor.meta && functor.meta.born
       case "useFx":
         return (name, f) => effects.use(functor, name, f);
