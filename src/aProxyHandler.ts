@@ -7,6 +7,7 @@ export const alive = v => (v !== undefined && v !== null) as boolean;
 export const isTruth = v => !!v;
 export const nullFilter = f => v => (alive(v) ? f(v) : null);
 export const someFilter = f => v => (!alive(v) ? f(v) : null);
+export const trueFilter = f => v => (isTruth(v) ? f(v) : null);
 
 
 
@@ -38,6 +39,12 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           functor.grandChilds.set(f, nullFilter(f));
           let v = functor.value[0];
           if (alive(v)) f.apply(f, nullFilter(v));
+        };
+      case "ifTrue":
+        return f => {
+          functor.grandChilds.set(f, trueFilter(f));
+          let v = functor.value[0];
+          if (v) f.apply(f, trueFilter(v));
         };
       case "ifNone":
         return f => {
