@@ -78,9 +78,9 @@ export interface AFlow<T> {
 
   $(fn: Listener<T>): AFlow<T>;
 
-  ifTrue(fn: Listener<T>): AFlow<T>;
-  ifNone(fn: Listener<T>): AFlow<T>;
-  ifSome(fn: Listener<T>): AFlow<T>;
+  upTrue(fn: Listener<T>): AFlow<T>;
+  upNone(fn: Listener<T>): AFlow<T>;
+  upSome(fn: Listener<T>): AFlow<T>;
 
   useFx(fxName: string, f: (fn: Promise<T>) => T): void;
 
