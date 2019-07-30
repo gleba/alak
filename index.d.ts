@@ -78,6 +78,10 @@ export interface AFlow<T> {
 
   $(fn: Listener<T>): AFlow<T>;
 
+  ifTrue(fn: Listener<T>): AFlow<T>;
+  ifNone(fn: Listener<T>): AFlow<T>;
+  ifSome(fn: Listener<T>): AFlow<T>;
+
   useFx(fxName: string, f: (fn: Promise<T>) => T): void;
 
   addFx(fxName: string, fn: Listener<any>): void;
@@ -123,7 +127,6 @@ export interface AFlow<T> {
    * @returns {AFlow<T>}
    */
   down(fn: Listener<T>): AFlow<T>;
-
   off(fn: Listener<T>): AFlow<T>;
 
   /**

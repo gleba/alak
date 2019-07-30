@@ -38,19 +38,19 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
         return f => {
           functor.grandChilds.set(f, nullFilter(f));
           let v = functor.value[0];
-          if (alive(v)) f.apply(f, nullFilter(v));
+          if (alive(v)) f.apply(f, [v]);
         };
       case "ifTrue":
         return f => {
           functor.grandChilds.set(f, trueFilter(f));
           let v = functor.value[0];
-          if (v) f.apply(f, trueFilter(v));
+          if (v) f.apply(f, [v]);
         };
       case "ifNone":
         return f => {
           functor.grandChilds.set(f, someFilter(f));
           let v = functor.value[0];
-          if (!alive(v)) f.apply(f, someFilter(v));
+          if (!alive(v)) f.apply(f, [v]);
         };
       case "nullSafe":
         return v => {
