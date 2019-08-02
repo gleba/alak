@@ -2,13 +2,14 @@ import { AFunctor, notifyTheChildren, setFunctorValue } from "./aFunctor";
 import { deleteParams } from "./utils";
 import { patternMatch } from "./match";
 import { effects } from "./AFX";
+import { aFromFlows } from "./aFrom";
 
 export const alive = v => (v !== undefined && v !== null) as boolean;
 export const isTruth = v => !!v;
 export const nullFilter = f => v => (alive(v) ? f(v) : null);
 export const someFilter = f => v => (!alive(v) ? f(v) : null);
 export const trueFilter = f => v => (isTruth(v) ? f(v) : null);
-
+const dipFun = (functor, f) => (...a) => f(functor, ...a);
 export const aProxyHandler: ProxyHandler<AFunctor> = {
   get(functor: AFunctor, prop: string) {
     switch (prop) {
@@ -18,9 +19,11 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
         return functor.value.length > 1 ? functor.value : functor.value[0];
       case "apply":
         return (context, v) => {
-          functor.bind(context)
-          setFunctorValue(functor, v[0])
+          functor.bind(context);
+          setFunctorValue(functor, v[0]);
         };
+      case "next":
+        return f => functor.childs.add(f);
       case "up":
       case "$":
       case "on":
@@ -81,6 +84,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           functor.childs.clear();
           deleteParams(functor);
         };
+      case "makeWave":
       case "notifyChildren":
       case "emit":
         return () => notifyTheChildren(functor);
@@ -91,15 +95,13 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           if (functor.value && functor.value.length) f.apply(f, functor.value);
         };
       case "mutate":
-        return f => {
-          setFunctorValue(functor, ...f(...functor.value));
-        };
+        return f => setFunctorValue(functor, ...f(...functor.value));
       case "setId":
-        return id => {
-          functor.id = id;
-        };
+        return id => (functor.id = id);
       case "id":
         return functor.id;
+      case "from":
+        return (...flows) => aFromFlows(functor, ...flows);
     }
     return false;
   }

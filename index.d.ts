@@ -1,3 +1,5 @@
+import { notifyTheChildren } from "./src/aFunctor";
+
 export type Listener<T extends any> = (...a: T[]) => any;
 
 export declare const A: IAproxy;
@@ -5,6 +7,14 @@ export declare const Al: IflowStarter;
 export declare const DFlow: IflowStarter;
 declare const _default: IAproxy;
 export default _default;
+
+type FromFlowFn<X, A, B, C, D> = {
+  (fn:(a: A, b: B, c?: C, d?: D)=> X):void
+};
+export interface AFlowFrom<X, A, B, C, D> {
+  holistic: FromFlowFn<X, A, B, C, D>;
+  waterfall: FromFlowFn<X, A, B, C, D>;
+}
 
 export interface AFlow<T> {
   v: T;
@@ -73,6 +83,12 @@ export interface AFlow<T> {
    */
   // link(fn: Listener<T>): AFlow<T>;
   // to(fn: Listener<T>): AFlow<T>;
+  from<A, B, C, D>(
+    a: AFlow<A>,
+    b: AFlow<B>,
+    c?: AFlow<C>,
+    d?: AFlow<D>
+  ): AFlowFrom<T, A, B, C, D>;
   on(fn: Listener<T>): AFlow<T>;
 
   up(fn: Listener<T>): AFlow<T>;
@@ -89,35 +105,8 @@ export interface AFlow<T> {
 
   removeFx(fxName: string, fn: Listener<any>): void;
 
-
-
-  /**
-   * Add edge only once
-   * subscribe listener
-   * call function on every flow data update
-   * `f.on(v=>...)`
-   * @param {Listener<T>} fn
-   * @returns {AFlow<T>}
-   */
-  once(fn: Listener<T>): AFlow<T>;
-
-  /**
-   * Subscribe listener
-   * call function on every next flow update
-   * `f.on(v=>...)`
-   * @param {Listener<T>} fn
-   * @returns {AFlow<T>}
-   */
+  // once(fn: Listener<T>): AFlow<T>;
   next(fn: Listener<T>): AFlow<T>;
-
-  /**
-   * Add Immutable edge
-   * subscribe listener
-   * call function on every flow update
-   * with clone value
-   * @param {Listener<T>} fn
-   * @returns {AFlow<T>}
-   */
   im(fn: Listener<T>): AFlow<T>;
 
   /**
@@ -169,6 +158,8 @@ export interface AFlow<T> {
    * Notify all edges/listeners with empty data value
    */
   emit(): void;
+  makeWave(): void;
+  notifyChildren(): void;
 
   /**
    * Delete data value without notify edges/listeners
@@ -252,11 +243,11 @@ export interface AFlow<T> {
 
 export type IflowStarter =
   | {
-  <T>(a?: T): AFlow<T>;
-}
+      <T>(a?: T): AFlow<T>;
+    }
   | {
-  (...a: any[]): AFlow<any>;
-};
+      (...a: any[]): AFlow<any>;
+    };
 
 export type IAnyflowStarter = {
   (a: any): IAnyflowStarter;

@@ -9,5 +9,6 @@ export function flow(...a) {
     functor(...a)
   }
   const proxy = new Proxy(functor, aProxyHandler)
+  functor.proxy = proxy
   return proxy
 }

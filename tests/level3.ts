@@ -3,7 +3,7 @@ import {A, DFlow} from "../src";
 // import {A, AFlow} from "../src";
 
 
-test("level3", (t: any) => {
+test("level3 - true some none", (t: any) => {
   let l3 = A.flow()
   let f3 = A.flow()
   const testTrue = v => t.ok(v, "testTrue")
