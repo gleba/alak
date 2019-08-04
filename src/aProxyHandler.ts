@@ -105,7 +105,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case "addMeta":
         return (metaName, value?) => {
           if (!functor.metaMap) functor.metaMap = new Map<string, any>();
-          functor.metaMap.set(metaName, value ? value : true);
+          functor.metaMap.set(metaName, value ? value : null);
         };
       case "hasMeta":
         return metaName => {
