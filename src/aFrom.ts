@@ -1,5 +1,6 @@
 import { AFlow } from "../index";
 import { setFunctorValue } from "./aFunctor";
+import {isPromise} from "./utils";
 
 export function aFromFlows(functor, ...flows: AFlow<any>[]) {
   if (functor.haveAfromMix) {
@@ -11,8 +12,15 @@ export function aFromFlows(functor, ...flows: AFlow<any>[]) {
 
   const notify = (fn) => {
     let values = flows.map(flow => flow.value);
-    // console.log("notify")
-    setFunctorValue(functor, fn(...values));
+    let nextValues = fn(...values)
+    if (isPromise(nextValues)){
+      nextValues.then(v=>
+        setFunctorValue(functor, v)
+      )
+    } else {
+      setFunctorValue(functor, nextValues);
+    }
+
   };
   function waterfall(fn) {
     flows.forEach(flow => {

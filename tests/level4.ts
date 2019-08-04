@@ -20,5 +20,18 @@ test("level4 - from", (t: any) => {
     t.ok(v == "know 100%", "next holistic");
   });
   bFlow(10);
-  t.end();
+
+  const asyncFlow = A.flow();
+  const xFlow = A.flow();
+  asyncFlow
+    .from(xFlow, aFlow)
+    .holistic(
+      async (a, b) => new Promise(done => setTimeout(() => done(a + b), 100))
+    );
+  xFlow("we ");
+  t.ok(!asyncFlow.value, "async from")
+  asyncFlow.on(x => {
+    t.ok(x="we know", "async return")
+    t.end();
+  });
 });
