@@ -242,7 +242,8 @@ export interface AFlow<T> {
 
 
   hasMeta(metaName: string): boolean;
-  addMeta(metaName: string): void;
+  addMeta(metaName: string, value? :any): void;
+  getMeta(metaName: string): any;
 }
 
 export type IflowStarter =

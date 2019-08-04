@@ -112,6 +112,11 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           if (!functor.metaMap) return false;
           return functor.metaMap.has(metaName);
         };
+      case "getMeta":
+        return metaName => {
+          if (!functor.metaMap) return null;
+          return functor.metaMap.get(metaName);
+        };
     }
     return false;
   }
