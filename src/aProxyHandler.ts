@@ -103,15 +103,15 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case "from":
         return (...flows) => aFromFlows(functor, ...flows);
       case "addMeta":
-        return (metaName) => {
-          if (!functor.metaSet) functor.metaSet= new Set<string>()
-          functor.metaSet.add(metaName)
-        }
+        return (metaName, value?) => {
+          if (!functor.metaMap) functor.metaMap = new Map<string, any>();
+          functor.metaMap.set(metaName, value ? value : true);
+        };
       case "hasMeta":
-        return (metaName) => {
-          if (!functor.metaSet) return false
-          return functor.metaSet.has(metaName)
-        }
+        return metaName => {
+          if (!functor.metaMap) return false;
+          return functor.metaMap.has(metaName);
+        };
     }
     return false;
   }

@@ -55,8 +55,8 @@ export interface AFunctor {
   childs: Set<AChildFlow>
   grandChilds: Map<AChildFlow, AChildFlow>
   meta: any
-  metaSet: Set<string>
-  metaMap: Map<string, Set<any>>
+  // metaSet: Set<string>
+  metaMap: Map<string, any>
   proxy: any
   value: any
   id: string
