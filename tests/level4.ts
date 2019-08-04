@@ -21,6 +21,30 @@ test("level4 - from", (t: any) => {
   });
   bFlow(10);
 
+
+
+
+  let flow1 = DFlow()
+  let flow2 = DFlow()
+  let flow3 = DFlow()
+  let flow4 = DFlow()
+
+  let hf = DFlow()
+
+  hf.from(flow1,flow2,flow3,flow4).holistic((...v)=>{
+    console.log(v)
+    return "ko"
+  })
+  flow1(1)
+  flow2(1)
+  flow3(1)
+  flow4(1)
+
+
+
+
+
+
   const asyncFlow = A.flow();
   const xFlow = A.flow();
   asyncFlow

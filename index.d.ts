@@ -239,6 +239,10 @@ export interface AFlow<T> {
   setMetaObj(obj: any): void;
 
   extend(key: string, obj: any): void;
+
+
+  hasMeta(metaName: string): boolean;
+  addMeta(metaName: string): void;
 }
 
 export type IflowStarter =
