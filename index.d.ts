@@ -8,12 +8,12 @@ export declare const DFlow: IflowStarter;
 declare const _default: IAproxy;
 export default _default;
 
-type FromFlowFn<X, A, B, C, D> = {
-  (fn:(a: A, b: B, c?: C, d?: D)=> X):void
+type FromFlowFn<X, T extends any[]> = {
+  (fn:(...a: T)=> X):void
 };
-export interface AFlowFrom<X, A, B, C, D> {
-  holistic: FromFlowFn<X, A, B, C, D>;
-  waterfall: FromFlowFn<X, A, B, C, D>;
+export interface AFlowFrom<X, T extends any[]> {
+  holistic: FromFlowFn<X, T>;
+  waterfall: FromFlowFn<X, T>;
 }
 
 export interface AFlow<T> {
@@ -83,12 +83,9 @@ export interface AFlow<T> {
    */
   // link(fn: Listener<T>): AFlow<T>;
   // to(fn: Listener<T>): AFlow<T>;
-  from<A, B, C, D>(
-    a: AFlow<A>,
-    b: AFlow<B>,
-    c?: AFlow<C>,
-    d?: AFlow<D>
-  ): AFlowFrom<T, A, B, C, D>;
+  from<A extends any[]>(
+    ...a: A,
+  ): AFlowFrom<T, A>;
   on(fn: Listener<T>): AFlow<T>;
 
   up(fn: Listener<T>): AFlow<T>;

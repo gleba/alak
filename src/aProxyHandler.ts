@@ -95,7 +95,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           if (functor.value && functor.value.length) f.apply(f, functor.value);
         };
       case "mutate":
-        return f => setFunctorValue(functor, ...f(...functor.value));
+        return f => setFunctorValue(functor, ...f(functor.value));
       case "setId":
         return id => (functor.id = id);
       case "id":
