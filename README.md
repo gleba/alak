@@ -6,12 +6,12 @@
 [![dependencies](https://david-dm.org/gleba/alak.svg)](https://david-dm.org/gleba/alak)
 [![Downloads](https://img.shields.io/npm/dt/alak.svg)](https://www.npmjs.com/package/alak)
 
-Atomic updates.
-Pattern Matching.
-Zero-dependency.
-Prefect for state machines.
-Easy and fast.
+- Zero-dependency
+- Atomic updates
+- Pattern Matching
+- Prefect for state machines
+- Simplicity, beauty and holistically
 
-[tests](https://github.com/gleba/alak/blob/master/tests/)
+[Tests](https://github.com/gleba/alak/blob/master/tests/)
 
 source code of idea : [first / initial commit](https://github.com/gleba/alak/commit/fdc2739105485acfa232bc7a123c7164fd4c2c33#diff-ed009b6b86b017532ef0489c77de5100)
