@@ -102,7 +102,9 @@ export interface AFlow<T> {
 
   removeFx(fxName: string, fn: Listener<any>): void;
 
-  // once(fn: Listener<T>): AFlow<T>;
+  once(fn: Listener<T>): AFlow<T>;
+
+
   next(fn: Listener<T>): AFlow<T>;
   im(fn: Listener<T>): AFlow<T>;
 
