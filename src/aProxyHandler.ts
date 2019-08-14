@@ -36,7 +36,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           if (functor.value && functor.value.length) f.apply(f, functor.value);
           else {
             const once = v => {
-              f.apply(f, v);
+              f.apply(f, functor.value);
               functor.childs.delete(once)
             }
             functor.childs.add(once)
