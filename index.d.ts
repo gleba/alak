@@ -1,76 +1,83 @@
-import { notifyTheChildren } from "./src/aFunctor";
+import { notifyTheChildren } from './src/aFunctor'
 
-export type Listener<T extends any> = (...a: T[]) => any;
+export type Listener<T extends any> = (...a: T[]) => any
 
-export declare const A: IAproxy;
-export declare const Al: IflowStarter;
-export declare const DFlow: IflowStarter;
-declare const _default: IAproxy;
-export default _default;
+export declare const A: IAproxy
+export declare const Al: IflowStarter
+export declare const DFlow: IflowStarter
+declare const _default: IAproxy
+export default _default
 
-type FromFlowFn<X, T extends any[]> = {
-  (fn:(...a: T)=> X):void
-};
-export interface AFlowFrom<X, T extends any[]> {
-  holistic: FromFlowFn<X, T>;
-  waterfall: FromFlowFn<X, T>;
+type ReturnTypefy<T extends  any[]> = {
+  [K in keyof T]: ReturnType<T[K]>
+}
+type FromHandler<T, A extends any[]> = {
+  (...a: ReturnTypefy<A>): T | PromiseLike<T>
+}
+
+type FromFlowFn<T, A extends any[]> = {
+  (fn: FromHandler<T, A>): T
+}
+export interface AFlowFrom<T, A extends any[]> {
+  holistic: FromFlowFn<T, A>
+  waterfall: FromFlowFn<T, A>
 }
 
 export interface AFlow<T> {
-  v: T;
-  value: T;
-  imv: T;
-  cloneValue: T;
-  immutable: any;
-  id: any;
-  o: any;
-  metaData: any;
-  data: T[];
-  isAsync: boolean;
+  v: T
+  value: T
+  imv: T
+  cloneValue: T
+  immutable: any
+  id: any
+  o: any
+  metaData: any
+  data: T[]
+  isAsync: boolean
 
-  (...a: T[]): T;
+  (...a: T[]): T
 
-  is(value?: any): Boolean;
-  safe(value?: T): void;
+  is(value?: any): Boolean
+  safe(value?: T): void
 
   /**
    * set flow value and notify child listeners if value not null and undefined
    * @param value
    * @returns {Boolean}
    */
-  nullSafe(value: T | null): void;
+  nullSafe(value: T | null): void
 
   /**
    * set flow value and notify child listeners if value not equal current flow value
    * @param value
    * @returns {Boolean}
    */
-  loopSafe(value: T): void;
+  loopSafe(value: T): void
 
   /**
    * Remove key or index in object or array
    * @param value
    * @returns {Boolean}
    */
-  remove(ki?: any);
+  remove(ki?: any)
 
-  set(ki: string | number, item: any);
+  set(ki: string | number, item: any)
 
-  push(item: any);
+  push(item: any)
 
-  map(f: (item: any, ki) => any);
+  map(f: (item: any, ki) => any)
 
   // effect(fn: Listener<T>, mutable?:boolean): any;
   // clearEffect(): void;
 
-  each(f: (item: any, ki) => void);
+  each(f: (item: any, ki) => void)
 
-  wrap(fn: Listener<T>): any;
+  wrap(fn: Listener<T>): any
 
   // iMix( ...f): any;
   // integralMix(fn: Listener<any>): any;
 
-  unwrap(): any;
+  unwrap(): any
 
   // mix(fn: Listener<any>): any;
   /**
@@ -83,30 +90,27 @@ export interface AFlow<T> {
    */
   // link(fn: Listener<T>): AFlow<T>;
   // to(fn: Listener<T>): AFlow<T>;
-  from<A extends any[]>(
-    ...a: A,
-  ): AFlowFrom<T, A>;
-  on(fn: Listener<T>): AFlow<T>;
+  from<A extends AFlow<any>[]>(...a: A): AFlowFrom<T, A>
+  on(fn: Listener<T>): AFlow<T>
 
-  up(fn: Listener<T>): AFlow<T>;
+  up(fn: Listener<T>): AFlow<T>
 
-  $(fn: Listener<T>): AFlow<T>;
+  $(fn: Listener<T>): AFlow<T>
 
-  upTrue(fn: Listener<T>): AFlow<T>;
-  upNone(fn: Listener<T>): AFlow<T>;
-  upSome(fn: Listener<T>): AFlow<T>;
+  upTrue(fn: Listener<T>): AFlow<T>
+  upNone(fn: Listener<T>): AFlow<T>
+  upSome(fn: Listener<T>): AFlow<T>
 
-  useFx(fxName: string, f: (fn: Promise<T>) => T): void;
+  useFx(fxName: string, f: (fn: Promise<T>) => T): void
 
-  addFx(fxName: string, fn: Listener<any>): void;
+  addFx(fxName: string, fn: Listener<any>): void
 
-  removeFx(fxName: string, fn: Listener<any>): void;
+  removeFx(fxName: string, fn: Listener<any>): void
 
-  once(fn: Listener<T>): AFlow<T>;
+  once(fn: Listener<T>): AFlow<T>
 
-
-  next(fn: Listener<T>): AFlow<T>;
-  im(fn: Listener<T>): AFlow<T>;
+  next(fn: Listener<T>): AFlow<T>
+  im(fn: Listener<T>): AFlow<T>
 
   /**
    * Remove edge
@@ -115,8 +119,8 @@ export interface AFlow<T> {
    * @param {Listener<T>} fn
    * @returns {AFlow<T>}
    */
-  down(fn: Listener<T>): AFlow<T>;
-  off(fn: Listener<T>): AFlow<T>;
+  down(fn: Listener<T>): AFlow<T>
+  off(fn: Listener<T>): AFlow<T>
 
   /**
    * Remove edge
@@ -124,7 +128,7 @@ export interface AFlow<T> {
    * same as `off`
    * @param fn
    */
-  stop(fn: any): void;
+  stop(fn: any): void
 
   /**
    * Make flow as eventbus
@@ -133,7 +137,7 @@ export interface AFlow<T> {
    * @param {boolean} v
    * @returns {AFlow<T>}
    */
-  stateless(v?: boolean): AFlow<T>;
+  stateless(v?: boolean): AFlow<T>
 
   /**
    * Make flow as dispatcher
@@ -142,36 +146,36 @@ export interface AFlow<T> {
    * @param {boolean} v
    * @returns {AFlow<T>}
    */
-  emitter(v?: boolean): AFlow<T>;
+  emitter(v?: boolean): AFlow<T>
 
   /**
    * Destroy flow
    * remove all data
    * kill object
    */
-  kill(): void;
+  kill(): void
 
-  end(): void;
+  end(): void
 
   /**
    * Notify all edges/listeners with empty data value
    */
-  emit(): void;
-  makeWave(): void;
-  notifyChildren(): void;
+  emit(): void
+  makeWave(): void
+  notifyChildren(): void
 
   /**
    * Delete data value without notify edges/listeners
    * - data value will be undefined
    */
-  clear(): void;
+  clear(): void
 
   /**
    * Update data value without notify edges/listeners
    * @param {T} a
    * @returns {void}
    */
-  silent(...a: T[]): void;
+  silent(...a: T[]): void
 
   /**
    * Patterm maching
@@ -186,7 +190,7 @@ export interface AFlow<T> {
    * @param pattern
    * @returns {any}
    */
-  match(...pattern: any[]): any;
+  match(...pattern: any[]): any
 
   /**
    * Mutate data value
@@ -198,74 +202,73 @@ export interface AFlow<T> {
    * @param {Listener<T>} fn
    * @returns {T}
    */
-  mutate(fn: Listener<T>): T;
+  mutate(fn: Listener<T>): T
 
   /**
    * Create new flow edged on current
    * @param {(...a: any[]) => U[]} fn
    * @returns {AFlow<any>}
    */
-  branch<U>(fn: (...a: any[]) => U[]): AFlow<any>;
+  branch<U>(fn: (...a: any[]) => U[]): AFlow<any>
 
   /**
    * Remove all injections
    */
-  drop(): void;
+  drop(): void
 
   /**
    * Bind key in object to flow data value
    * @param obj
    * @param {string} key
    */
-  inject(obj: any, key?: string): void;
+  inject(obj: any, key?: string): void
 
   /**
    * Unbind injected object
    * @param obj
    */
-  reject(obj: any): void;
+  reject(obj: any): void
 
   /**
    * set id param to flow
    * @param {string} name
    */
-  setId(name: string): void;
+  setId(name: string): void
 
   /**
    * set any meta data as object in flow
    * @param obj
    */
-  setMetaObj(obj: any): void;
+  setMetaObj(obj: any): void
 
-  extend(key: string, obj: any): void;
+  extend(key: string, obj: any): void
 
-
-  hasMeta(metaName: string): boolean;
-  addMeta(metaName: string, value? :any): void;
-  getMeta(metaName: string): any;
+  hasMeta(metaName: string): boolean
+  addMeta(metaName: string, value?: any): void
+  getMeta(metaName: string): any
 }
 
 export type IflowStarter =
   | {
-      <T>(a?: T): AFlow<T>;
-    }
+  <T>(a?: T): AFlow<T>
+}
   | {
-      (...a: any[]): AFlow<any>;
-    };
+  (...a: any[]): AFlow<any>
+}
 
 export type IAnyflowStarter = {
-  (a: any): IAnyflowStarter;
-  [s: string]: IAnyflowStarter;
-};
+  (a: any): IAnyflowStarter
+  [s: string]: IAnyflowStarter
+}
 
 export interface IAproxy {
-  flow: IflowStarter;
-  f: IflowStarter;
-  meta: IflowStarter;
-  m: IflowStarter;
-  stateless: IflowStarter;
-  emitter: IflowStarter;
-  install: IflowStarter;
+  flow: IflowStarter
+  f: IflowStarter
+  meta: IflowStarter
+  m: IflowStarter
+  stateless: IflowStarter
+  emitter: IflowStarter
+  install: IflowStarter
 
-  [s: string]: IflowStarter;
+  [s: string]: IflowStarter
 }
