@@ -8,8 +8,10 @@ export declare const DFlow: IflowStarter
 declare const _default: IAproxy
 export default _default
 
+// type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+
 type ReturnTypefy<T extends  any[]> = {
-  [K in keyof T]: ReturnType<T[K]>
+  [K in keyof T]: T[K] extends (...args: any) => infer R ? R : any;
 }
 type FromHandler<T, A extends any[]> = {
   (...a: ReturnTypefy<A>): T | PromiseLike<T>
