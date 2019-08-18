@@ -3,11 +3,11 @@ import { setFunctorValue } from "./aFunctor";
 import {isPromise} from "./utils";
 
 export function aFromFlows(functor, ...flows: AFlow<any>[]) {
-  if (functor.haveAfromMix) {
-    console.warn(functor)
+  if (functor.haveFrom) {
+    // console.warn(functor)
     throw `functor ${functor.id?functor.id:""} already has a assigned 'from(function..', reassign 'from' to attest to business logic errors`
   } else {
-    functor.haveAfromMix = true
+    functor.haveFrom = true
   }
 
   const notify = (fn) => {
@@ -22,7 +22,7 @@ export function aFromFlows(functor, ...flows: AFlow<any>[]) {
     }
 
   };
-  function waterfall(fn) {
+  function quantum(fn) {
     flows.forEach(flow => {
       if (flow != functor.proxy) flow.next(()=>notify(fn));
     });
@@ -42,11 +42,11 @@ export function aFromFlows(functor, ...flows: AFlow<any>[]) {
     };
     flows.forEach(flow => {
       if (flow == functor.proxy) needToRun--;
-      else flow.on(() => countActiveFlows(flow));
+      else flow.up(() => countActiveFlows(flow));
     });
   }
   return {
-    waterfall,
+    quantum,
     holistic
   };
 }

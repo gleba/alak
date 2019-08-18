@@ -3,6 +3,7 @@ export const deepClone = v =>
   typeof v === "object" ? JSON.parse(JSON.stringify(v)) : v;
 
 export const deleteParams = o => {
+  // console.log("→→→→", typeof o, o)
   Object.keys(o).forEach(k => {
     if (o[k]) o[k] = null;
     delete o[k];

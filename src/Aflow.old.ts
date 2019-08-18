@@ -69,7 +69,7 @@ export function flow(a?) {
       while (onceListeners.length>0) {
         remove(listeners, onceListeners.shift())
       }
-        // remove(listeners, onceListeners.shift)
+        // remove(children, onceListeners.shift)
     },
     mutate: function (fn) {
       let newValue
@@ -95,7 +95,7 @@ export function flow(a?) {
       if (!mapObjects) mapObjects = new Map<any, Function>()
       let fn = key
         ? v => obj[key] = v
-        : v => Object.keys(v).forEach(k => obj[k] = v[k])
+        : v => Object.map(v).forEach(k => obj[k] = v[k])
       mapObjects.set(obj, fn)
       proxy.on(fn)
       return obj
@@ -204,7 +204,7 @@ export function flow(a?) {
       if (Array.isArray(v)) {
         v.forEach((item,i)=>f(item,i,v))
       } else {
-        Object.keys(v).forEach(k=>f(v[k],k,v))
+        Object.map(v).forEach(k=>f(v[k],k,v))
       }
       proxy.emit()
     },
@@ -214,7 +214,7 @@ export function flow(a?) {
         return v.map((v,i)=>f(v,i))
       } else {
         let o = {}
-        Object.keys(v).forEach(k=>o[k]=f(v[k],k))
+        Object.map(v).forEach(k=>o[k]=f(v[k],k))
         return o
       }
     },

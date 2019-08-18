@@ -22,7 +22,7 @@ type FromFlowFn<T, A extends any[]> = {
 }
 export interface AFlowFrom<T, A extends any[]> {
   holistic: FromFlowFn<T, A>
-  waterfall: FromFlowFn<T, A>
+  quantum: FromFlowFn<T, A>
 }
 
 export interface AFlow<T> {
@@ -40,17 +40,18 @@ export interface AFlow<T> {
   (...a: T[]): T
 
   is(value?: any): Boolean
+  isEmpty: Boolean
   safe(value?: T): void
 
   /**
-   * set flow value and notify child listeners if value not null and undefined
+   * set flow value and notify child children if value not null and undefined
    * @param value
    * @returns {Boolean}
    */
   nullSafe(value: T | null): void
 
   /**
-   * set flow value and notify child listeners if value not equal current flow value
+   * set flow value and notify child children if value not equal current flow value
    * @param value
    * @returns {Boolean}
    */
@@ -93,7 +94,8 @@ export interface AFlow<T> {
   // link(fn: Listener<T>): AFlow<T>;
   // to(fn: Listener<T>): AFlow<T>;
   from<A extends AFlow<any>[]>(...a: A): AFlowFrom<T, A>
-  on(fn: Listener<T>): AFlow<T>
+
+  on(state:string, fn: Listener<T>): AFlow<T>
 
   up(fn: Listener<T>): AFlow<T>
 
@@ -143,7 +145,7 @@ export interface AFlow<T> {
 
   /**
    * Make flow as dispatcher
-   * notify all edges/listeners when call flow() without arguments
+   * notify all edges/children when call flow() without arguments
    * set true if need enable it
    * @param {boolean} v
    * @returns {AFlow<T>}
@@ -155,25 +157,26 @@ export interface AFlow<T> {
    * remove all data
    * kill object
    */
-  kill(): void
+  // free(): void
 
   end(): void
 
   /**
-   * Notify all edges/listeners with empty data value
+   * Notify all edges/children with empty data value
    */
   emit(): void
-  makeWave(): void
+  notify(): void
   notifyChildren(): void
 
   /**
-   * Delete data value without notify edges/listeners
+   * Delete data value without notify edges/children
    * - data value will be undefined
    */
   clear(): void
+  clearValue(): void
 
   /**
-   * Update data value without notify edges/listeners
+   * Update data value without notify edges/children
    * @param {T} a
    * @returns {void}
    */
@@ -196,7 +199,7 @@ export interface AFlow<T> {
 
   /**
    * Mutate data value
-   * and notify edges/listeners
+   * and notify edges/children
    * @example
    * ```
    * flow.mutate(v=>v+1)

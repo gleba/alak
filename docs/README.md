@@ -114,7 +114,7 @@ startFlow(4)
 // flow listener3 4
 // pattern match by key 4
 
-startFlow.drop() //remove all listeners
+startFlow.drop() children
 
 // Advanced
 

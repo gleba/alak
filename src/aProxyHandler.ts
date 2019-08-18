@@ -23,12 +23,12 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           setFunctorValue(functor, v[0]);
         };
       case "next":
-        return f => functor.childs.add(f);
+        return f => functor.children.add(f);
       case "up":
       case "$":
       case "on":
         return f => {
-          functor.childs.add(f);
+          functor.children.add(f);
           if (functor.value && functor.value.length) f.apply(f, functor.value);
         };
       case "once":
@@ -37,11 +37,13 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           else {
             const once = v => {
               f.apply(f, functor.value);
-              functor.childs.delete(once)
+              functor.children.delete(once)
             }
-            functor.childs.add(once)
+            functor.children.add(once)
           }
         };
+      case "isEmpty":
+        return !functor.value.length
       case "is":
         return v => {
           if (functor.value && functor.value.length) {
@@ -62,21 +64,21 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       //   return (name, f) => onFx(functor, name, f);
       case "upSome":
         return f => {
-          functor.grandChilds.set(f, nullFilter(f));
+          functor.grandChildren.set(f, nullFilter(f));
           let v = functor.value[0];
           if (alive(v)) f.apply(f, [v]);
         };
       case "upTrue":
         return f => {
-          functor.grandChilds.set(f, trueFilter(f));
+          functor.grandChildren.set(f, trueFilter(f));
           let v = functor.value[0];
           if (v) f.apply(f, [v]);
         };
       case "upNone":
         return f => {
-          functor.grandChilds.set(f, someFilter(f));
+          functor.grandChildren.set(f, someFilter(f));
           let v = functor.value[0];
-          if (!alive(v)) f.apply(f, [v]);
+          if (functor.value.length && !alive(v)) f.apply(f, [v]);
         };
       case "nullSafe":
       case "safe":
@@ -86,27 +88,36 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case "down":
       case "off":
         return f => {
-          if (functor.childs.has(f)) functor.childs.delete(f);
-          else if (functor.grandChilds.has(f)) functor.grandChilds.delete(f);
+          if (functor.children.has(f)) functor.children.delete(f);
+          else if (functor.grandChildren.has(f)) functor.grandChildren.delete(f);
         };
+      case "clear":
+        return ()=> {
+          functor.children.clear();
+          functor.grandChildren.clear();
+          functor.value = []
+          delete functor.haveFrom
+        }
+      case "clearValue":
+        return ()=> functor.value = []
       case "kill":
       case "end":
         return () => {
-          functor.childs.clear();
+          functor.children.clear();
           deleteParams(functor);
         };
-      case "makeWave":
+      case "notify":
       case "notifyChildren":
       case "emit":
         return () => notifyTheChildren(functor);
       case "match":
         return (...pattern) => {
           let f = patternMatch(pattern);
-          functor.childs.add(f);
+          functor.children.add(f);
           if (functor.value && functor.value.length) f.apply(f, functor.value);
         };
       case "mutate":
-        return f => setFunctorValue(functor, ...f(...functor.value));
+        return mutatorFn => setFunctorValue(functor, mutatorFn(...functor.value));
       case "setId":
         return id => (functor.id = id);
       case "id":
