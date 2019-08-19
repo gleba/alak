@@ -95,7 +95,10 @@ export interface AFlow<T> {
   // to(fn: Listener<T>): AFlow<T>;
   from<A extends AFlow<any>[]>(...a: A): AFlowFrom<T, A>
 
-  on(state:string, fn: Listener<T>): AFlow<T>
+  on:{
+    (state:string, fn: Listener<T>): AFlow<T>
+    await:(fn: Listener<T>)=>void
+  }
 
   up(fn: Listener<T>): AFlow<T>
 
@@ -105,11 +108,7 @@ export interface AFlow<T> {
   upNone(fn: Listener<T>): AFlow<T>
   upSome(fn: Listener<T>): AFlow<T>
 
-  useFx(fxName: string, f: (fn: Promise<T>) => T): void
-
-  addFx(fxName: string, fn: Listener<any>): void
-
-  removeFx(fxName: string, fn: Listener<any>): void
+  useWarp(f: (fn: Promise<T>) => T): void
 
   once(fn: Listener<T>): AFlow<T>
 

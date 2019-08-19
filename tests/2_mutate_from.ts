@@ -1,5 +1,5 @@
 import { test } from './ouput.shema'
-import { A, AFX, DFlow } from '../src'
+import { A,  DFlow } from '../src'
 
 // import {AFX} from "../src/AFX";
 // import {A, AFlow} from "../src";

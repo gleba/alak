@@ -3,7 +3,7 @@ import {AFacadeProxy} from "./aFacadeProxy";
 import {flow} from "./Aflow";
 import {IAproxy, IflowStarter} from "../index";
 
-export {AFX} from "./AFX";
+export {ASE} from "./ASE";
 
 export const A = AFacadeProxy as IAproxy
 

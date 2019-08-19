@@ -1,4 +1,5 @@
-import { AFX, effects } from './AFX'
+import {ASE, notifyAboutStateListeners} from "./ASE";
+
 
 export function setFunctorValue(functor: AFunctor, ...a) {
   if (!functor.children) {
@@ -25,29 +26,35 @@ export function notifyTheChildren(functor: AFunctor) {
 }
 
 function executeBorn(functor:AFunctor, bornFn) {
-  if (bornFn.then) {
-    if (functor.stateListeners.size){
-
-    }
-    return new Promise(async done => done(await bornFn()))
+  let value = bornFn()
+  if (value.then) {
+    notifyAboutStateListeners(functor, ASE.AWAIT, true)
+    value.then(v=>{
+      setFunctorValue(functor, v)
+      notifyAboutStateListeners(functor, ASE.AWAIT, false)
+      notifyAboutStateListeners(functor, ASE.READY)
+    })
+  } else{
+    setFunctorValue(functor, value)
   }
-  else return bornFn()
+  return value
 }
 
 export const newAFunctor = () => {
-  let children = new Set<AnyFunction>()
-  let grandChildren = new Map<AnyFunction, AnyFunction>()
+  // let children = new Set<AnyFunction>()
+  // let grandChildren = new Map<AnyFunction, AnyFunction>()
   const functor = function(...a) {
     if (a.length)
-      if (typeof a[0] === 'function') functor.bornFn = a[0]
+      if (typeof a[0] === 'function') functor.warpFn = a[0]
       else setFunctorValue(functor, ...a)
     else {
-      if (functor.bornFn) return functor.bornFn() //new Promise(async done => done(await ))
+      if (functor.warpFn) return executeBorn(functor, functor.warpFn) //new Promise(async done => done(await ))
       return functor.value
     }
   } as AFunctor
-  functor.children = children
-  functor.grandChildren = grandChildren
+  functor.children = new Set<AnyFunction>()
+  functor.grandChildren = new Map<AnyFunction, AnyFunction>()
+  functor.asEventsListeners = new Map<string, Set<AnyFunction>>()
   functor.value = []
 
   return functor as AFunctor
@@ -60,8 +67,8 @@ export type AnyFunction = {
 export interface AFunctor {
   children: Set<AnyFunction>
   grandChildren: Map<AnyFunction, AnyFunction>
-  stateListeners: Set<AnyFunction>
-  bornFn: any
+  asEventsListeners: Map<string, Set<AnyFunction>>
+  warpFn: any
   meta: any
   // metaSet: Set<string>
   metaMap: Map<string, any>
