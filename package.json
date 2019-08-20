@@ -1,7 +1,7 @@
 {
   "name": "alak",
-  "version": "1.0.0-alpha.26",
-  "description": "Fantasy FRP DataChannels/DataFlow/Pattern Matching",
+  "version": "1.0.0",
+  "description": "Alak functor, the data flow library.",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "typescript": {
@@ -10,12 +10,13 @@
   "keywords": [
     "frp",
     "pattern matching",
-    "Functional reactive programming",
+    "functional programming",
+    "reactive programming",
     "atomic updates",
     "channels",
     "streams",
-    "dependency-free",
-    "dataflow"
+    "dataflow",
+    "dependency free"
   ],
   "author": "Gleb Panteleev <dev@gleb.pw> (http://gleb.pw/)",
   "license": "MIT",

@@ -7,4 +7,3 @@ Meanings of अलक in English :
 - Локоны, Виться, Пряди, Завитки, Вселенная
 
 # alak / अलक  (sanskrit)
-![Image of alak](http://x.gleb.pw/alak.jpg)

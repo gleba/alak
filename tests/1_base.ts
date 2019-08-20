@@ -3,6 +3,7 @@ import { test } from './ouput.shema'
 import { A } from '../src'
 
 test('base functions', ({ ok, end, fall, plan}) => {
+  //start
   const flow = A.flow(5)
   flow.up(v => ok(v == 5, 'up'))
 
@@ -21,13 +22,10 @@ test('base functions', ({ ok, end, fall, plan}) => {
 
   //multi arguments
   flow.clear()
-  flow(
-    [0, 0, 0],
-    1,
-  )
+  flow([0, 0, 0], 1,)
   flow.up((v1, v2) => ok(v1.length == 3 && v2 == 1, 'up multi-value'))
 
-  //multiple handlers
+  //atomic updates
   const countFlow = A.flow()
   let vCounter = 0
   const addCount = v => (vCounter = vCounter + v)

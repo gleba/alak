@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-
-ver_label=$( npm version patch --no-git-tag-version )
-git add *
-git commit -m $ver_label
-git push
-echo $ver_label
