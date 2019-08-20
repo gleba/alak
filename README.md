@@ -8,7 +8,7 @@ Functor is a function containing data that can transfer its data to any other fu
 Data is changed by passing data to the functor as an argument.  
   
 * Zero-dependency  
-* [Atomic updates](https://github.com/gleba/alak/blob/master/tests/1_base.ts#L31)  
+* [Atomic updates](https://github.com/gleba/alak/blob/master/tests/1_base.ts#L28)  
 * [Pattern Matching](https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts)  
 * Two type of compute strategy [quantum](https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts#L24) and [holistic](https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts#L39)   
 * [Meta values](https://github.com/gleba/alak/blob/master/tests/5_meta.ts)  
