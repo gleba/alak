@@ -64,8 +64,8 @@ test('base functions', ({ ok, end, fall, plan}) => {
   flow(2)
   flow(3)
 
-  countFlow.end()
-  ok(countFlow() == undefined, 'end')
+  countFlow.close()
+  ok(countFlow() == undefined, 'close')
   countFlow(5) //error message test
 
   plan(14)

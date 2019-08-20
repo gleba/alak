@@ -9,19 +9,31 @@ export const isTruth = v => !!v
 export const nullFilter = f => v => (alive(v) ? f(v) : null)
 export const someFilter = f => v => (!alive(v) ? f(v) : null)
 export const trueFilter = f => v => (isTruth(v) ? f(v) : null)
-const dipFun = (functor, f) => (...a) => f(functor, ...a)
+
 export const aProxyHandler: ProxyHandler<AFunctor> = {
   get(functor: AFunctor, prop: string) {
     switch (prop) {
+      //base
       case 'v':
       case 'value':
-      case 'data':
         return functor.value.length > 1 ? functor.value : functor.value[0]
-      case 'apply':
-        return (context, v) => {
-          functor.bind(context)
-          setFunctorValue(functor, v[0])
+      case 'clear':
+        return () => {
+          functor.children.clear()
+          functor.grandChildren.clear()
+          functor.asEventsListeners.clear()
+          functor.value = []
+          delete functor.haveFrom
         }
+      case 'clearValue':
+        return () => (functor.value = [])
+      case 'close':
+        return () => {
+          functor.children.clear()
+          deleteParams(functor)
+        }
+      case 'notify':
+        return () => notifyTheChildren(functor)
       case 'next':
         return f => functor.children.add(f)
       case 'up':
@@ -45,10 +57,14 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
             functor.children.add(once)
           }
         }
-      case 'on':
-        return proxyASEOnMap(functor)
-      case 'off':
-        return (aseName, fn) => addASEventListener(functor, aseName, fn)
+
+      case 'apply':
+        return (context, v) => {
+          functor.bind(context)
+          setFunctorValue(functor, v[0])
+        }
+
+        //sugar
       case 'isEmpty':
         return !functor.value.length
       case 'is':
@@ -59,8 +75,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
             return v === null || v === undefined
           }
         }
-      case 'isAsync':
-        return functor.meta && functor.meta.born
+
       case 'upSome':
         return f => {
           functor.grandChildren.set(f, nullFilter(f))
@@ -79,47 +94,12 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           let v = functor.value[0]
           if (functor.value.length && !alive(v)) f.apply(f, [v])
         }
-      case 'nullSafe':
-      case 'safe':
-        return v => {
-          if (alive(v)) setFunctorValue(functor, v)
-        }
-      case 'clear':
-        return () => {
-          functor.children.clear()
-          functor.grandChildren.clear()
-          functor.asEventsListeners.clear()
-          functor.value = []
-          delete functor.haveFrom
-        }
-      case 'clearValue':
-        return () => (functor.value = [])
-      case 'kill':
-      case 'end':
-        return () => {
-          functor.children.clear()
-          deleteParams(functor)
-        }
-      case 'notify':
-      case 'notifyChildren':
-      case 'emit':
-        return () => notifyTheChildren(functor)
-      case 'useWarp':
-        return (fn:AnyFunction) => functor.warpFn = fn
-      case 'match':
-        return (...pattern) => {
-          let f = patternMatch(pattern)
-          functor.children.add(f)
-          if (functor.value && functor.value.length) f.apply(f, functor.value)
-        }
-      case 'mutate':
-        return mutatorFn => setFunctorValue(functor, mutatorFn(...functor.value))
+
+      //meta
       case 'setId':
         return id => (functor.id = id)
       case 'id':
         return functor.id
-      case 'from':
-        return (...flows) => aFromFlows(functor, ...flows)
       case 'addMeta':
         return (metaName, value?) => {
           if (!functor.metaMap) functor.metaMap = new Map<string, any>()
@@ -135,6 +115,25 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           if (!functor.metaMap) return null
           return functor.metaMap.get(metaName)
         }
+
+      // strong
+      case 'useWarp':
+        return (fn:AnyFunction) => functor.warpFn = fn
+      case 'on':
+        return proxyASEOnMap(functor)
+      case 'off':
+        return (aseName, fn) => addASEventListener(functor, aseName, fn)
+
+      case 'match':
+        return (...pattern) => {
+          let f = patternMatch(pattern)
+          functor.children.add(f)
+          if (functor.value && functor.value.length) f.apply(f, functor.value)
+        }
+      case 'mutate':
+        return mutatorFn => setFunctorValue(functor, mutatorFn(...functor.value))
+      case "from":
+        return (...flows) => aFromFlows(functor, ...flows);
     }
     return false
   },

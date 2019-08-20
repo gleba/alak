@@ -17,7 +17,7 @@ test('meta', ({ plan, ok, end, pass, fail }) => {
   flow.clear()
   ok(flow.hasMeta("a") && flow.getMeta("a").a, "meta strength")
 
-  flow.end()
+  flow.close()
   ok(!flow.hasMeta("a"), "meta end")
 
   plan(5)

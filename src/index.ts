@@ -1,13 +1,13 @@
 
 import {AFacadeProxy} from "./aFacadeProxy";
 import {flow} from "./Aflow";
-import {IAproxy, IflowStarter} from "../index";
+import {Facade, FlowStarter} from "../index";
 
 export {ASE} from "./ASE";
 
-export const A = AFacadeProxy as IAproxy
+export const A = AFacadeProxy as Facade
 
-export const Al = flow as any as IflowStarter
-export const DFlow = flow as any as IflowStarter
-export default AFacadeProxy as IAproxy
+export const Al = flow as any as FlowStarter
+export const DFlow = flow as any as FlowStarter
+export default AFacadeProxy as Facade
 
