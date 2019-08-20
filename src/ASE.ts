@@ -19,7 +19,7 @@ export function addASEventListener(f: AFunctor, aboutState: ASE | string, fn: An
   } else f.asEventsListeners.get(aboutState).add(fn)
 }
 export function removeASEventListener(f: AFunctor, aboutState: ASE | string, fn: AnyFunction) {
-  if (!f.asEventsListeners.has(aboutState)) {
+  if (f.asEventsListeners.has(aboutState)) {
     let ase = f.asEventsListeners.get(aboutState)
     if (ase.has(fn)) ase.delete(fn)
   }
@@ -31,5 +31,14 @@ export function proxyASEOnMap(functor) {
   }
   f.await = fn => addASEventListener(functor, 'await', fn)
   f.ready = fn => addASEventListener(functor, 'ready', fn)
+  return f
+}
+
+export function proxyASEOffMap(functor) {
+  function f(aseName, fn) {
+    addASEventListener(functor, aseName, fn)
+  }
+  f.await = fn => removeASEventListener(functor, 'await', fn)
+  f.ready = fn => removeASEventListener(functor, 'ready', fn)
   return f
 }

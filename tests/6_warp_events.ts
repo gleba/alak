@@ -25,10 +25,17 @@ test('warp and ', async ({ plan, ok, end, pass, fail, equal }) => {
     else equal(flow.value, initValue, 'About State Event: on.await ( is loaded )')
   })
   flow.on(ASE.READY, () => equal(flow.value, initValue, "About State Event: ready"))
-
   equal(flow.value, 0, 'rewrite async warp')
   let value = await flow()
-  ok(value == flow.value && value == initValue, 'values consistency')
+  ok(value == flow.value && value == initValue, 'consistency warped')
+
+
+  flow.clear()
+  const neverWait = () => fail("off")
+  flow.on.await(neverWait)
+  flow.off.await(neverWait)
+  flow()
+
   plan(8)
   end()
 })

@@ -4,7 +4,7 @@
 [![travis status](https://travis-ci.org/gleba/alak.svg?branch=master)](https://travis-ci.org/gleba/alak)  
 [![dependencies](https://david-dm.org/gleba/alak.svg)](https://david-dm.org/gleba/alak)  
 [![Downloads](https://img.shields.io/npm/dt/alak.svg)](https://www.npmjs.com/package/alak)  
-### data flow library  
+
 Functor is a function containing data that can transfer its data to any other functions when changing data. 
 Data is changed by passing data to the functor as an argument.  
   
