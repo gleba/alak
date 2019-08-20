@@ -52,6 +52,8 @@ export interface AFlow<T> {
   (value?: T, ...v: any[]): T | Promise<T>
   /** set warp function for data-mine*/
   useWarp(fn: () => T | Promise<T>): void
+  /** check 'from' or 'warp' function are async*/
+  isAsync:Boolean
   /** pattern matching see examples https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts*/
   match(...pattern: any[]): any
   /** function that takes values and returns a new value for flow*/
