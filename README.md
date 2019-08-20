@@ -1,15 +1,14 @@
-# Alak is Flow Functor  
+# Alak Functor  
+[![npm version](https://badge.fury.io/js/alak.svg)](https://badge.fury.io/js/alak)[![travis status](https://travis-ci.org/gleba/alak.svg?branch=master)](https://travis-ci.org/gleba/alak)
+[![dependencies](https://david-dm.org/gleba/alak.svg)](https://david-dm.org/gleba/alak)
+[![Downloads](https://img.shields.io/npm/dt/alak.svg)](https://www.npmjs.com/package/alak)
 
-[![npm version](https://badge.fury.io/js/alak.svg)](https://badge.fury.io/js/alak)  
-[![travis status](https://travis-ci.org/gleba/alak.svg?branch=master)](https://travis-ci.org/gleba/alak)  
-[![dependencies](https://david-dm.org/gleba/alak.svg)](https://david-dm.org/gleba/alak)  
-[![Downloads](https://img.shields.io/npm/dt/alak.svg)](https://www.npmjs.com/package/alak)  
-
+### data flow library  
 Functor is a function containing data that can transfer its data to any other functions when changing data. 
 Data is changed by passing data to the functor as an argument.  
   
 * Zero-dependency  
-* [Atomic updates](https://github.com/gleba/alak/blob/master/tests/1_base.ts#L31)  
+* [Atomic updates](https://github.com/gleba/alak/blob/master/tests/1_base.ts#L28)  
 * [Pattern Matching](https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts)  
 * Two type of compute strategy [quantum](https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts#L24) and [holistic](https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts#L39)   
 * [Meta values](https://github.com/gleba/alak/blob/master/tests/5_meta.ts)  
