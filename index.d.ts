@@ -63,19 +63,20 @@ export interface AFlow<T> {
   getMeta(metaName: string): any
 
   /*set value with args OR get value from warp function if exist*/
-  (value?: T, ...v:any[]): T | Promise<T>
+  (value?: T, ...v: any[]): T | Promise<T>
 
   /*set warp function for data-mine*/
   useWarp(fn: () => T | Promise<T>): void
 
-
-  /*add event listener for change async state of data, "await, ready, etc...*/
-  on:{
+  /*add event listener for change async state of data, "await, ready, etc...
+   *@experimental*/
+  on: {
     (eventName: string, fn: AnyFunction)
-    [events:string]:(fn:AnyFunction)=>void
+    [eventName: string]: (fn: AnyFunction) => void
   }
 
-  /*remove event listener for change async state of data, "await, ready, etc...*/
+  /*remove event listener for change async state of data, "await, ready, etc...
+   * @experimental*/
   off(eventName: string, fn: AnyFunction)
 
   /*pattern matching see examples https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts*/

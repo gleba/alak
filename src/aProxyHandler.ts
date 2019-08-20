@@ -116,14 +116,16 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           return functor.metaMap.get(metaName)
         }
 
-      // strong
-      case 'useWarp':
-        return (fn:AnyFunction) => functor.warpFn = fn
+
+      //experimental
       case 'on':
         return proxyASEOnMap(functor)
       case 'off':
         return (aseName, fn) => addASEventListener(functor, aseName, fn)
 
+      //strong
+      case 'useWarp':
+        return (fn:AnyFunction) => functor.warpFn = fn
       case 'match':
         return (...pattern) => {
           let f = patternMatch(pattern)
