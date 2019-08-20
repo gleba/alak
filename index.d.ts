@@ -1,13 +1,3 @@
-import { AnyFunction } from './src/aFunctor'
-
-export type ValueReceiver<T extends any> = (...a: T[]) => any
-
-export declare const A: Facade
-export declare const Al: FlowStarter
-export declare const DFlow: FlowStarter
-declare const _default: Facade
-export default _default
-
 export interface AFlow<T> {
   /*get value*/
   v: T
@@ -73,6 +63,10 @@ export interface AFlow<T> {
   on: {
     (eventName: string, fn: AnyFunction)
     [eventName: string]: (fn: AnyFunction) => void
+    /*send true if value are computing in async warp function*/
+    await: (fn: AnyFunction) => void
+    /*send when first fill data value*/
+    ready: (fn: AnyFunction) => void
   }
 
   /*remove event listener for change async state of data, "await, ready, etc...
@@ -87,19 +81,6 @@ export interface AFlow<T> {
 
   /*mutate computed value from multi flow https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts*/
   from<A extends AFlow<any>[]>(...a: A): AFlowFrom<T, A>
-}
-
-export type FlowStarter =
-  | {
-      <T>(v?: T): AFlow<T>
-    }
-  | {
-      (...v: any[]): AFlow<any>
-    }
-
-export interface Facade {
-  flow: FlowStarter
-  [s: string]: FlowStarter
 }
 
 type ReturnTypefy<T extends any[]> = {
@@ -117,3 +98,26 @@ export interface AFlowFrom<T, A extends any[]> {
   holistic: FromFlowFn<T, A>
   quantum: FromFlowFn<T, A>
 }
+type AnyFunction = {
+  (...v: any[]): any
+}
+
+export type ValueReceiver<T extends any> = (...a: T[]) => any
+
+export type FlowStarter =
+  | {
+      <T>(v?: T): AFlow<T>
+    }
+  | {
+      (...v: any[]): AFlow<any>
+    }
+
+export interface Facade {
+  flow: FlowStarter
+  [s: string]: FlowStarter
+}
+export declare const A: Facade
+export declare const Al: FlowStarter
+export declare const DFlow: FlowStarter
+declare const _default: Facade
+export default _default

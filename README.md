@@ -1,5 +1,4 @@
-
-# Alak Flow Functor
+# Alak is Flow Functor
 ### data object stream library
 [![npm version](https://badge.fury.io/js/alak.svg)](https://badge.fury.io/js/alak)
 [![travis status](https://travis-ci.org/gleba/alak.svg?branch=master)](https://travis-ci.org/gleba/alak)
@@ -8,10 +7,16 @@
 
 - Zero-dependency
 - Atomic updates
-- Pattern Matching
+- [Pattern Matching](https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts)
+- Two type of compute strategy
+    - [quantum](https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts#L24)
+    - [holistic](https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts#L39) 
+- [Meta values](https://github.com/gleba/alak/blob/master/tests/5_meta.ts)
+- Promise [async/await support](https://github.com/gleba/alak/blob/master/tests/6_warp_events.ts#L23)
+
+
 - Prefect for state machines
-- Simplicity, beauty and holistically
+- May be the best alternative to 'event buses' and RxJs, etc... 
 
-[Tests](https://github.com/gleba/alak/blob/master/tests/)
-
-source code of idea : [first / initial commit](https://github.com/gleba/alak/commit/fdc2739105485acfa232bc7a123c7164fd4c2c33#diff-ed009b6b86b017532ef0489c77de5100)
+[See tests as examples](https://github.com/gleba/alak/blob/master/tests/)
+[See interface as docs](https://github.com/gleba/alak/blob/master/index.d.ts)

@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-
-ver_label=$(npm version prerelease --preid=alpha  --no-git-tag-version)
-#git add *
-#git commit -m $ver_label
-#git push
-push
-echo $ver_label
