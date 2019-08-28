@@ -16,7 +16,7 @@ Data is changed by passing data to the functor as an argument.
   
   
   
-This Ideas of the future is prefect for state machines. Maybe the best alternative to 'event buses' and RxJs, etc...   
+This Ideas of the future is prefect for state machines. Maybe the best alternative to 'event buses' and RxJs, Ramda, etc...   
   
 [See tests as examples](https://github.com/gleba/alak/blob/master/tests/)  
   
