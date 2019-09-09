@@ -21,9 +21,9 @@ export interface AFlow<T> {
   close(): void
   /** send values to the listening functions*/
   notify(): void
-  /** add function of receiving all changes value with current value if exist*/
+  /** add listener to the value changes*/
   up(fn: ValueReceiver<T>): void
-  /** add function of receiving all changes value from the next update*/
+  /** add listener to the value changes since the next update*/
   next(fn: ValueReceiver<T>): void
   /** remove receiving function*/
   down(fn: ValueReceiver<T>): void
@@ -32,7 +32,7 @@ export interface AFlow<T> {
   /** same as 'flow.value === v'*/
 
   is(v: T): boolean
-  /** add function of receiving all changes value with current value if it not null ot undefined*/
+  /** add function of receiving all changes value with current value if it not null or undefined*/
   upSome(fn: ValueReceiver<T>): void
   /** add function of receiving all changes value with current value if it is true after casting value to boolean type*/
   upTrue(fn: ValueReceiver<T>): void
@@ -94,11 +94,11 @@ export type ValueReceiver<T extends any> = (...a: T[]) => any
 
 export type FlowStarter =
   | {
-      <T>(v?: T): AFlow<T>
-    }
+  <T>(v?: T): AFlow<T>
+}
   | {
-      (...v: any[]): AFlow<any>
-    }
+  (...v: any[]): AFlow<any>
+}
 
 export interface Facade {
   flow: FlowStarter
