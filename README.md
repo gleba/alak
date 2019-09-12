@@ -8,8 +8,8 @@
 Data is changed by passing data to the functor as argument.  
   
 ### inspired flyd & fantasy land
-Basic functional of this library - is one subscribe feature from [Flyd](https://github.com/paldepind/flyd#flydonfn-s) with more simplest api and sugar for [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine). 
-Also can be best alternative to 'event buses', RxJs, [kefir](https://github.com/kefirjs/kefir), etc...   
+Basic functional of this library - is the one subscribe feature from [Flyd](https://github.com/paldepind/flyd#flydonfn-s) with more simplest api and sugar for [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine), 
+where can be best alternative to 'event buses', RxJs, [kefir](https://github.com/kefirjs/kefir), etc...   
     
 * Zero-dependency  
 * [Atomic updates](https://github.com/gleba/alak/blob/master/tests/1_base.ts#L28)  
