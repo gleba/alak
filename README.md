@@ -21,3 +21,6 @@ where can be best alternative to 'event buses', RxJs, [kefir](https://github.com
 [See tests as examples](https://github.com/gleba/alak/blob/master/tests/)  
   
 [See interface as docs](https://github.com/gleba/alak/blob/master/index.d.ts)
+
+
+(codesandbox base usage)[https://codesandbox.io/s/alak-base-example-38poh?fontsize=14]
