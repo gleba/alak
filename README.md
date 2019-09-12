@@ -24,3 +24,4 @@ where can be best alternative to 'event buses', RxJs, [kefir](https://github.com
 
 
 [Codesandbox base usage](https://codesandbox.io/s/alak-base-example-38poh?fontsize=14)
+[Codesandbox usage](https://codesandbox.io/s/alak-base-example-elrm5?fontsize=14&module=%2Fsrc%2Findex.ts)
