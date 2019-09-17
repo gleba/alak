@@ -20,10 +20,7 @@ test('base functions', ({ ok, end, fall, plan}) => {
   flow(5)
   flow.up(v => ok(v == 5, 'up fill flow'))
 
-  //multi arguments
-  flow.clear()
-  flow([0, 0, 0], 1,)
-  flow.up((v1, v2) => ok(v1.length == 3 && v2 == 1, 'up multi-value'))
+
 
   //atomic updates
   const countFlow = A.flow()
@@ -66,6 +63,6 @@ test('base functions', ({ ok, end, fall, plan}) => {
   ok(countFlow() == undefined, 'close')
   countFlow(5) //error message test
 
-  plan(14)
+  plan(13)
   end()
 })

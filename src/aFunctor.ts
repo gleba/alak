@@ -1,4 +1,4 @@
-import { FlowState, notifyStateListeners } from './FlowState'
+import {FlowState, notifyStateListeners} from './FlowState'
 
 export function setFunctorValue(functor: AFunctor, ...a) {
   if (!functor.children) {
@@ -8,29 +8,42 @@ export function setFunctorValue(functor: AFunctor, ...a) {
   }
 
   let [value, context] = a
-  if (value && value.then) {
-    notifyStateListeners(functor, FlowState.AWAIT, true)
-    return value.then(v => {
-      a[0] = v
-      functor.value = a
-      notifyStateListeners(functor, FlowState.AWAIT, false)
-      notifyStateListeners(functor, FlowState.READY)
-      notifyTheChildren(functor)
-    })
-  } else {
-    functor.value = a
-    notifyTheChildren(functor)
+
+  const setValue = finalValue => {
+    if (functor.wrapperFn) {
+      let wrappedValue = functor.wrapperFn(finalValue)
+      if (wrappedValue.then)
+        return setAsyncValue(functor, wrappedValue)
+      functor.value = [wrappedValue]
+    } else {
+      functor.value = [finalValue]
+    }
+    notifyChildrens(functor)
   }
+  if (value && value.then) {
+    return setAsyncValue(functor, value)
+  } else {
+    return setValue(value)
+  }
+}
+function setAsyncValue(functor, value) {
+  notifyStateListeners(functor, FlowState.AWAIT, true)
+  return value.then(v => {
+    functor.value = [v]
+    notifyStateListeners(functor, FlowState.AWAIT, false)
+    notifyStateListeners(functor, FlowState.READY)
+    notifyChildrens(functor)
+  })
 }
 function useGetter(functor) {
-  if (functor.getterFn.then){
-    return setFunctorValue(functor, ...[functor.getterFn(), "getter"]) //new Promise(async done => done(await ))
+  if (functor.getterFn.then) {
+    return setFunctorValue(functor, ...[functor.getterFn(), 'getter']) //new Promise(async done => done(await ))
   }
   const value = functor.getterFn()
-  setFunctorValue(functor, value, "getter")
+  setFunctorValue(functor, value, 'getter')
   return value
 }
-export function notifyTheChildren(functor: AFunctor) {
+export function notifyChildrens(functor: AFunctor) {
   if (functor.children.size > 0) {
     functor.children.forEach(f => {
       f.apply(f, functor.value)
@@ -50,8 +63,7 @@ export const newAFunctor = () => {
     if (a.length) {
       return setFunctorValue(functor, ...a)
     } else {
-      if (functor.getterFn)
-        return useGetter(functor)
+      if (functor.getterFn) return useGetter(functor)
       let v = functor.value
       return v && v.length ? v[0] : undefined
     }

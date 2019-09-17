@@ -1,4 +1,4 @@
-import {AFunctor, AnyFunction, notifyTheChildren, setFunctorValue} from './aFunctor'
+import {AFunctor, AnyFunction, notifyChildrens, setFunctorValue} from './aFunctor'
 import { deleteParams } from './utils'
 import { patternMatch } from './match'
 import { aFromFlows } from './aFrom'
@@ -33,7 +33,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           deleteParams(functor)
         }
       case 'notify':
-        return () => notifyTheChildren(functor)
+        return () => notifyChildrens(functor)
       case 'next':
         return f => functor.children.add(f)
       case 'up':
@@ -127,8 +127,9 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       //strong
       case 'useWarp':
       case 'useGetter':
-      case 'useWrapper':
         return (fn:AnyFunction) => functor.getterFn = fn
+      case 'useWrapper':
+        return (fn:AnyFunction) => functor.wrapperFn = fn
       case "isAsync":
         return functor.meta && functor.meta.born;
       case 'match':

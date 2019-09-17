@@ -29,22 +29,24 @@ test('pattern matching', ({ plan, ok, end, pass, fail }) => {
     isString, v => pass('match string', v),
     5, fail,
     [5], fail,
-    (...v) => pass('else matched '+ v),
+    (...v) => fail('else matched '+ v),
   )
-
-
-  // prettier-ignore
-  flow.match((a, b, c) => [
-    Number.isInteger(b), () => pass('multi pattern function call'),
-    a == 'A' && b == 1, (...v) => ok(v[2].length==2, 'multi matching'),
-    a == state && !b && !c, () => pass('multi matching'),
-    c == a, fail
-  ])
 
   flow(state)
   flow([5, true, 'x'])
-  // prettier-ignore
-  flow('A', 1, [0, 1],)
+
+  flow.clear()
+
+  flow.match(([a, b, c]) => [
+    typeof a == "string" && b, v => pass(v),
+    a && b && !c, v => pass(v),
+    !b && c, v => pass(v),
+    v => fail(v),
+  ])
+
+  flow(['A', false, true])
+  flow([true, true, false])
+  flow(['A', true])
 
   plan(10)
   end()

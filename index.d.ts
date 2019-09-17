@@ -52,6 +52,8 @@ export interface AFlow<T> {
   (value?: T, ...v: any[]): T | Promise<T>
   /** set getter function for data-mine*/
   useGetter(fn: () => T | Promise<T>): void
+  /** set getter function for data-mine*/
+  useWrapper(fn: (v:T) => T | Promise<T>): void
   /** check 'from' or 'warp' function are async*/
   isAsync:Boolean
   /** pattern matching see examples https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts*/
