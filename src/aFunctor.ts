@@ -1,4 +1,4 @@
-import { ASE, notifyAboutStateListeners } from './ASE'
+import { FlowState, notifyStateListeners } from './FlowState'
 
 export function setFunctorValue(functor: AFunctor, ...a) {
   if (!functor.children) {
@@ -9,12 +9,12 @@ export function setFunctorValue(functor: AFunctor, ...a) {
 
   let [value, context] = a
   if (value && value.then) {
-    notifyAboutStateListeners(functor, ASE.AWAIT, true)
+    notifyStateListeners(functor, FlowState.AWAIT, true)
     return value.then(v => {
       a[0] = v
       functor.value = a
-      notifyAboutStateListeners(functor, ASE.AWAIT, false)
-      notifyAboutStateListeners(functor, ASE.READY)
+      notifyStateListeners(functor, FlowState.AWAIT, false)
+      notifyStateListeners(functor, FlowState.READY)
       notifyTheChildren(functor)
     })
   } else {
@@ -48,7 +48,7 @@ export const newAFunctor = () => {
   // let grandChildren = new Map<AnyFunction, AnyFunction>()
   const functor = function(...a) {
     if (a.length) {
-      setFunctorValue(functor, ...a)
+      return setFunctorValue(functor, ...a)
     } else {
       if (functor.getterFn)
         return useGetter(functor)

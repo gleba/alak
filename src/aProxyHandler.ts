@@ -2,7 +2,7 @@ import {AFunctor, AnyFunction, notifyTheChildren, setFunctorValue} from './aFunc
 import { deleteParams } from './utils'
 import { patternMatch } from './match'
 import { aFromFlows } from './aFrom'
-import {addASEventListener, proxyASEOffMap, proxyASEOnMap} from './ASE'
+import {addStateEventListener, proxyStateOffMap, proxyStateOnMap} from './FlowState'
 
 export const alive = v => (v !== undefined && v !== null) as boolean
 export const isTruth = v => !!v
@@ -120,9 +120,9 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
 
       //experimental
       case 'on':
-        return proxyASEOnMap(functor)
+        return proxyStateOnMap(functor)
       case 'off':
-        return proxyASEOffMap(functor)
+        return proxyStateOffMap(functor)
 
       //strong
       case 'useWarp':

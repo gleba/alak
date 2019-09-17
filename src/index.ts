@@ -3,7 +3,7 @@ import {AFacadeProxy} from "./aFacadeProxy";
 import {flow} from "./Aflow";
 import {Facade, FlowStarter} from "../index";
 
-export {ASE} from "./ASE";
+export {FlowState} from "./FlowState";
 
 export const A = AFacadeProxy as Facade
 
