@@ -16,7 +16,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       //base
       case 'v':
       case 'value':
-        return functor.value.length > 1 ? functor.value : functor.value[0]
+        return functor.value.length>=1 ? functor.value[0] : undefined
       case 'clear':
         return () => {
           functor.children.clear()
@@ -61,6 +61,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case 'apply':
         return (context, v) => {
           functor.bind(context)
+
           setFunctorValue(functor, v[0])
         }
 
@@ -125,7 +126,9 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
 
       //strong
       case 'useWarp':
-        return (fn:AnyFunction) => functor.warpFn = fn
+      case 'useGetter':
+      case 'useWrapper':
+        return (fn:AnyFunction) => functor.getterFn = fn
       case "isAsync":
         return functor.meta && functor.meta.born;
       case 'match':

@@ -50,8 +50,8 @@ export interface AFlow<T> {
   getMeta(metaName: string): any
   /** set value with args OR get value from warp function if exist*/
   (value?: T, ...v: any[]): T | Promise<T>
-  /** set warp function for data-mine*/
-  useWarp(fn: () => T | Promise<T>): void
+  /** set getter function for data-mine*/
+  useGetter(fn: () => T | Promise<T>): void
   /** check 'from' or 'warp' function are async*/
   isAsync:Boolean
   /** pattern matching see examples https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts*/

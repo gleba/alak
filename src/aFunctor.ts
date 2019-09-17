@@ -1,5 +1,4 @@
-import {ASE, notifyAboutStateListeners} from "./ASE";
-
+import { ASE, notifyAboutStateListeners } from './ASE'
 
 export function setFunctorValue(functor: AFunctor, ...a) {
   if (!functor.children) {
@@ -7,10 +6,29 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     console.warn("it's possible memory leak in application")
     return
   }
-  if (a.length > 0) {
+
+  let [value, context] = a
+  if (value && value.then) {
+    notifyAboutStateListeners(functor, ASE.AWAIT, true)
+    return value.then(v => {
+      a[0] = v
+      functor.value = a
+      notifyAboutStateListeners(functor, ASE.AWAIT, false)
+      notifyAboutStateListeners(functor, ASE.READY)
+      notifyTheChildren(functor)
+    })
+  } else {
     functor.value = a
+    notifyTheChildren(functor)
   }
-  notifyTheChildren(functor)
+}
+function useGetter(functor) {
+  if (functor.getterFn.then){
+    return setFunctorValue(functor, ...[functor.getterFn(), "getter"]) //new Promise(async done => done(await ))
+  }
+  const value = functor.getterFn()
+  setFunctorValue(functor, value, "getter")
+  return value
 }
 export function notifyTheChildren(functor: AFunctor) {
   if (functor.children.size > 0) {
@@ -25,31 +43,17 @@ export function notifyTheChildren(functor: AFunctor) {
   }
 }
 
-function executeBorn(functor:AFunctor, bornFn) {
-  let value = bornFn()
-  if (value.then) {
-    notifyAboutStateListeners(functor, ASE.AWAIT, true)
-    value.then(v=>{
-      setFunctorValue(functor, v)
-      notifyAboutStateListeners(functor, ASE.AWAIT, false)
-      notifyAboutStateListeners(functor, ASE.READY)
-    })
-  } else{
-    setFunctorValue(functor, value)
-  }
-  return value
-}
-
 export const newAFunctor = () => {
   // let children = new Set<AnyFunction>()
   // let grandChildren = new Map<AnyFunction, AnyFunction>()
   const functor = function(...a) {
-    if (a.length)
-      if (typeof a[0] === 'function') functor.warpFn = a[0]
-      else setFunctorValue(functor, ...a)
-    else {
-      if (functor.warpFn) return executeBorn(functor, functor.warpFn) //new Promise(async done => done(await ))
-      return functor.value
+    if (a.length) {
+      setFunctorValue(functor, ...a)
+    } else {
+      if (functor.getterFn)
+        return useGetter(functor)
+      let v = functor.value
+      return v && v.length ? v[0] : undefined
     }
   } as AFunctor
   functor.children = new Set<AnyFunction>()
@@ -68,7 +72,8 @@ export interface AFunctor {
   children: Set<AnyFunction>
   grandChildren: Map<AnyFunction, AnyFunction>
   asEventsListeners: Map<string, Set<AnyFunction>>
-  warpFn: any
+  getterFn: any
+  wrapperFn: any
   meta: any
   // metaSet: Set<string>
   metaMap: Map<string, any>

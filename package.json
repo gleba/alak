@@ -28,5 +28,7 @@
     "ts-node": "^8.0.2",
     "typescript": "^3.4.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "uglifyjs": "^2.4.11"
+  }
 }
