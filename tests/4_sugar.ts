@@ -1,6 +1,5 @@
-import { test } from './ouput.shema'
-import { isArray, isNumber, isString } from 'util'
-import { A, DFlow } from '../src'
+import {test} from './ouput.shema'
+import {A} from '../src'
 
 test('sugar', ({ ok, end, plan }) => {
   let flow = A.flow()

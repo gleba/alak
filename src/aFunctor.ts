@@ -1,4 +1,5 @@
 import {FlowState, notifyStateListeners} from './FlowState'
+import {dev} from "./dev";
 
 export function setFunctorValue(functor: AFunctor, ...a) {
   if (!functor.children) {
@@ -7,6 +8,7 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     return
   }
 
+  if (dev.itis) dev.updatingStarted(functor, a)
   let [value, context] = a
 
   const setValue = finalValue => {
@@ -18,6 +20,7 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     } else {
       functor.value = [finalValue]
     }
+    if (dev.itis) dev.updatingFinished(functor.uid, finalValue)
     notifyChildrens(functor)
   }
   if (value && value.then) {
@@ -26,12 +29,13 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     return setValue(value)
   }
 }
-function setAsyncValue(functor, value) {
+function setAsyncValue(functor:AFunctor, value) {
   notifyStateListeners(functor, FlowState.AWAIT, true)
   return value.then(v => {
     functor.value = [v]
     notifyStateListeners(functor, FlowState.AWAIT, false)
     notifyStateListeners(functor, FlowState.READY)
+    if (dev.itis) dev.updatingFinished(functor.uid, v)
     notifyChildrens(functor)
   })
 }
@@ -72,7 +76,7 @@ export const newAFunctor = () => {
   functor.grandChildren = new Map<AnyFunction, AnyFunction>()
   functor.asEventsListeners = new Map<string, Set<AnyFunction>>()
   functor.value = []
-
+  functor.uid = Math.random()
   return functor as AFunctor
 }
 
@@ -91,6 +95,7 @@ export interface AFunctor {
   metaMap: Map<string, any>
   proxy: any
   value: any
+  uid: number
   id: string
   haveFrom: boolean
   (...a: any[]): void

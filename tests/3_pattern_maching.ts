@@ -1,7 +1,5 @@
-import { test } from './ouput.shema'
-import { A, DFlow } from '../src'
-import { isInteger } from 'core-js/fn/number'
-import { isArray } from 'core-js/fn/array'
+import {test} from './ouput.shema'
+import {A} from '../src'
 
 test('pattern matching', ({ plan, ok, end, pass, fail }) => {
   // basic

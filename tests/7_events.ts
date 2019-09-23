@@ -1,4 +1,4 @@
-import { test } from './ouput.shema'
+import {test} from './ouput.shema'
 import {A, FlowState} from '../src'
 
 test('plugins', async ({ plan, ok, end, pass, fail, equal }) => {
@@ -25,10 +25,24 @@ test('plugins', async ({ plan, ok, end, pass, fail, equal }) => {
   ok(value == flow.value && value == testValue, 'consistency warped')
 
 
+  const f1 = A.flow()
+  const f2 = A.flow()
+  flow.setId("10")
+  flow.up(f1)
+  // flow.up(f1)
+  flow.up(f2)
+  flow(2)
+
   flow.clear()
   const neverWait = () => fail("off")
   flow.on.await(neverWait)
   flow.off.await(neverWait)
   flow()
+
+
   end()
 })
+
+
+
+

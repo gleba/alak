@@ -24,6 +24,7 @@
   "devDependencies": {
     "@types/core-js": "^2.5.0",
     "@types/node": "^12.6.8",
+    "socket.io-client": "^2.3.0",
     "tape": "^4.8.0",
     "ts-node": "^8.0.2",
     "typescript": "^3.4.4"

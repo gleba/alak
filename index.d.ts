@@ -1,3 +1,4 @@
+
 export interface AFlow<T> {
   /** get value*/
   v: T
@@ -53,9 +54,9 @@ export interface AFlow<T> {
   /** set getter function for data-mine*/
   useGetter(fn: () => T | Promise<T>): void
   /** set getter function for data-mine*/
-  useWrapper(fn: (v:T) => T | Promise<T>): void
+  useWrapper(fn: (v: T) => T | Promise<T>): void
   /** check 'from' or 'warp' function are async*/
-  isAsync:Boolean
+  isAsync: Boolean
   /** pattern matching see examples https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts*/
   match(...pattern: any[]): any
   /** function that takes values and returns a new value for flow*/
@@ -96,16 +97,25 @@ export type ValueReceiver<T extends any> = (...a: T[]) => any
 
 export type FlowStarter =
   | {
-  <T>(v?: T): AFlow<T>
-}
+      <T>(v?: T): AFlow<T>
+    }
   | {
-  (...v: any[]): AFlow<any>
-}
+      (...v: any[]): AFlow<any>
+    }
 
+
+export type LogHook = {
+  type:string
+  uid:number | string,
+  context: any
+  id?:string,
+  value?:any,
+}
 export interface Facade {
   flow: FlowStarter
-
-  [s: string]: FlowStarter
+  enableLogging()
+  canLog: boolean
+  log(hook: LogHook): void
 }
 
 export declare const A: Facade
@@ -113,3 +123,5 @@ export declare const Al: FlowStarter
 export declare const DFlow: FlowStarter
 declare const _default: Facade
 export default _default
+
+

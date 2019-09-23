@@ -1,5 +1,5 @@
-import { test } from './ouput.shema'
-import { A } from '../src'
+import {test} from './ouput.shema'
+import {A} from '../src'
 
 test('meta', ({ plan, ok, end, pass, fail }) => {
   const flow = A.flow()

@@ -1,6 +1,5 @@
-import { test } from './ouput.shema'
-import { A } from '../src'
-import { FlowState } from '../src/FlowState'
+import {test} from './ouput.shema'
+import {A} from '../src'
 
 test('promise, getter, wrapper', async ({ plan, ok, end, pass, fail, equal }) => {
   const testValue = 10
