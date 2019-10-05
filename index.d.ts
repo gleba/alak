@@ -6,7 +6,7 @@ export interface AFlow<T> {
   value: T
   /** does the box contain any value, 'null' and 'undefined' are also values*/
   isEmpty: boolean
-  /** get string value to identify the newFlow*/
+  /** get string value to identify the flow*/
   id: string
   /** add event listener for change async state of data, "await, ready, etc...
    *@experimental*/
@@ -23,7 +23,7 @@ export interface AFlow<T> {
   /** delete value*/
   clearValue(): void
 
-  /** close newFlow, force free memory*/
+  /** close flow, force free memory*/
   close(): void
 
   /** send values to the listening functions*/
@@ -41,7 +41,7 @@ export interface AFlow<T> {
   /** only one passing value to a function*/
   once(fn: ValueReceiver<T>): void
 
-  /** same as 'newFlow.value === v'*/
+  /** same as 'flow.value === v'*/
 
   is(v: T): boolean
 
@@ -54,11 +54,11 @@ export interface AFlow<T> {
   /** add function of receiving all changes value with current value if it is null or undefined*/
   upNone(fn: ValueReceiver<T>): void
 
-  /** set string value to identify the newFlow*/
+  /** set string value to identify the flow*/
 
   setId(id: string): void
 
-  /** add meta value to extend properties the newFlow*/
+  /** add meta value to extend properties the flow*/
   addMeta(metaName: string, value?: any)
 
   /** does the stream have a meta name*/
@@ -79,10 +79,10 @@ export interface AFlow<T> {
   /** pattern matching see examples https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts*/
   match(...pattern: any[]): any
 
-  /** function that takes values and returns a new value for newFlow*/
+  /** function that takes values and returns a new value for flow*/
   mutate(mutator: (v: T) => T): void
 
-  /** mutate computed value from multi newFlow https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts*/
+  /** mutate computed value from multi flow https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts*/
   from<A extends AFlow<any>[]>(...a: A): AFlowFrom<T, A>
 }
 
