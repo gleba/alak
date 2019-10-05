@@ -155,7 +155,7 @@ export interface Facade {
 }
 
 export declare const A: Facade
-declare const _default: Facade
+// declare const _default: Facade
 export default A
 
 export interface AZ<T> extends AFlow<T> {}

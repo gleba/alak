@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Alak functor, the data flow library.",
   "main": "dist/index.js",
   "typings": "index.d.ts",
