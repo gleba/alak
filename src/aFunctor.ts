@@ -3,9 +3,9 @@ import {dev} from "./dev";
 
 export function setFunctorValue(functor: AFunctor, ...a) {
   if (!functor.children) {
-    console.error('Attempt to pass in the ended flow ', functor.id ? functor.id : '')
+    console.error('Attempt to pass in the ended newFlow ', functor.id ? functor.id : '')
     console.warn("it's possible memory leak in application")
-    return
+    return functor.proxy
   }
 
   if (dev.itis) dev.updatingStarted(functor, a)
@@ -22,7 +22,9 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     }
     if (dev.itis) dev.updatingFinished(functor.uid, finalValue)
     notifyChildrens(functor)
+    return functor.value[0]
   }
+
   if (value && value.then) {
     return setAsyncValue(functor, value)
   } else {

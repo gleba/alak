@@ -6,7 +6,7 @@ export interface AFlow<T> {
   value: T
   /** does the box contain any value, 'null' and 'undefined' are also values*/
   isEmpty: boolean
-  /** get string value to identify the flow*/
+  /** get string value to identify the newFlow*/
   id: string
   /** add event listener for change async state of data, "await, ready, etc...
    *@experimental*/
@@ -14,54 +14,75 @@ export interface AFlow<T> {
   /** remove event listener for change async state of data, "await, ready, etc...
    * @experimental*/
   off: AboutStateEvents
+  /** check 'from' or 'warp' function are async*/
+  isAsync: Boolean
+
   /** unsubscribe all listeners*/
   clear(): void
+
   /** delete value*/
   clearValue(): void
-  /** close flow, force free memory*/
+
+  /** close newFlow, force free memory*/
   close(): void
+
   /** send values to the listening functions*/
   notify(): void
+
   /** add listener to the value changes*/
   up(fn: ValueReceiver<T>): void
+
   /** add listener to the value changes since the next update*/
   next(fn: ValueReceiver<T>): void
+
   /** remove receiving function*/
   down(fn: ValueReceiver<T>): void
+
   /** only one passing value to a function*/
   once(fn: ValueReceiver<T>): void
-  /** same as 'flow.value === v'*/
+
+  /** same as 'newFlow.value === v'*/
 
   is(v: T): boolean
+
   /** add function of receiving all changes value with current value if it not null or undefined*/
   upSome(fn: ValueReceiver<T>): void
+
   /** add function of receiving all changes value with current value if it is true after casting value to boolean type*/
   upTrue(fn: ValueReceiver<T>): void
+
   /** add function of receiving all changes value with current value if it is null or undefined*/
   upNone(fn: ValueReceiver<T>): void
-  /** set string value to identify the flow*/
+
+  /** set string value to identify the newFlow*/
 
   setId(id: string): void
-  /** add meta value to extend properties the flow*/
+
+  /** add meta value to extend properties the newFlow*/
   addMeta(metaName: string, value?: any)
 
   /** does the stream have a meta name*/
   hasMeta(metaName: string): boolean
+
   /** get meta value by name*/
   getMeta(metaName: string): any
+
   /** set value with args OR get value from warp function if exist*/
-  (value?: T, ...v: any[]): T | Promise<T>
+  (value?: T, ...v: any[]): Promise<T> | T
+
   /** set getter function for data-mine*/
   useGetter(fn: () => T | Promise<T>): void
+
   /** set getter function for data-mine*/
   useWrapper(fn: (v: T) => T | Promise<T>): void
-  /** check 'from' or 'warp' function are async*/
-  isAsync: Boolean
+
   /** pattern matching see examples https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts*/
   match(...pattern: any[]): any
-  /** function that takes values and returns a new value for flow*/
+
+  /** function that takes values and returns a new value for newFlow*/
   mutate(mutator: (v: T) => T): void
-  /** mutate computed value from multi flow https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts*/
+
+  /** mutate computed value from multi newFlow https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts*/
   from<A extends AFlow<any>[]>(...a: A): AFlowFrom<T, A>
 }
 
@@ -96,32 +117,47 @@ type AnyFunction = {
 export type ValueReceiver<T extends any> = (...a: T[]) => any
 
 export type FlowStarter =
-  | {
-      <T>(v?: T): AFlow<T>
-    }
-  | {
-      (...v: any[]): AFlow<any>
-    }
+  {
+    <T>(v?: T): AFlow<T>
+  } |
+  {(...v: any[]): AFlow<any>}
 
 
 export type LogHook = {
-  type:string
-  uid:number | string,
+  type: string
+  uid: number | string,
   context: any
-  id?:string,
-  value?:any,
+  id?: string,
+  value?: any,
 }
+
+type MaybeAny<T> = unknown extends T ? any : T
 export interface Facade {
+  <T>(v?: T): AFlow<MaybeAny<T>>
+
+  any:{
+    (v:any):AFlow<any>
+  }
+  number: AFlow<number>
+  arrayOfNumbers: AFlow<number[]>
+  arrayOfStrings: AFlow<string[]>
+  arrayOfBool: AFlow<boolean[]>
+  bool: AFlow<boolean>
+  arrayOfObject: AFlow<{[s:string]:any}[]>
+  object: AFlow<{[s:string]:any}>
   flow: FlowStarter
-  enableLogging()
   canLog: boolean
+
+
+  enableLogging()
+
   log(hook: LogHook): void
 }
 
 export declare const A: Facade
-export declare const Al: FlowStarter
-export declare const DFlow: FlowStarter
 declare const _default: Facade
-export default _default
+export default A
+
+export interface AZ<T> extends AFlow<T> {}
 
 

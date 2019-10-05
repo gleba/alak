@@ -96,9 +96,9 @@ startFlow.on(v => console.log("flow listener1", v))
 // Basic 
 
 const startFlow = DFlow(1)
-startFlow.on(v => console.log("flow listener1", v))
-startFlow.on(v => console.log("flow listener2", v))
-startFlow.on(v => console.log("flow listener3", v))
+startFlow.on(v => console.log(newFlow, v))
+startFlow.on(v => console.log(newFlow, v))
+startFlow.on(v => console.log(newFlow, v))
 startFlow.match(
     4, v => console.log("pattern match by key", v)
 )
@@ -106,12 +106,12 @@ startFlow.match(
 startFlow(10)
 startFlow(4)
 // output:
-// flow listener1 10
-// flow listener2 10
-// flow listener3 10
-// flow listener1 4
-// flow listener2 4
-// flow listener3 4
+newFlow
+newFlow
+newFlow
+newFlow
+newFlow
+newFlow
 // pattern match by key 4
 
 startFlow.drop() children

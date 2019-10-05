@@ -3,7 +3,7 @@ import {A} from '../src'
 
 test('promise, getter, wrapper', async ({ plan, ok, end, pass, fail, equal }) => {
   const testValue = 10
-  const flow = A.flow()
+  const flow = A()
 
   const asyncWait = () =>
     new Promise(done =>

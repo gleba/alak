@@ -4,7 +4,7 @@ import {A} from '../src'
 
 test('base functions', ({ ok, end, fall, plan}) => {
   //start
-  const flow = A.flow(5)
+  const flow = A(5)
   flow.up(v => ok(v == 5, 'up'))
 
   //clear
@@ -18,12 +18,12 @@ test('base functions', ({ ok, end, fall, plan}) => {
   flow(3)
   flow.next(v => ok(v == 5, 'next'))
   flow(5)
-  flow.up(v => ok(v == 5, 'up fill flow'))
+  flow.up(v => ok(v == 5, 'up fill newFlow'))
 
 
 
   //atomic updates
-  const countFlow = A.flow()
+  const countFlow = A()
   let vCounter = 0
   const addCount = v => (vCounter = vCounter + v)
   countFlow.up(addCount)

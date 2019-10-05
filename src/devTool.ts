@@ -1,7 +1,8 @@
 import {dev} from "./dev";
 
-export const getConnector =  ()=> {
+export function getConnector() {
   var io = require('socket.io-client')
+  console.log("alak debug mode")
   if (!io) {
     console.log("please add socket.io")
     console.log("npm i socket.io-client")
@@ -9,8 +10,9 @@ export const getConnector =  ()=> {
     console.log('<script src="/socket.io/socket.io.js"></script>')
     throw "socket.io-client not found"
   }
-  let socket = io('http://localhost:8778?ctx=app&asid='+dev.sid);
+  // let socket = io('http://localhost:8778?ctx=app');
 
+  let socket = io('http://localhost:8778?ctx=app&asid='+dev.sid);
 
   let cache = []
   let isOnline = false

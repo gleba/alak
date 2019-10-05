@@ -22,8 +22,8 @@ test('mutate and computate', async ({ ok, end, plan, pass }) => {
   ok(arrayFlow.value.length == 2, 'mutate 2')
 
   //from quantum
-  const numberFlow = A.flow()
-  const computedFlow = A.flow()
+  const numberFlow = A.number
+  const computedFlow = A()
   computedFlow.from(arrayFlow, numberFlow).quantum((value, newValue) => {
     if (!newValue) {
       pass('from quantum init')

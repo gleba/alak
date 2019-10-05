@@ -1,16 +1,24 @@
-import {flow} from "./Aflow";
+import {newFlow} from "./Aflow";
 import {dev} from "./dev";
 import {getConnector} from "./devTool";
 
 
-let metaExtends = {}
-
-export const AFacadeProxy = new Proxy({}, {
+export const AFacadeProxy = new Proxy(newFlow, {
   get(target, key) {
     switch (key) {
+      case "number":
+      case "arrayOfNumbers":
+      case "arrayOfStrings":
+      case "arrayOfBool":
+      case "bool":
+      case "arrayOfObject":
+      case "object":
       case "f":
+        return newFlow()
+      case "any":
+        return newFlow
       case "flow":
-        return flow
+        return newFlow
       case "enableLogging":
         return () => {
           dev.itis = true
@@ -19,11 +27,7 @@ export const AFacadeProxy = new Proxy({}, {
       case "canLog":
         return dev.itis
       case "log":
-        return (...a)=>dev.hook.apply(dev,a)
-      default :
-        if (metaExtends[key])
-          return metaExtends[key]
-        return target[key]
+        return (...a) => dev.hook.apply(dev, a)
     }
   }
 }) as any

@@ -14,6 +14,7 @@ export const dev = {
   flows: {} as UpdateMap,
   sid:Math.random(),
   hook(h:LogHook){
+    console.log(h, "hook")
     this.post('/', {  sid: this.sid, ...h })
   },
   updatingStarted(flow: AFunctor, context) {

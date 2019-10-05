@@ -2,7 +2,7 @@ import {aProxyHandler} from "./aProxyHandler";
 import {newAFunctor} from "./aFunctor";
 
 
-export function flow(...a) {
+export function newFlow(...a) {
   const functor = newAFunctor()
   // const proxy = new Proxy(functor, aProxyHandler)
   if (a.length) {

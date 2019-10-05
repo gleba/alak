@@ -8,5 +8,5 @@ export {FlowState} from "./FlowState";
 
 export const A = AFacadeProxy as Facade
 
-export default AFacadeProxy as Facade
+export default A as Facade
 

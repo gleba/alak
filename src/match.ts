@@ -44,7 +44,7 @@ export function patternMatch(arg) {
     return (...value) => {
       let v = value[0]
       // if (value.length>1 ) {
-      //   console.warn("multiple flow argument not support in current pattern matching, use multiple argument match((a,b,x)=>[pattern]")
+      //   console.warn("multiple newFlow argument not support in current pattern matching, use multiple argument match((a,b,x)=>[pattern]")
       //   // return
       // }
       let matchFn

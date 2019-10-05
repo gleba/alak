@@ -2,7 +2,7 @@ import {test} from './ouput.shema'
 import {A} from '../src'
 
 test('sugar', ({ ok, end, plan }) => {
-  let flow = A.flow()
+  let flow = A()
 
   flow.upSome(v => ok(v != undefined && v != null, 'upSome ' + v))
   flow.upTrue(v => ok(!!v, 'upTrue ' + v))

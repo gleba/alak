@@ -3,7 +3,7 @@ import {A, FlowState} from '../src'
 
 test('plugins', async ({ plan, ok, end, pass, fail, equal }) => {
   const testValue = 'testValue'
-  const flow = A.flow()
+  const flow = A()
 
   const asyncWait = () =>
     new Promise(done =>
@@ -25,11 +25,11 @@ test('plugins', async ({ plan, ok, end, pass, fail, equal }) => {
   ok(value == flow.value && value == testValue, 'consistency warped')
 
 
-  const f1 = A.flow()
-  const f2 = A.flow()
+  const f1 = A()
+  const f2 = A()
   flow.setId("10")
   flow.up(f1)
-  // flow.up(f1)
+  // newFlow.up(f1)
   flow.up(f2)
   flow(2)
 

@@ -2,11 +2,11 @@ import {test} from './ouput.shema'
 import {A} from '../src'
 
 test('meta', ({ plan, ok, end, pass, fail }) => {
-  const flow = A.flow()
-  let flowId = 'my.flow.namespace'
+  const flow = A()
+  let flowId = 'my.newFlow.namespace'
   flow.setId(flowId)
 
-  ok(flow.id == flowId, 'flow id')
+  ok(flow.id == flowId, 'newFlow id')
 
   flow.addMeta("my")
   ok(flow.hasMeta("my"), "meta")
