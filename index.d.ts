@@ -149,6 +149,10 @@ export interface Facade {
   canLog: boolean
 
 
+  STATE_READY: string
+  STATE_AWAIT: string
+  STATE_EMPTY: string
+
   enableLogging()
 
   log(hook: LogHook): void

@@ -1,10 +1,7 @@
-import { AFunctor, AnyFunction } from './aFunctor'
+import {AFunctor, AnyFunction} from './aFunctor'
 
-export enum FlowState {
-  EMPTY = 'empty',
-  AWAIT = 'await',
-  READY = 'ready',
-}
+const list = ["empty", "await", "ready"] as const; // TS3.4 syntax
+export type FlowState = typeof list[number]
 
 export function notifyStateListeners(f: AFunctor, aboutState: FlowState | string, ...value) {
   if (f.asEventsListeners.has(aboutState))
@@ -18,6 +15,7 @@ export function addStateEventListener(f: AFunctor, aboutState: FlowState | strin
     f.asEventsListeners.set(aboutState, set)
   } else f.asEventsListeners.get(aboutState).add(fn)
 }
+
 export function removeASEventListener(f: AFunctor, aboutState: FlowState | string, fn: AnyFunction) {
   if (f.asEventsListeners.has(aboutState)) {
     let ase = f.asEventsListeners.get(aboutState)
@@ -29,6 +27,7 @@ export function proxyStateOnMap(functor) {
   function f(aseName, fn) {
     addStateEventListener(functor, aseName, fn)
   }
+
   f.await = fn => addStateEventListener(functor, 'await', fn)
   f.ready = fn => addStateEventListener(functor, 'ready', fn)
   return f
@@ -38,6 +37,7 @@ export function proxyStateOffMap(functor) {
   function f(aseName, fn) {
     addStateEventListener(functor, aseName, fn)
   }
+
   f.await = fn => removeASEventListener(functor, 'await', fn)
   f.ready = fn => removeASEventListener(functor, 'ready', fn)
   return f

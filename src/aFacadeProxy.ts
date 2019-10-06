@@ -1,5 +1,5 @@
 import {newFlow} from "./Aflow";
-import {devConst} from "./dev";
+import {devConst} from "./devConst";
 import {getConnector} from "./devTool";
 
 
@@ -28,6 +28,14 @@ export const AFacadeProxy = new Proxy(newFlow, {
         return devConst.itis
       case "log":
         return (...a) => devConst.hook.apply(devConst, a)
+
+
+      case "STATE_READY":
+        return 'ready'
+      case "STATE_AWAIT":
+        return 'await'
+      case "STATE_EMPTY":
+        return 'empty'
     }
   }
 }) as any

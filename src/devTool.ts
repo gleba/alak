@@ -1,4 +1,4 @@
-import {devConst} from "./dev";
+import {devConst} from "./devConst";
 
 export function getConnector() {
   var io = require('socket.io-client')
@@ -18,8 +18,7 @@ export function getConnector() {
   let isOnline = false
   socket.on('connect', ()=>{
     isOnline = true
-    console.log('online!!!')
-
+    console.log('debug session online')
     while (cache.length)
       socket.send(cache.shift())
   });

@@ -1,5 +1,6 @@
 import {test} from './ouput.shema'
-import {A, FlowState} from '../src'
+import {A,} from '../src'
+import {FlowState} from "../src/FlowState";
 
 test('plugins', async ({ plan, ok, end, pass, fail, equal }) => {
   const testValue = 'testValue'
@@ -18,7 +19,7 @@ test('plugins', async ({ plan, ok, end, pass, fail, equal }) => {
     if (isWait) equal(flow.value, 0, 'Async State : on.await ( is loading )')
     else equal(flow.value, testValue, 'Async State : on.await ( is loaded )')
   })
-  flow.on(FlowState.READY, () => equal(flow.value, testValue, "Async State : ready"))
+  flow.on(A.STATE_READY, () => equal(flow.value, testValue, "Async State : ready"))
   equal(flow.value, 0, 'rewrite async warp')
   let value = await flow()
 
