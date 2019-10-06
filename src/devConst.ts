@@ -9,7 +9,7 @@ type UpdateMap = {
 }
 
 
-export const dev = {
+export const devConst = {
   itis: false,
   flows: {} as UpdateMap,
   sid:Math.random(),

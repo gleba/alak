@@ -1,4 +1,4 @@
-import {dev} from "./dev";
+import {devConst} from "./dev";
 
 export function getConnector() {
   var io = require('socket.io-client')
@@ -12,7 +12,7 @@ export function getConnector() {
   }
   // let socket = io('http://localhost:8778?ctx=app');
 
-  let socket = io('http://localhost:8778?ctx=app&asid='+dev.sid);
+  let socket = io('http://localhost:8778?ctx=app&asid='+devConst.sid);
 
   let cache = []
   let isOnline = false

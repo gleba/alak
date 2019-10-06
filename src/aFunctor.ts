@@ -1,5 +1,5 @@
 import {FlowState, notifyStateListeners} from './FlowState'
-import {dev} from "./dev";
+import {devConst} from "./dev";
 
 export function setFunctorValue(functor: AFunctor, ...a) {
   if (!functor.children) {
@@ -8,7 +8,7 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     return functor.proxy
   }
 
-  if (dev.itis) dev.updatingStarted(functor, a)
+  if (devConst.itis) devConst.updatingStarted(functor, a)
   let [value, context] = a
 
   const setValue = finalValue => {
@@ -20,7 +20,7 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     } else {
       functor.value = [finalValue]
     }
-    if (dev.itis) dev.updatingFinished(functor.uid, finalValue)
+    if (devConst.itis) devConst.updatingFinished(functor.uid, finalValue)
     notifyChildrens(functor)
     return functor.value[0]
   }
@@ -37,7 +37,7 @@ function setAsyncValue(functor:AFunctor, value) {
     functor.value = [v]
     notifyStateListeners(functor, FlowState.AWAIT, false)
     notifyStateListeners(functor, FlowState.READY)
-    if (dev.itis) dev.updatingFinished(functor.uid, v)
+    if (devConst.itis) devConst.updatingFinished(functor.uid, v)
     notifyChildrens(functor)
   })
 }
