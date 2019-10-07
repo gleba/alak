@@ -25,7 +25,7 @@ export const AFacadeProxy = new Proxy(newFlow, {
           dev.post = getConnector()
         }
       case "canLog":
-        return dev.itis
+        return dev.debug
       case "log":
         return (...a) => dev.hook.apply(dev, a)
 
