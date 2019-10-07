@@ -1,5 +1,5 @@
 import {newFlow} from "./Aflow";
-import {devConst} from "./devConst";
+import {dev} from "./devConst";
 import {getConnector} from "./devTool";
 
 
@@ -21,13 +21,13 @@ export const AFacadeProxy = new Proxy(newFlow, {
         return newFlow
       case "enableLogging":
         return () => {
-          devConst.itis = true
-          devConst.post = getConnector()
+          dev.debug = true
+          dev.post = getConnector()
         }
       case "canLog":
-        return devConst.itis
+        return dev.itis
       case "log":
-        return (...a) => devConst.hook.apply(devConst, a)
+        return (...a) => dev.hook.apply(dev, a)
 
 
       case "STATE_READY":

@@ -1,5 +1,5 @@
 import {FlowState, notifyStateListeners} from './FlowState'
-import {devConst} from "./devConst";
+import {dev} from "./devConst";
 import {A} from "./index";
 
 export function setFunctorValue(functor: AFunctor, ...a) {
@@ -9,9 +9,9 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     return functor.proxy
   }
 
-  if (devConst.itis) devConst.updatingStarted(functor, a)
-  let [value, context] = a
 
+  let [value, context] = a
+  if (dev.debug) dev.updatingStarted(functor, context)
   const setValue = finalValue => {
     if (functor.wrapperFn) {
       let wrappedValue = functor.wrapperFn(finalValue)
@@ -21,7 +21,7 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     } else {
       functor.value = [finalValue]
     }
-    if (devConst.itis) devConst.updatingFinished(functor.uid, finalValue)
+    if (dev.debug) dev.updatingFinished(functor.uid, finalValue)
     notifyChildrens(functor)
     return functor.value[0]
   }
@@ -38,7 +38,7 @@ function setAsyncValue(functor:AFunctor, value) {
     functor.value = [v]
     notifyStateListeners(functor, A.STATE_AWAIT, false)
     notifyStateListeners(functor, A.STATE_READY)
-    if (devConst.itis) devConst.updatingFinished(functor.uid, v)
+    if (dev.debug) dev.updatingFinished(functor.uid, v)
     notifyChildrens(functor)
   })
 }

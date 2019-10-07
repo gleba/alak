@@ -9,12 +9,12 @@ type UpdateMap = {
 }
 
 
-export const devConst = {
-  itis: false,
+export const dev = {
+  debug: false,
   flows: {} as UpdateMap,
   sid:Math.random(),
   hook(h:LogHook){
-    console.log(h, "hook")
+    // console.log(h, "hook")
     this.post('/', {  sid: this.sid, ...h })
   },
   updatingStarted(flow: AFunctor, context) {
@@ -25,6 +25,8 @@ export const devConst = {
   updatingFinished(uid: number, value) {
     let v = this.flows[uid]
     v.duration = Date.now() - v.duration
+    // console.log("updatingFinished", value)
+
     this.post('/', { value, type:"update", sid: this.sid, ...v })
   },
 } as any
