@@ -34,7 +34,10 @@ test('promise, getter, wrapper', async ({ plan, ok, end, pass, fail, equal }) =>
   ok(flow.value === testValue, 'async getter')
 
 
-  flow.useWrapper(v=>v*2)
+  flow.useWrapper((newV, preV)=>{
+    return newV*2
+  })
+  flow(testValue)
   flow(testValue)
   ok(flow.value === testValue*2, 'match wrapper')
 

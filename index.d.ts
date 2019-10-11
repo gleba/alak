@@ -1,4 +1,3 @@
-
 export interface AFlow<T> {
   /** get value*/
   v: T
@@ -59,7 +58,7 @@ export interface AFlow<T> {
   setId(id: string): void
 
   /** add meta value to extend properties the flow*/
-  addMeta(metaName: string, value?: any)
+  addMeta(metaName: string, value?: any): void
 
   /** does the stream have a meta name*/
   hasMeta(metaName: string): boolean
@@ -74,7 +73,7 @@ export interface AFlow<T> {
   useGetter(fn: () => T | Promise<T>): void
 
   /** set getter function for data-mine*/
-  useWrapper(fn: (v: T) => T | Promise<T>): void
+  useWrapper(fn: (newValue: T, prevValue: T) => T | Promise<T>): void
 
   /** pattern matching see examples https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts*/
   match(...pattern: any[]): any
@@ -87,7 +86,7 @@ export interface AFlow<T> {
 }
 
 type AboutStateEvents = {
-  (eventName: string, fn: AnyFunction)
+  (eventName: string, fn: AnyFunction): void
   [eventName: string]: (fn: AnyFunction) => void
   /** send true if value are computing in async warp function*/
   await: (fn: AnyFunction) => void
@@ -120,7 +119,7 @@ export type FlowStarter =
   {
     <T>(v?: T): AFlow<T>
   } |
-  {(...v: any[]): AFlow<any>}
+  { (...v: any[]): AFlow<any> }
 
 
 export type LogHook = {
@@ -132,28 +131,30 @@ export type LogHook = {
 }
 
 type MaybeAny<T> = unknown extends T ? any : T
-export interface Facade {
-  <T>(v?: T): AFlow<MaybeAny<T>>
 
-  any:{
-    (v:any):AFlow<any>
+export interface Facade {
+  dict: {
+    (v: any): AFlow<{ [s: string]: any }>
+  }
+  any: {
+    (v: any): AFlow<any>
   }
   number: AFlow<number>
   arrayOfNumbers: AFlow<number[]>
   arrayOfStrings: AFlow<string[]>
   arrayOfBool: AFlow<boolean[]>
   bool: AFlow<boolean>
-  arrayOfObject: AFlow<{[s:string]:any}[]>
-  object: AFlow<{[s:string]:any}>
+  arrayOfObject: AFlow<{ [s: string]: any }[]>
+  object: AFlow<{ [s: string]: any }>
   flow: FlowStarter
   canLog: boolean
-
-
   STATE_READY: string
   STATE_AWAIT: string
   STATE_EMPTY: string
 
-  enableLogging()
+  <T>(v?: T): AFlow<MaybeAny<T>>
+
+  enableLogging(): void
 
   log(hook: LogHook): void
 }
@@ -162,6 +163,7 @@ export declare const A: Facade
 // declare const _default: Facade
 export default A
 
-export interface AZ<T> extends AFlow<T> {}
+export interface AZ<T> extends AFlow<T> {
+}
 
 

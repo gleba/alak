@@ -16,6 +16,7 @@ export const AFacadeProxy = new Proxy(newFlow, {
       case "f":
         return newFlow()
       case "any":
+      case "dict":
         return newFlow
       case "flow":
         return newFlow

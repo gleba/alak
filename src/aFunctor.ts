@@ -14,7 +14,7 @@ export function setFunctorValue(functor: AFunctor, ...a) {
   if (dev.debug) dev.updatingStarted(functor, context)
   const setValue = finalValue => {
     if (functor.wrapperFn) {
-      let wrappedValue = functor.wrapperFn(finalValue)
+      let wrappedValue = functor.wrapperFn(finalValue, functor.value[0])
       if (wrappedValue.then)
         return setAsyncValue(functor, wrappedValue)
       functor.value = [wrappedValue]
