@@ -2,7 +2,8 @@ import {AFunctor, AnyFunction, notifyChildrens, setFunctorValue} from './aFuncto
 import { deleteParams } from './utils'
 import { patternMatch } from './match'
 import { aFromFlows } from './aFrom'
-import {addStateEventListener, proxyStateOffMap, proxyStateOnMap} from './FlowState'
+import {addStateEventListener, notifyStateListeners, proxyStateOffMap, proxyStateOnMap} from './FlowState'
+import {A} from "./index";
 
 export const alive = v => (v !== undefined && v !== null) as boolean
 export const isTruth = v => !!v
@@ -26,6 +27,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           delete functor.haveFrom
         }
       case 'clearValue':
+        notifyStateListeners(functor, A.STATE_CLEAR_VALUE)
         return () => (functor.value = [])
       case 'close':
         return () => {

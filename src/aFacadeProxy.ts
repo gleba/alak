@@ -37,6 +37,8 @@ export const AFacadeProxy = new Proxy(newFlow, {
         return 'await'
       case "STATE_EMPTY":
         return 'empty'
+      case "STATE_CLEAR_VALUE":
+        return 'clear_value'
     }
   }
 }) as any

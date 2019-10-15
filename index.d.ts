@@ -149,6 +149,7 @@ export interface Facade {
   flow: FlowStarter
   canLog: boolean
   STATE_READY: string
+  STATE_CLEAR_VALUE: string
   STATE_AWAIT: string
   STATE_EMPTY: string
 
