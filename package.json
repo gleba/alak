@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Alak functor, the data flow library.",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -28,8 +28,5 @@
     "tape": "^4.8.0",
     "ts-node": "^8.0.2",
     "typescript": "^3.4.4"
-  },
-  "dependencies": {
-    "uglifyjs": "^2.4.11"
   }
 }
