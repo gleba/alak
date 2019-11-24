@@ -5,6 +5,7 @@ test('promise, getter, wrapper', async ({ plan, ok, end, pass, fail, equal }) =>
   const testValue = 10
   const flow = A()
 
+  ok(!flow.isAsync, "is Async false")
   const asyncWait = () =>
     new Promise(done =>
       setTimeout(() => {
@@ -30,6 +31,8 @@ test('promise, getter, wrapper', async ({ plan, ok, end, pass, fail, equal }) =>
     pass("async getter await state:"+ s)
   })
   flow.useGetter(asyncWait)
+  ok(flow.isAsync, "is Async true")
+
   await flow()
   ok(flow.value === testValue, 'async getter')
 
@@ -49,6 +52,6 @@ test('promise, getter, wrapper', async ({ plan, ok, end, pass, fail, equal }) =>
   flow.useWrapper(v=>new Promise(done=>done(v*3)))
   await flow(testValue)
 
-  plan(12)
+  plan(14)
   end()
 })

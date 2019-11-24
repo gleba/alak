@@ -136,7 +136,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case 'useWrapper':
         return (fn:AnyFunction) => functor.wrapperFn = fn
       case "isAsync":
-        return functor.meta && functor.meta.born;
+        return !!(functor.getterFn || functor.wrapperFn)
       case 'match':
         return (...pattern) => {
           let f = patternMatch(pattern)
