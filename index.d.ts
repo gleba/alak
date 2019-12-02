@@ -83,6 +83,13 @@ export interface AFlow<T> {
 
   /** mutate computed value from multi flow https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts*/
   from<A extends AFlow<any>[]>(...a: A): AFlowFrom<T, A>
+
+  /** get immutable clone of value*/
+  getImmutable():T
+
+
+  /** get immutable clone of value*/
+  injectOnce(targetObject:any, key?:string)
 }
 
 type AboutStateEvents = {

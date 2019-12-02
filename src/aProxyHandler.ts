@@ -1,9 +1,14 @@
-import {AFunctor, AnyFunction, notifyChildrens, setFunctorValue} from './aFunctor'
+import { AFunctor, AnyFunction, notifyChildrens, setFunctorValue } from './aFunctor'
 import { deleteParams } from './utils'
 import { patternMatch } from './match'
 import { aFromFlows } from './aFrom'
-import {addStateEventListener, notifyStateListeners, proxyStateOffMap, proxyStateOnMap} from './FlowState'
-import {A} from "./index";
+import {
+  addStateEventListener,
+  notifyStateListeners,
+  proxyStateOffMap,
+  proxyStateOnMap,
+} from './FlowState'
+import { A } from './index'
 
 export const alive = v => (v !== undefined && v !== null) as boolean
 export const isTruth = v => !!v
@@ -17,7 +22,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       //base
       case 'v':
       case 'value':
-        return functor.value.length>=1 ? functor.value[0] : undefined
+        return functor.value.length >= 1 ? functor.value[0] : undefined
       case 'clear':
         return () => {
           functor.children.clear()
@@ -67,7 +72,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           setFunctorValue(functor, v[0])
         }
 
-        //sugar
+      //sugar
       case 'isEmpty':
         return !functor.value.length
       case 'is':
@@ -122,7 +127,6 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
           return functor.metaMap.get(metaName)
         }
 
-
       //experimental
       case 'on':
         return proxyStateOnMap(functor)
@@ -132,10 +136,10 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       //strong
       case 'useWarp':
       case 'useGetter':
-        return (fn:AnyFunction) => functor.getterFn = fn
+        return (fn: AnyFunction) => (functor.getterFn = fn)
       case 'useWrapper':
-        return (fn:AnyFunction) => functor.wrapperFn = fn
-      case "isAsync":
+        return (fn: AnyFunction) => (functor.wrapperFn = fn)
+      case 'isAsync':
         return !!(functor.getterFn || functor.wrapperFn)
       case 'match':
         return (...pattern) => {
@@ -145,8 +149,19 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
         }
       case 'mutate':
         return mutatorFn => setFunctorValue(functor, mutatorFn(...functor.value))
-      case "from":
-        return (...flows) => aFromFlows(functor, ...flows);
+      case 'from':
+        return (...flows) => aFromFlows(functor, ...flows)
+      case 'getImmutable':
+        return () => functor.value.length >= 1 ? JSON.parse(JSON.stringify(functor.value[0])) : undefined
+      case 'injectOnce':
+        return (o, key) => {
+          let id = functor.id ? functor.id : functor.uid
+          if (!o) throw "trying inject flow"+ id +" to null object"
+          if (!key) {
+            key = id
+          }
+          o[key] = functor.value[0]
+        }
     }
     return false
   },

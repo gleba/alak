@@ -13,13 +13,20 @@ test('sugar', ({ok, end, plan}) => {
   flow(undefined)
 
 
-  let f1 = A.dict(Array(10).fill(0).reduce((p, v, i) => {
-    p["x" + i] = {
-      id: i,
-      x: Math.random()
-    }
-    return p
-  }, {}))
+
+  // let newO = {}
+  // flow.setId("xx")
+  // flow.injectOnce(newO)
+  // console.log(newO)
+
+
+  // let f1 = A.dict(Array(10).fill(0).reduce((p, v, i) => {
+  //   p["x" + i] = {
+  //     id: i,
+  //     x: Math.random()
+  //   }
+  //   return p
+  // }, {}))
 
 
   plan(5)
