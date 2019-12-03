@@ -105,8 +105,7 @@ type AboutStateEvents = {
   ready: (fn: AnyFunction) => void
 }
 type UnpackedPromise<T> = T extends Promise<infer U> ? U : T;
-type UnpackedFlow<T> =
-  T extends (...args: any[]) => infer U ? U : T;
+type UnpackedFlow<T> = T extends (...args: any[]) => infer U ? U : T;
 type ReturnArrayTypes<T extends any[]> = {
   [K in keyof T]: UnpackedPromise<UnpackedFlow<T[K]>>
 }
