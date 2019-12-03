@@ -1,5 +1,4 @@
-import {A} from "../src";
-
+import { A } from '../src'
 
 console.log(A.canLog)
 // A.enableLogging()
@@ -10,4 +9,3 @@ require('./4_sugar')
 require('./5_meta')
 require('./6_promise_getter_wrapper')
 require('./7_events')
-

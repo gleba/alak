@@ -89,11 +89,10 @@ export interface AFlow<T> {
   from<A extends AFlow<any>[]>(...a: A): AFlowFrom<T, A>
 
   /** get immutable clone of value*/
-  getImmutable():T
-
+  getImmutable(): T
 
   /** get immutable clone of value*/
-  injectOnce(targetObject:any, key?:string)
+  injectOnce(targetObject: any, key?: string)
 }
 
 type AboutStateEvents = {
@@ -104,11 +103,9 @@ type AboutStateEvents = {
   /** send when first fill data value*/
   ready: (fn: AnyFunction) => void
 }
-type UnpackedPromise<T> = T extends Promise<infer U> ? U : T;
-type UnpackedFlow<T> = T extends (...args: any[]) => infer U ? U : T;
-type ReturnArrayTypes<T extends any[]> = {
-  [K in keyof T]: UnpackedPromise<UnpackedFlow<T[K]>>
-}
+type UnpackedPromise<T> = T extends Promise<infer U> ? U : T
+type UnpackedFlow<T> = T extends (...args: any[]) => infer U ? U : T
+type ReturnArrayTypes<T extends any[]> = { [K in keyof T]: UnpackedPromise<UnpackedFlow<T[K]>> }
 type FromHandler<T, A extends any[]> = {
   (...a: ReturnArrayTypes<A>): T | PromiseLike<T>
 }
@@ -129,18 +126,17 @@ type AnyFunction = {
 export type ValueReceiver<T extends any> = (...a: T[]) => any
 
 export type FlowStarter =
-  {
-    <T>(v?: T): AFlow<T>
-  } |
-  { (...v: any[]): AFlow<any> }
-
+  | {
+      <T>(v?: T): AFlow<T>
+    }
+  | { (...v: any[]): AFlow<any> }
 
 export type LogHook = {
   type: string
-  uid: number | string,
+  uid: number | string
   context: any
-  id?: string,
-  value?: any,
+  id?: string
+  value?: any
 }
 
 type MaybeAny<T> = unknown extends T ? any : T
@@ -177,7 +173,4 @@ export declare const A: Facade
 // declare const _default: Facade
 export default A
 
-export interface AZ<T> extends AFlow<T> {
-}
-
-
+export interface AZ<T> extends AFlow<T> {}

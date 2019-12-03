@@ -1,6 +1,5 @@
-import {aProxyHandler} from "./aProxyHandler";
-import {newAFunctor} from "./aFunctor";
-
+import { aProxyHandler } from './aProxyHandler'
+import { newAFunctor } from './aFunctor'
 
 export function newFlow(...a) {
   const functor = newAFunctor()

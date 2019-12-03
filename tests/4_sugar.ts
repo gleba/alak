@@ -1,7 +1,7 @@
-import {test} from './ouput.shema'
-import {A} from '../src'
+import { test } from './ouput.shema'
+import { A } from '../src'
 
-test('sugar', ({ok, end, plan}) => {
+test('sugar', ({ ok, end, plan }) => {
   let flow = A()
 
   flow.upSome(v => ok(v != undefined && v != null, 'upSome ' + v))
@@ -12,13 +12,10 @@ test('sugar', ({ok, end, plan}) => {
   flow(null)
   flow(undefined)
 
-
-
   // let newO = {}
   // flow.setId("xx")
   // flow.injectOnce(newO)
   // console.log(newO)
-
 
   // let f1 = A.dict(Array(10).fill(0).reduce((p, v, i) => {
   //   p["x" + i] = {
@@ -28,8 +25,6 @@ test('sugar', ({ok, end, plan}) => {
   //   return p
   // }, {}))
 
-
   plan(5)
   end()
 })
-

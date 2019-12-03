@@ -1,32 +1,31 @@
 import { getConnector } from './devTool'
 import { AFunctor } from './aFunctor'
-import {LogHook} from "../index";
+import { LogHook } from '../index'
 
 // value: any
 // duration: number
 type UpdateMap = {
-  [uid:number]:LogHook
+  [uid: number]: LogHook
 }
-
 
 export const dev = {
   debug: false,
   flows: {} as UpdateMap,
-  sid:Math.random(),
-  hook(h:LogHook){
+  sid: Math.random(),
+  hook(h: LogHook) {
     // console.log(h, "hook")
-    this.post('/', {  sid: this.sid, ...h })
+    this.post('/', { sid: this.sid, ...h })
   },
   updatingStarted(flow: AFunctor, context) {
     let duration = Date.now()
     let uid = flow.uid
-    this.flows[uid] = { uid, context, duration}
+    this.flows[uid] = { uid, context, duration }
   },
   updatingFinished(uid: number, value) {
     let v = this.flows[uid]
     v.duration = Date.now() - v.duration
     // console.log("updatingFinished", value)
 
-    this.post('/', { value, type:"update", sid: this.sid, ...v })
+    this.post('/', { value, type: 'update', sid: this.sid, ...v })
   },
 } as any

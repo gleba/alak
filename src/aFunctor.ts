@@ -1,6 +1,6 @@
-import {FlowState, notifyStateListeners} from './FlowState'
-import {dev} from "./devConst";
-import {A} from "./index";
+import { FlowState, notifyStateListeners } from './FlowState'
+import { dev } from './devConst'
+import { A } from './index'
 
 export function setFunctorValue(functor: AFunctor, ...a) {
   if (!functor.children) {
@@ -9,14 +9,12 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     return functor.proxy
   }
 
-
   let [value, context] = a
   if (dev.debug) dev.updatingStarted(functor, context)
   const setValue = finalValue => {
     if (functor.wrapperFn) {
       let wrappedValue = functor.wrapperFn(finalValue, functor.value[0])
-      if (wrappedValue.then)
-        return setAsyncValue(functor, wrappedValue)
+      if (wrappedValue.then) return setAsyncValue(functor, wrappedValue)
       functor.value = [wrappedValue]
     } else {
       functor.value = [finalValue]
@@ -32,7 +30,8 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     return setValue(value)
   }
 }
-function setAsyncValue(functor:AFunctor, value) {
+
+function setAsyncValue(functor: AFunctor, value) {
   notifyStateListeners(functor, A.STATE_AWAIT, true)
   return value.then(v => {
     functor.value = [v]
@@ -42,6 +41,7 @@ function setAsyncValue(functor:AFunctor, value) {
     notifyChildrens(functor)
   })
 }
+
 function useGetter(functor) {
   if (functor.getterFn.then) {
     return setFunctorValue(functor, ...[functor.getterFn(), 'getter']) //new Promise(async done => done(await ))
@@ -50,6 +50,7 @@ function useGetter(functor) {
   setFunctorValue(functor, value, 'getter')
   return value
 }
+
 export function notifyChildrens(functor: AFunctor) {
   if (functor.children.size > 0) {
     functor.children.forEach(f => {
@@ -102,5 +103,6 @@ export interface AFunctor {
   id: string
   flowName: string
   haveFrom: boolean
+
   (...a: any[]): void
 }

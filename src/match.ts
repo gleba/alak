@@ -48,14 +48,14 @@ export function patternMatch(arg) {
       //   // return
       // }
       let matchFn
-      if (pattern.map.has(v)){
+      if (pattern.map.has(v)) {
         matchFn = pattern.map.get(v)
       }
       if (!matchFn)
         pattern.fn.forEach(([f, mf]) => {
           if (f(v)) matchFn = mf
         })
-      if (!matchFn && typeof v === "object") {
+      if (!matchFn && typeof v === 'object') {
         matchFn = pattern.json[JSON.stringify(v)]
       }
       if (!matchFn && pattern.else) matchFn = pattern.else

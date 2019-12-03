@@ -1,6 +1,6 @@
-import {AFunctor, AnyFunction} from './aFunctor'
+import { AFunctor, AnyFunction } from './aFunctor'
 
-const list = ["empty", "await", "ready"] as const; // TS3.4 syntax
+const list = ['empty', 'await', 'ready'] as const // TS3.4 syntax
 export type FlowState = typeof list[number]
 
 export function notifyStateListeners(f: AFunctor, aboutState: FlowState | string, ...value) {
@@ -8,7 +8,11 @@ export function notifyStateListeners(f: AFunctor, aboutState: FlowState | string
     f.asEventsListeners.get(aboutState).forEach(f => f.apply(f, value))
 }
 
-export function addStateEventListener(f: AFunctor, aboutState: FlowState | string, fn: AnyFunction) {
+export function addStateEventListener(
+  f: AFunctor,
+  aboutState: FlowState | string,
+  fn: AnyFunction,
+) {
   if (!f.asEventsListeners.has(aboutState)) {
     let set = new Set<AnyFunction>()
     set.add(fn)
@@ -16,7 +20,11 @@ export function addStateEventListener(f: AFunctor, aboutState: FlowState | strin
   } else f.asEventsListeners.get(aboutState).add(fn)
 }
 
-export function removeASEventListener(f: AFunctor, aboutState: FlowState | string, fn: AnyFunction) {
+export function removeASEventListener(
+  f: AFunctor,
+  aboutState: FlowState | string,
+  fn: AnyFunction,
+) {
   if (f.asEventsListeners.has(aboutState)) {
     let ase = f.asEventsListeners.get(aboutState)
     if (ase.has(fn)) ase.delete(fn)

@@ -6,8 +6,5 @@
     "declaration": false,
     "outDir": "dist"
   },
-  "exclude": [
-    "node_modules",
-    "tests"
-  ]
+  "exclude": ["node_modules", "tests"]
 }

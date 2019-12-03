@@ -155,13 +155,14 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case 'from':
         return (...flows) => aFromFlows(functor, ...flows)
       case 'getImmutable':
-        return () => functor.value.length >= 1 ? JSON.parse(JSON.stringify(functor.value[0])) : undefined
+        return () =>
+          functor.value.length >= 1 ? JSON.parse(JSON.stringify(functor.value[0])) : undefined
       case 'injectOnce':
         return (o, key) => {
           if (!key) {
             key = functor.name ? functor.name : functor.id ? functor.id : functor.uid
           }
-          if (!o) throw "trying inject flow key : "+ key +" to null object"
+          if (!o) throw 'trying inject flow key : ' + key + ' to null object'
           o[key] = functor.value[0]
         }
     }

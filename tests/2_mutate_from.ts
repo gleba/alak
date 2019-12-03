@@ -1,5 +1,5 @@
-import {test} from './ouput.shema'
-import {A} from '../src'
+import { test } from './ouput.shema'
+import { A } from '../src'
 
 // import {AFX} from "../src/AFX";
 // import {A, AFlow} from "../src";
@@ -25,7 +25,6 @@ test('mutate and computate', async ({ ok, end, plan, pass }) => {
   const numberFlow = A.number
   const computedFlow = A()
   computedFlow.from(arrayFlow, numberFlow).quantum((value, newValue) => {
-
     if (!newValue) {
       pass('from quantum init')
       return 0
@@ -40,7 +39,7 @@ test('mutate and computate', async ({ ok, end, plan, pass }) => {
   //from holistic
   arrayFlow.clearValue()
   computedFlow.clear()
-  computedFlow.from(numberFlow).holistic((newValue) => {
+  computedFlow.from(numberFlow).holistic(newValue => {
     newValue
     // return value.length + newValue
   })
@@ -59,5 +58,4 @@ test('mutate and computate', async ({ ok, end, plan, pass }) => {
 
   plan(10)
   setTimeout(end, 400)
-
 })

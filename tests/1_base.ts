@@ -1,8 +1,8 @@
-import {test} from './ouput.shema'
+import { test } from './ouput.shema'
 
-import {A} from '../src'
+import { A } from '../src'
 
-test('base functions', ({ ok, end, fall, plan}) => {
+test('base functions', ({ ok, end, fall, plan }) => {
   //start
   const flow = A(5)
   flow.up(v => ok(v == 5, 'up'))
@@ -19,8 +19,6 @@ test('base functions', ({ ok, end, fall, plan}) => {
   flow.next(v => ok(v == 5, 'next'))
   flow(5)
   flow.up(v => ok(v == 5, 'up fill newFlow'))
-
-
 
   //atomic updates
   const countFlow = A()
@@ -54,7 +52,7 @@ test('base functions', ({ ok, end, fall, plan}) => {
 
   //once
   flow.clear()
-  flow.once(v=>ok(v==1, "once"))
+  flow.once(v => ok(v == 1, 'once'))
   flow(1)
   flow(2)
   flow(3)
