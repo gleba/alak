@@ -107,9 +107,9 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case 'setId':
         return id => (functor.id = id)
       case 'setName':
-        return name => (functor.name = name)
+        return name => (functor.flowName = name)
       case 'name':
-        return functor.name
+        return functor.flowName
       case 'uid':
         return functor.uid
       case 'id':

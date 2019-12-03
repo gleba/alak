@@ -4,9 +4,13 @@ import {A} from '../src'
 test('meta', ({ plan, ok, end, pass, fail }) => {
   const flow = A()
   let flowId = 'my.newFlow.namespace'
+  let flowName = 'flowName'
   flow.setId(flowId)
-
   ok(flow.id == flowId, 'newFlow id')
+
+
+  flow.setName(flowName)
+  ok(flow.name == flowName, 'flowName')
 
   flow.addMeta("my")
   ok(flow.hasMeta("my"), "meta")
@@ -20,6 +24,6 @@ test('meta', ({ plan, ok, end, pass, fail }) => {
   flow.close()
   ok(!flow.hasMeta("a"), "meta end")
 
-  plan(5)
+  plan(6)
   end()
 })
