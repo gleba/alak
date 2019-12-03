@@ -155,11 +155,10 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
         return () => functor.value.length >= 1 ? JSON.parse(JSON.stringify(functor.value[0])) : undefined
       case 'injectOnce':
         return (o, key) => {
-          let id = functor.id ? functor.id : functor.uid
-          if (!o) throw "trying inject flow"+ id +" to null object"
           if (!key) {
-            key = id
+            key = functor.name ? functor.name : functor.id ? functor.id : functor.uid
           }
+          if (!o) throw "trying inject flow key : "+ key +" to null object"
           o[key] = functor.value[0]
         }
     }

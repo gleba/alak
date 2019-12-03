@@ -100,6 +100,7 @@ export interface AFunctor {
   value: any
   uid: number
   id: string
+  name: string
   haveFrom: boolean
   (...a: any[]): void
 }
