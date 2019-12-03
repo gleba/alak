@@ -106,7 +106,10 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       //meta
       case 'setId':
         return id => (functor.id = id)
+      case 'setName':
+        return name => (functor.name = name)
       case 'name':
+        return functor.name
       case 'uid':
         return functor.uid
       case 'id':

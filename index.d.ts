@@ -7,6 +7,8 @@ export interface AFlow<T> {
   isEmpty: boolean
   /** get string value to identify the flow*/
   id: string
+  name: string
+  uid: string
   /** add event listener for change async state of data, "await, ready, etc...
    *@experimental*/
   on: AboutStateEvents
@@ -56,6 +58,8 @@ export interface AFlow<T> {
   /** set string value to identify the flow*/
 
   setId(id: string): void
+
+  setName(name: string): void
 
   /** add meta value to extend properties the flow*/
   addMeta(metaName: string, value?: any): void
