@@ -1,9 +1,6 @@
 import { test } from './ouput.shema'
 import { A } from '../src'
 
-// import {AFX} from "../src/AFX";
-// import {A, AFlow} from "../src";
-
 test('mutate and computate', async ({ ok, end, plan, pass }) => {
   //mutate
   const startValue = [1]
@@ -39,9 +36,8 @@ test('mutate and computate', async ({ ok, end, plan, pass }) => {
   //from holistic
   arrayFlow.clearValue()
   computedFlow.clear()
-  computedFlow.from(numberFlow).holistic(newValue => {
-    newValue
-    // return value.length + newValue
+  computedFlow.from(arrayFlow, numberFlow).holistic((value, newValue) => {
+    return value.length + newValue
   })
   ok(computedFlow.isEmpty, 'from holistic')
   arrayFlow([0, 0])

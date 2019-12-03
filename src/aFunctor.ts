@@ -65,13 +65,18 @@ export function notifyChildrens(functor: AFunctor) {
 }
 
 export const newAFunctor = () => {
-  // let children = new Set<AnyFunction>()
-  // let grandChildren = new Map<AnyFunction, AnyFunction>()
-  const functor = function(...a) {
-    if (a.length) {
-      return setFunctorValue(functor, ...a)
+  const functor = function() {
+    if (arguments.length) {
+      if (typeof arguments[0] == 'function') {
+        functor.getterFn = arguments[0]
+      } else {
+        return setFunctorValue(functor, ...arguments)
+      }
     } else {
       if (functor.getterFn) return useGetter(functor)
+      if (functor.holyFn) {
+        return functor.holyFn()
+      }
       let v = functor.value
       return v && v.length ? v[0] : undefined
     }
@@ -103,6 +108,7 @@ export interface AFunctor {
   id: string
   flowName: string
   haveFrom: boolean
+  holyFn: Function
 
   (...a: any[]): void
 }

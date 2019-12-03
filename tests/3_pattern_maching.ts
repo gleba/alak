@@ -1,6 +1,5 @@
 import { test } from './ouput.shema'
 import { A } from '../src'
-import { AFlow } from '../index'
 
 test('pattern matching', ({ plan, ok, end, pass, fail }) => {
   // basic
@@ -22,17 +21,13 @@ test('pattern matching', ({ plan, ok, end, pass, fail }) => {
   let state = [5, true, 'x']
   // prettier-ignore
   const isString = v => typeof v== 'string'
+  // prettier-ignore
   flow.match(
-    state,
-    v => pass('match linked object'),
-    [5, true, 'x'],
-    v => pass('match similar object'),
-    isString,
-    v => pass('match string', v),
-    5,
-    fail,
-    [5],
-    fail,
+    state, v => pass('match linked object'),
+    [5, true, 'x'], v => pass('match similar object'),
+    isString, v => pass('match string', v),
+    5, fail,
+    [5], fail,
     (...v) => fail('else matched ' + v),
   )
 
