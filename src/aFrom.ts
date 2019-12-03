@@ -32,10 +32,15 @@ export function aFromFlows(functor, ...flows: AFlow<any>[]) {
   function holistic(mixFn) {
     const holyFlows = []
     functor.holyFn = () => {
-      return new Promise(q => {
-        Promise.all(holyFlows.map(f => f())).then(() => {
-          q(functor.value[0])
-        })
+      // console.log("-", holyFlows.length)
+      return new Promise(fin => {
+        if (holyFlows.length) {
+          Promise.all(holyFlows.map(f => f())).then(() => {
+            fin(functor.value[0])
+          })
+        } else {
+          return fin(makeMix(mixFn))
+        }
       })
     }
     return new Promise(done => {

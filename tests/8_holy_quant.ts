@@ -8,18 +8,24 @@ test('plugins', async ({ plan, ok, end, pass, fail, equal }) => {
     async () =>
       new Promise(done =>
         setTimeout(() => {
-          console.log('get')
+          pass('mix1')
           done(10)
         }, 100),
       ),
   )
   const bFlow = A(5)
   const cFlow = A()
-
-  await cFlow.from(aFlow, bFlow).holistic((a: any, b) => {
+  await cFlow.from(aFlow, bFlow).holistic((a, b) => {
     return (a + b) as any
   })
+  equal(await cFlow(), 15)
+  const xFlow = A()
 
-  console.log(await cFlow())
+  xFlow.from(bFlow).holistic(async b => {
+    pass('mix2')
+    return new Promise(done => setTimeout(() => done(10), 100))
+  })
+  equal(await xFlow(), 10)
+  plan(6)
   end()
 })
