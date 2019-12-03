@@ -162,7 +162,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case 'injectOnce':
         return (o, key) => {
           if (!key) {
-            key = functor.name ? functor.name : functor.id ? functor.id : functor.uid
+            key = functor.flowName ? functor.flowName : functor.id ? functor.id : functor.uid
           }
           if (!o) throw 'trying inject flow key : ' + key + ' to null object'
           o[key] = functor.value[0]
