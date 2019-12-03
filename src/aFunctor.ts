@@ -74,8 +74,8 @@ export const newAFunctor = () => {
       }
     } else {
       if (functor.getterFn) return useGetter(functor)
-      if (functor.holyFn) {
-        return functor.holyFn()
+      if (functor.strongFn) {
+        return functor.strongFn()
       }
       let v = functor.value
       return v && v.length ? v[0] : undefined
@@ -108,7 +108,7 @@ export interface AFunctor {
   id: string
   flowName: string
   haveFrom: boolean
-  holyFn: Function
+  strongFn: Function
 
   (...a: any[]): void
 }

@@ -117,6 +117,7 @@ type FromFlowFn<T, A extends any[]> = {
 export interface AFlowFrom<T, A extends any[]> {
   holistic: FromFlowFn<T, A>
   quantum: FromFlowFn<T, A>
+  strong: FromFlowFn<T, A>
 }
 
 type AnyFunction = {

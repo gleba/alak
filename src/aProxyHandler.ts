@@ -143,7 +143,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case 'useWrapper':
         return (fn: AnyFunction) => (functor.wrapperFn = fn)
       case 'isAsync':
-        return !!(functor.getterFn || functor.wrapperFn || functor.holyFn)
+        return !!(functor.getterFn || functor.wrapperFn || functor.strongFn)
       case 'match':
         return (...pattern) => {
           let f = patternMatch(pattern)

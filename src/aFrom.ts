@@ -1,8 +1,8 @@
 import { AFlow } from '../index'
-import { setFunctorValue } from './aFunctor'
+import { AFunctor, setFunctorValue } from './aFunctor'
 import { isPromise } from './utils'
 
-export function aFromFlows(functor, ...flows: AFlow<any>[]) {
+export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
   if (functor.haveFrom) {
     throw `functor ${
       functor.id ? functor.id : ''
@@ -29,20 +29,7 @@ export function aFromFlows(functor, ...flows: AFlow<any>[]) {
     makeMix(mixFn)
   }
 
-  function holistic(mixFn) {
-    const holyFlows = []
-    functor.holyFn = () => {
-      // console.log("-", holyFlows.length)
-      return new Promise(fin => {
-        if (holyFlows.length) {
-          Promise.all(holyFlows.map(f => f())).then(() => {
-            fin(functor.value[0])
-          })
-        } else {
-          return fin(makeMix(mixFn))
-        }
-      })
-    }
+  function holistic(mixFn, strong?: any[]) {
     return new Promise(done => {
       let needToRun = flows.length
       let waitSet = new Set()
@@ -59,16 +46,32 @@ export function aFromFlows(functor, ...flows: AFlow<any>[]) {
         else {
           if (flow.isAsync) {
             flow()
-            holyFlows.push(flow)
+            strong && strong.push(flow)
           }
           flow.up(() => countActiveFlows(flow))
         }
       })
     })
   }
-
+  function strong(mixFn) {
+    const strongFlows = []
+    functor.strongFn = () => {
+      // console.log("-", holyFlows.length)
+      return new Promise(fin => {
+        if (strongFlows.length) {
+          Promise.all(strongFlows.map(f => f())).then(() => {
+            fin(functor.value[0])
+          })
+        } else {
+          return fin(makeMix(mixFn))
+        }
+      })
+    }
+    holistic(mixFn, strongFlows)
+  }
   return {
     quantum,
     holistic,
+    strong,
   }
 }
