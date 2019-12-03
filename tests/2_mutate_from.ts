@@ -25,6 +25,7 @@ test('mutate and computate', async ({ ok, end, plan, pass }) => {
   const numberFlow = A.number
   const computedFlow = A()
   computedFlow.from(arrayFlow, numberFlow).quantum((value, newValue) => {
+
     if (!newValue) {
       pass('from quantum init')
       return 0
@@ -39,8 +40,9 @@ test('mutate and computate', async ({ ok, end, plan, pass }) => {
   //from holistic
   arrayFlow.clearValue()
   computedFlow.clear()
-  computedFlow.from(arrayFlow, numberFlow).holistic((value, newValue) => {
-    return value.length + newValue
+  computedFlow.from(numberFlow).holistic((newValue) => {
+    newValue
+    // return value.length + newValue
   })
   ok(computedFlow.isEmpty, 'from holistic')
   arrayFlow([0, 0])

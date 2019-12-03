@@ -104,11 +104,14 @@ type AboutStateEvents = {
   /** send when first fill data value*/
   ready: (fn: AnyFunction) => void
 }
-type ReturnTypefy<T extends any[]> = {
-  [K in keyof T]: T[K] extends (...args: any) => infer R ? R : any
+type UnpackedPromise<T> = T extends Promise<infer U> ? U : T;
+type UnpackedFlow<T> =
+  T extends (...args: any[]) => infer U ? U : T;
+type ReturnArrayTypes<T extends any[]> = {
+  [K in keyof T]: UnpackedPromise<UnpackedFlow<T[K]>>
 }
 type FromHandler<T, A extends any[]> = {
-  (...a: ReturnTypefy<A>): T | PromiseLike<T>
+  (...a: ReturnArrayTypes<A>): T | PromiseLike<T>
 }
 
 type FromFlowFn<T, A extends any[]> = {
