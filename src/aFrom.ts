@@ -12,7 +12,17 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
   }
 
   const makeMix = mixFn => {
-    let values = flows.map(flow => flow.value)
+    const inAwaiting: AFlow<any>[] = []
+    let values = flows.map(flow => {
+      if (flow.inAwaiting) {
+        inAwaiting.push(flow)
+      }
+      return flow.value
+    })
+    if (inAwaiting.length > 0) {
+      return values
+    }
+
     let nextValues = mixFn(...values)
     if (isPromise(nextValues)) {
       nextValues.then(v => setFunctorValue(functor, v))

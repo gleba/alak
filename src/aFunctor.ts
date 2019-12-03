@@ -33,8 +33,10 @@ export function setFunctorValue(functor: AFunctor, ...a) {
 
 function setAsyncValue(functor: AFunctor, value) {
   notifyStateListeners(functor, A.STATE_AWAIT, true)
+  functor.inAwaiting = true
   return value.then(v => {
     functor.value = [v]
+    functor.inAwaiting = false
     notifyStateListeners(functor, A.STATE_AWAIT, false)
     notifyStateListeners(functor, A.STATE_READY)
     if (dev.debug) dev.updatingFinished(functor.uid, v)
@@ -108,6 +110,7 @@ export interface AFunctor {
   id: string
   flowName: string
   haveFrom: boolean
+  inAwaiting: boolean
   strongFn: Function
 
   (...a: any[]): void

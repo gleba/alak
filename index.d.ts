@@ -17,6 +17,7 @@ export interface AFlow<T> {
   off: AboutStateEvents
   /** check 'from' or 'warp' function are async*/
   isAsync: Boolean
+  inAwaiting: Boolean
 
   /** unsubscribe all listeners*/
   clear(): void
