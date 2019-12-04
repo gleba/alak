@@ -24,6 +24,7 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
     }
 
     let nextValues = mixFn(...values)
+    functor.getterFn = () => mixFn(...values)
     if (isPromise(nextValues)) {
       nextValues.then(v => setFunctorValue(functor, v))
     } else {
@@ -77,7 +78,7 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
         }
       })
     }
-    holistic(mixFn, strongFlows)
+    return holistic(mixFn, strongFlows)
   }
   return {
     quantum,

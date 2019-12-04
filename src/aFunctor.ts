@@ -75,10 +75,10 @@ export const newAFunctor = () => {
         return setFunctorValue(functor, ...arguments)
       }
     } else {
-      if (functor.getterFn) return useGetter(functor)
       if (functor.strongFn) {
         return functor.strongFn()
       }
+      if (functor.getterFn) return useGetter(functor)
       let v = functor.value
       return v && v.length ? v[0] : undefined
     }
