@@ -122,6 +122,7 @@ export interface AFlowFrom<T, A extends any[]> {
   holistic: FromFlowFn<T, A>
 
   quantum: FromFlowFn<T, A>
+  some: FromFlowFn<T, A>
   strong: FromFlowFn<T, A>
   weak: FromFlowFn<T, A>
 }
