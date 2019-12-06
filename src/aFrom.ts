@@ -46,7 +46,7 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
     makeMix(mixFn)
   }
 
-  function quantum(mixFn, strong?: any[]) {
+  function quantum(mixFn, { strong, some }: { strong?: any[]; some?: boolean }) {
     let needToRun = flows.length
     let waitCount = 0
     let waitSet = new Set()
@@ -71,17 +71,21 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
           } else {
             waitCount++
           }
-          flow.up(countActiveFlows)
+          if (some) {
+            flow.upSome(countActiveFlows)
+          } else {
+            flow.up(countActiveFlows)
+          }
         }
       })
     })
   }
   function strong(mixFn) {
-    const strongFlows = []
+    const strong = []
     functor.strongFn = () => {
       return new Promise(fin => {
-        if (strongFlows.length) {
-          Promise.all(strongFlows.map(f => f())).then(() => {
+        if (strong.length) {
+          Promise.all(strong.map(f => f())).then(() => {
             fin(functor.value[0])
           })
         } else {
@@ -89,11 +93,16 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
         }
       })
     }
-    return quantum(mixFn, strongFlows)
+    return quantum(mixFn, { strong })
+  }
+
+  function some(mixFn) {
+    return quantum(mixFn, { some: true })
   }
 
   return {
     quantum,
+    some,
     holistic: quantum,
     weak,
     strong,
