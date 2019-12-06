@@ -31,39 +31,37 @@ export function setFunctorValue(functor: AFunctor, ...a) {
   }
 }
 
-function setAsyncValue(functor: AFunctor, value) {
+async function setAsyncValue(functor: AFunctor, promise: PromiseLike<any>) {
   notifyStateListeners(functor, A.STATE_AWAIT, true)
   functor.inAwaiting = true
-  return value.then(v => {
-    functor.value = [v]
-    functor.inAwaiting = false
-    notifyStateListeners(functor, A.STATE_AWAIT, false)
-    notifyStateListeners(functor, A.STATE_READY)
-    if (dev.debug) dev.updatingFinished(functor.uid, v)
-    notifyChildrens(functor)
-  })
+  functor.isAsync = true
+  let v = await promise
+  functor.value = [v]
+  functor.inAwaiting = false
+  notifyStateListeners(functor, A.STATE_AWAIT, false)
+  notifyStateListeners(functor, A.STATE_READY)
+  if (dev.debug) dev.updatingFinished(functor.uid, v)
+  notifyChildrens(functor)
+  return v
 }
 
-function useGetter(functor) {
-  if (functor.getterFn.then) {
-    return setFunctorValue(functor, ...[functor.getterFn(), 'getter']) //new Promise(async done => done(await ))
-  }
-  const value = functor.getterFn()
-  setFunctorValue(functor, value, 'getter')
-  return value
-}
+// function useGetter(functor: AFunctor) {
+//   const value = functor.getterFn()
+//   // if (value && value.then) {
+//   //   console.log("use getter", value)
+//   //   // setAsyncValue(functor, value)
+//   // }
+//   setFunctorValue(functor, value, 'getter')
+//   return value
+// }
+
+const notify = (functor: AFunctor, whose) =>
+  whose && whose.size > 0 && whose.forEach(f => f.apply(functor.proxy, functor.value))
 
 export function notifyChildrens(functor: AFunctor) {
-  if (functor.children.size > 0) {
-    functor.children.forEach(f => {
-      f.apply(f, functor.value)
-    })
-  }
-  if (functor.grandChildren.size > 0) {
-    functor.grandChildren.forEach(f => {
-      f.apply(f, functor.value)
-    })
-  }
+  // console.log('→', functor.flowName, functor.value)
+  notify(functor, functor.children)
+  notify(functor, functor.grandChildren)
 }
 
 export const newAFunctor = () => {
@@ -78,7 +76,7 @@ export const newAFunctor = () => {
       if (functor.strongFn) {
         return functor.strongFn()
       }
-      if (functor.getterFn) return useGetter(functor)
+      if (functor.getterFn) return setFunctorValue(functor, functor.getterFn(), 'getter')
       let v = functor.value
       return v && v.length ? v[0] : undefined
     }
@@ -110,6 +108,7 @@ export interface AFunctor {
   id: string
   flowName: string
   haveFrom: boolean
+  isAsync: boolean
   inAwaiting: boolean
   strongFn: Function
 

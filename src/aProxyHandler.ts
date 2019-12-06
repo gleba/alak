@@ -46,7 +46,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case 'up':
         return f => {
           functor.children.add(f)
-          if (functor.value && functor.value.length) f.apply(f, functor.value)
+          if (functor.value && functor.value.length) f.apply(functor.proxy, functor.value)
         }
       case 'down':
         return f => {
@@ -55,7 +55,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
         }
       case 'once':
         return f => {
-          if (functor.value && functor.value.length) f.apply(f, functor.value)
+          if (functor.value && functor.value.length) f.apply(functor.proxy, functor.value)
           else {
             const once = v => {
               f.apply(f, functor.value)
@@ -68,7 +68,6 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case 'apply':
         return (context, v) => {
           functor.bind(context)
-
           setFunctorValue(functor, v[0])
         }
 
@@ -88,13 +87,13 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
         return f => {
           functor.grandChildren.set(f, nullFilter(f))
           let v = functor.value[0]
-          if (alive(v)) f.apply(f, [v])
+          if (alive(v)) f.apply(functor.proxy, [v])
         }
       case 'upTrue':
         return f => {
           functor.grandChildren.set(f, trueFilter(f))
           let v = functor.value[0]
-          if (v) f.apply(f, [v])
+          if (v) f.apply(functor.proxy, [v])
         }
       case 'upNone':
         return f => {
@@ -143,7 +142,7 @@ export const aProxyHandler: ProxyHandler<AFunctor> = {
       case 'useWrapper':
         return (fn: AnyFunction) => (functor.wrapperFn = fn)
       case 'isAsync':
-        return !!(functor.getterFn || functor.wrapperFn || functor.strongFn)
+        return !!(functor.isAsync || functor.getterFn || functor.wrapperFn || functor.strongFn)
       case 'inAwaiting':
         return functor.inAwaiting
       case 'match':

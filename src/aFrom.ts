@@ -10,7 +10,10 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
   } else {
     functor.haveFrom = true
   }
-
+  let someoneIsWaiting = []
+  const freeWaiters = v => {
+    while (someoneIsWaiting.length) someoneIsWaiting.pop()(v)
+  }
   const makeMix = mixFn => {
     const inAwaiting: AFlow<any>[] = []
     let values = flows.map(flow => {
@@ -20,46 +23,55 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
       return flow.value
     })
     if (inAwaiting.length > 0) {
-      return values
+      return new Promise(_ => someoneIsWaiting.push(_))
     }
-
+    functor.getterFn = () => makeMix(mixFn)
     let nextValues = mixFn(...values)
-    functor.getterFn = () => mixFn(...values)
     if (isPromise(nextValues)) {
-      nextValues.then(v => setFunctorValue(functor, v))
+      nextValues.then(v => {
+        freeWaiters(v)
+        setFunctorValue(functor, v)
+      })
     } else {
+      freeWaiters(nextValues)
       setFunctorValue(functor, nextValues)
     }
     return nextValues
   }
 
-  function quantum(mixFn) {
+  function weak(mixFn) {
     flows.forEach(flow => {
       if (flow != functor.proxy) flow.next(() => makeMix(mixFn))
     })
     makeMix(mixFn)
   }
 
-  function holistic(mixFn, strong?: any[]) {
+  function quantum(mixFn, strong?: any[]) {
+    let needToRun = flows.length
+    let waitCount = 0
+    let waitSet = new Set()
     return new Promise(done => {
-      let needToRun = flows.length
-      let waitSet = new Set()
-      const countActiveFlows = f => {
-        if (waitSet) waitSet.add(f)
-        if (!waitSet || waitSet.size == needToRun) {
-          done(makeMix(mixFn))
-          waitSet = null
-        }
+      functor.getterFn = () => new Promise(_ => someoneIsWaiting.push(_))
+      function countActiveFlows() {
+        if (waitSet) {
+          waitSet.add(this)
+          if (waitSet.size == needToRun) {
+            waitSet = null
+            done(makeMix(mixFn))
+          }
+        } else done(makeMix(mixFn))
       }
       flows.forEach(flow => {
         //for this flow in mix
         if (flow == functor.proxy) needToRun--
         else {
-          if (flow.isAsync) {
+          if (strong && flow.isAsync) {
             flow()
-            strong && strong.push(flow)
+            strong.push(flow)
+          } else {
+            waitCount++
           }
-          flow.up(() => countActiveFlows(flow))
+          flow.up(countActiveFlows)
         }
       })
     })
@@ -67,7 +79,6 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
   function strong(mixFn) {
     const strongFlows = []
     functor.strongFn = () => {
-      // console.log("-", holyFlows.length)
       return new Promise(fin => {
         if (strongFlows.length) {
           Promise.all(strongFlows.map(f => f())).then(() => {
@@ -78,11 +89,13 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
         }
       })
     }
-    return holistic(mixFn, strongFlows)
+    return quantum(mixFn, strongFlows)
   }
+
   return {
     quantum,
-    holistic,
+    holistic: quantum,
+    weak,
     strong,
   }
 }
