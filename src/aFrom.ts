@@ -46,7 +46,7 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
     makeMix(mixFn)
   }
 
-  function quantum(mixFn, { strong, some }: { strong?: any[]; some?: boolean }) {
+  function quantum(mixFn, opt?: { strong?: any[]; some?: boolean }) {
     let needToRun = flows.length
     let waitCount = 0
     let waitSet = new Set()
@@ -65,16 +65,18 @@ export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
         //for this flow in mix
         if (flow == functor.proxy) needToRun--
         else {
-          if (strong && flow.isAsync) {
-            flow()
-            strong.push(flow)
-          } else {
-            waitCount++
-          }
-          if (some) {
-            flow.upSome(countActiveFlows)
-          } else {
+          if (!opt) {
             flow.up(countActiveFlows)
+          } else {
+            if (opt.strong && flow.isAsync) {
+              flow()
+              opt.strong.push(flow)
+            } else {
+              waitCount++
+            }
+            if (opt.some) {
+              flow.upSome(countActiveFlows)
+            }
           }
         }
       })
