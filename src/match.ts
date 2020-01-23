@@ -1,5 +1,6 @@
-import { isArray, isFunction } from 'util'
-
+function isFunction(functionToCheck) {
+  return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
+}
 function parsePattern(pattern) {
   let o = { else: null, map: new Map(), json: {}, fn: [] }
   let pair = {} as any
