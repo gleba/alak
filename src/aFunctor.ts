@@ -45,15 +45,6 @@ async function setAsyncValue(functor: AFunctor, promise: PromiseLike<any>) {
   return v
 }
 
-// function useGetter(functor: AFunctor) {
-//   const value = functor.getterFn()
-//   // if (value && value.then) {
-//   //   console.log("use getter", value)
-//   //   // setAsyncValue(functor, value)
-//   // }
-//   setFunctorValue(functor, value, 'getter')
-//   return value
-// }
 
 const notify = (functor: AFunctor, whose) =>
   whose && whose.size > 0 && whose.forEach(f => f.apply(functor.proxy, functor.value))
@@ -111,6 +102,5 @@ export interface AFunctor {
   isAsync: boolean
   inAwaiting: boolean
   strongFn: Function
-
   (...a: any[]): void
 }

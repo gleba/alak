@@ -20,13 +20,13 @@ export function addStateEventListener(
   } else f.asEventsListeners.get(aboutState).add(fn)
 }
 
-export function removeASEventListener(
+export function removeStateEventListener(
   f: AFunctor,
-  aboutState: FlowState | string,
+  state: FlowState | string,
   fn: AnyFunction,
 ) {
-  if (f.asEventsListeners.has(aboutState)) {
-    let ase = f.asEventsListeners.get(aboutState)
+  if (f.asEventsListeners.has(state)) {
+    let ase = f.asEventsListeners.get(state)
     if (ase.has(fn)) ase.delete(fn)
   }
 }
@@ -46,7 +46,7 @@ export function proxyStateOffMap(functor) {
     addStateEventListener(functor, aseName, fn)
   }
 
-  f.await = fn => removeASEventListener(functor, 'await', fn)
-  f.ready = fn => removeASEventListener(functor, 'ready', fn)
+  f.await = fn => removeStateEventListener(functor, 'await', fn)
+  f.ready = fn => removeStateEventListener(functor, 'ready', fn)
   return f
 }

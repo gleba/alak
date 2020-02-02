@@ -133,12 +133,6 @@ type AnyFunction = {
 
 export type ValueReceiver<T extends any> = (...a: T[]) => any
 
-export type FlowStarter =
-  | {
-      <T>(v?: T): AFlow<T>
-    }
-  | { (...v: any[]): AFlow<any> }
-
 export type LogHook = {
   type: string
   uid: number | string
@@ -149,7 +143,13 @@ export type LogHook = {
 
 type MaybeAny<T> = unknown extends T ? any : T
 
-export interface Facade {
+
+/**
+ * Фасад
+ * @private
+ */
+interface Facade {
+  <T>(v?: T): AFlow<MaybeAny<T>>
   dict: {
     (v: any): AFlow<{ [s: string]: any }>
   }
@@ -163,22 +163,26 @@ export interface Facade {
   bool: AFlow<boolean>
   arrayOfObject: AFlow<{ [s: string]: any }[]>
   object: AFlow<{ [s: string]: any }>
-  flow: FlowStarter
-  canLog: boolean
-  STATE_READY: string
-  STATE_CLEAR_VALUE: string
-  STATE_AWAIT: string
-  STATE_EMPTY: string
 
-  <T>(v?: T): AFlow<MaybeAny<T>>
+  // canLog: boolean
+  // STATE_READY: string
+  // STATE_CLEAR_VALUE: string
+  // STATE_AWAIT: string
+  // STATE_EMPTY: string
+  //
 
-  enableLogging(): void
-
-  log(hook: LogHook): void
+  // enableLogging(): void
+  // log(hook: LogHook): void
 }
 
+/**
+ * Конструктор фукнтора потока
+ * @example
+ * ```
+ * const a = A()
+ * const b = A(5)
+ * @public
+ */
 export declare const A: Facade
-// declare const _default: Facade
 export default A
 
-export interface AZ<T> extends AFlow<T> {}
