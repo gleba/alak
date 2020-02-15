@@ -1,6 +1,7 @@
 import { test } from './ouput.shema'
+import { A } from '../packages'
 
-import { A } from '../src'
+
 
 test('base functions', ({ ok, end, fall, plan }) => {
   //start

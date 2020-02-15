@@ -1,10 +1,10 @@
 import { test } from './ouput.shema'
-import { A } from '../src'
+import { A } from '../packages'
 
 test('mutate and computate', async ({ ok, end, plan, pass }) => {
   //mutate
   const startValue = [1]
-  const arrayFlow = A.flow(startValue)
+  const arrayFlow = A(startValue)
   arrayFlow.mutate(v => {
     ok(v == startValue, 'mutate')
     v.push(2)
@@ -19,7 +19,7 @@ test('mutate and computate', async ({ ok, end, plan, pass }) => {
   ok(arrayFlow.value.length == 2, 'mutate 2')
 
   //from weak
-  const numberFlow = A.number
+  const numberFlow = A<number>()
   const computedFlow = A()
   computedFlow.from(arrayFlow, numberFlow).weak((value, newValue) => {
     if (!newValue) {

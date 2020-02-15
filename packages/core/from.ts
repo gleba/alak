@@ -1,8 +1,8 @@
-import { AFlow } from '../index'
-import { AFunctor, setFunctorValue } from './aFunctor'
+
+import { Functor, setFunctorValue } from './functor'
 import { isPromise } from './utils'
 
-export function aFromFlows(functor: AFunctor, ...flows: AFlow<any>[]) {
+export function aFromFlows(functor: Functor, ...flows: AFlow<any>[]) {
   if (functor.haveFrom) {
     throw `functor ${
       functor.id ? functor.id : ''

@@ -1,9 +1,10 @@
 import { test } from './ouput.shema'
-import { A } from '../src'
+import { A } from '../packages'
+
 
 test('pattern matching', ({ plan, ok, end, pass, fail }) => {
   // basic
-  const flow = A.any(3)
+  const flow = A<any>(3)
   // prettier-ignore
   flow.match(
     3, v => ok(3 === v, "matching by key"),

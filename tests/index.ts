@@ -1,7 +1,4 @@
-import { A } from '../src'
-
-console.log(A.canLog)
-A.enableLogging()
+//
 require('./1_base')
 require('./2_mutate_from')
 require('./3_pattern_maching')

@@ -1,8 +1,7 @@
-import { FlowState, notifyStateListeners } from './FlowState'
-import { dev } from './devConst'
-import { A } from './index'
+import { FState, notifyStateListeners } from './state'
+// import { dev } from '../dev/devConst'
 
-export function setFunctorValue(functor: AFunctor, ...a) {
+export function setFunctorValue(functor: Functor, ...a) {
   if (!functor.children) {
     console.error('Attempt to pass in the ended newFlow ', functor.id ? functor.id : '')
     console.warn("it's possible memory leak in application")
@@ -10,7 +9,7 @@ export function setFunctorValue(functor: AFunctor, ...a) {
   }
 
   let [value, context] = a
-  if (dev.debug) dev.updatingStarted(functor, context)
+  // if (dev.debug) dev.updatingStarted(functor, context)
   const setValue = finalValue => {
     if (functor.wrapperFn) {
       let wrappedValue = functor.wrapperFn(finalValue, functor.value[0])
@@ -19,7 +18,7 @@ export function setFunctorValue(functor: AFunctor, ...a) {
     } else {
       functor.value = [finalValue]
     }
-    if (dev.debug) dev.updatingFinished(functor.uid, finalValue)
+    // if (dev.debug) dev.updatingFinished(functor.uid, finalValue)
     notifyChildrens(functor)
     return functor.value[0]
   }
@@ -31,31 +30,36 @@ export function setFunctorValue(functor: AFunctor, ...a) {
   }
 }
 
-async function setAsyncValue(functor: AFunctor, promise: PromiseLike<any>) {
-  notifyStateListeners(functor, A.STATE_AWAIT, true)
+async function setAsyncValue(functor: Functor, promise: PromiseLike<any>) {
+  notifyStateListeners(functor, FState.AWAIT, true)
   functor.inAwaiting = true
   functor.isAsync = true
   let v = await promise
   functor.value = [v]
   functor.inAwaiting = false
-  notifyStateListeners(functor, A.STATE_AWAIT, false)
-  notifyStateListeners(functor, A.STATE_READY)
-  if (dev.debug) dev.updatingFinished(functor.uid, v)
+  notifyStateListeners(functor, FState.AWAIT, false)
+  // if (dev.debug) dev.updatingFinished(functor.uid, v)
   notifyChildrens(functor)
   return v
 }
 
 
-const notify = (functor: AFunctor, whose) =>
+const notify = (functor: Functor, whose) =>
   whose && whose.size > 0 && whose.forEach(f => f.apply(functor.proxy, functor.value))
 
-export function notifyChildrens(functor: AFunctor) {
+export function notifyChildrens(functor: Functor) {
   // console.log('→', functor.flowName, functor.value)
   notify(functor, functor.children)
   notify(functor, functor.grandChildren)
 }
 
-export const newAFunctor = () => {
+
+export function grandUpFn(functor:Functor, f:AnyFunction, ff:AnyFunction):any {
+  if (!functor.grandChildren) functor.grandChildren =  new Map()
+  functor.grandChildren.set(f, ff)
+  return functor.value[0]
+}
+export const createFunctor = () => {
   const functor = function() {
     if (arguments.length) {
       if (typeof arguments[0] == 'function') {
@@ -71,23 +75,20 @@ export const newAFunctor = () => {
       let v = functor.value
       return v && v.length ? v[0] : undefined
     }
-  } as AFunctor
+  } as Functor
   functor.children = new Set<AnyFunction>()
-  functor.grandChildren = new Map<AnyFunction, AnyFunction>()
-  functor.asEventsListeners = new Map<string, Set<AnyFunction>>()
+  // functor.grandChildren = new Map<AnyFunction, AnyFunction>()
+  // functor.stateListeners = new Map<string, Set<AnyFunction>>()
   functor.value = []
   functor.uid = Math.random()
-  return functor as AFunctor
+  return functor
 }
 
-export type AnyFunction = {
-  (...v: any[]): any
-}
 
-export interface AFunctor {
+export interface Functor {
   children: Set<AnyFunction>
   grandChildren: Map<AnyFunction, AnyFunction>
-  asEventsListeners: Map<string, Set<AnyFunction>>
+  stateListeners: Map<string, Set<AnyFunction>>
   getterFn: any
   wrapperFn: any
   meta: any

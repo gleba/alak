@@ -1,5 +1,6 @@
 import { test } from './ouput.shema'
-import { A } from '../src'
+import { A } from '../packages'
+
 
 test('sugar', ({ ok, end, plan }) => {
   let flow = A()

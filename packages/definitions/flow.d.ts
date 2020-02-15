@@ -1,4 +1,6 @@
-export interface AFlow<T> {
+type ValueReceiver<T extends any> = (...a: T[]) => any
+
+interface AFlow<T> {
   /** get value*/
   v: T
   /** get value*/
@@ -10,11 +12,13 @@ export interface AFlow<T> {
   name: string
   uid: string
   /** add event listener for change async state of data, "await, ready, etc...
-   *@experimental*/
-  on: AboutStateEvents
-  /** remove event listener for change async state of data, "await, ready, etc...
-   * @experimental*/
-  off: AboutStateEvents
+   //  *@experimental*/
+  onAwait: (fn: (isAwaiting: boolean) => void) => void
+  offAwait: (fn: AnyFunction) => void
+  on: OnFlowState
+  // /** remove event listener for change async state of data, "await, ready, etc...
+  //  * @experimental*/
+  off: OnFlowState
   /** check 'from' or 'warp' function are async*/
   isAsync: Boolean
   inAwaiting: Boolean
@@ -95,94 +99,3 @@ export interface AFlow<T> {
   /** get immutable clone of value*/
   injectOnce(targetObject: any, key?: string)
 }
-
-type AboutStateEvents = {
-  (eventName: string, fn: AnyFunction): void
-  [eventName: string]: (fn: AnyFunction) => void
-  /** send true if value are computing in async warp function*/
-  await: (fn: AnyFunction) => void
-  /** send when first fill data value*/
-  ready: (fn: AnyFunction) => void
-}
-type UnpackedPromise<T> = T extends Promise<infer U> ? U : T
-type UnpackedFlow<T> = T extends (...args: any[]) => infer U ? U : T
-type ReturnArrayTypes<T extends any[]> = { [K in keyof T]: UnpackedPromise<UnpackedFlow<T[K]>> }
-type FromHandler<T, A extends any[]> = {
-  (...a: ReturnArrayTypes<A>): T | PromiseLike<T>
-}
-
-type FromFlowFn<T, A extends any[]> = {
-  (fn: FromHandler<T, A>): T
-}
-
-export interface AFlowFrom<T, A extends any[]> {
-  /**
-   * @deprecated Use quantum method
-   */
-  holistic: FromFlowFn<T, A>
-
-  quantum: FromFlowFn<T, A>
-  some: FromFlowFn<T, A>
-  strong: FromFlowFn<T, A>
-  weak: FromFlowFn<T, A>
-}
-
-type AnyFunction = {
-  (...v: any[]): any
-}
-
-export type ValueReceiver<T extends any> = (...a: T[]) => any
-
-export type LogHook = {
-  type: string
-  uid: number | string
-  context: any
-  id?: string
-  value?: any
-}
-
-type MaybeAny<T> = unknown extends T ? any : T
-
-
-/**
- * Фасад
- * @private
- */
-interface Facade {
-  <T>(v?: T): AFlow<MaybeAny<T>>
-  dict: {
-    (v: any): AFlow<{ [s: string]: any }>
-  }
-  any: {
-    (v: any): AFlow<any>
-  }
-  number: AFlow<number>
-  arrayOfNumbers: AFlow<number[]>
-  arrayOfStrings: AFlow<string[]>
-  arrayOfBool: AFlow<boolean[]>
-  bool: AFlow<boolean>
-  arrayOfObject: AFlow<{ [s: string]: any }[]>
-  object: AFlow<{ [s: string]: any }>
-
-  // canLog: boolean
-  // STATE_READY: string
-  // STATE_CLEAR_VALUE: string
-  // STATE_AWAIT: string
-  // STATE_EMPTY: string
-  //
-
-  // enableLogging(): void
-  // log(hook: LogHook): void
-}
-
-/**
- * Конструктор фукнтора потока
- * @example
- * ```
- * const a = A()
- * const b = A(5)
- * @public
- */
-export declare const A: Facade
-export default A
-

@@ -1,5 +1,5 @@
 {
-  "watch": ["src", "scripts"],
+  "watch": ["packages", "scripts", "tests", "tsconfig.json"],
   "ext": "ts",
-  "exec": "node build docs"
+  "exec": "node build dev"
 }

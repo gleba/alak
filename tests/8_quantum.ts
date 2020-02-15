@@ -1,6 +1,5 @@
 import { test } from './ouput.shema'
-import { A } from '../src'
-import { aFromFlows } from '../src/aFrom'
+import { A } from '../packages'
 
 test('quantum', async ({ plan, ok, end, pass, fail, equal }) => {
   let timeout = 7
@@ -20,6 +19,6 @@ test('quantum', async ({ plan, ok, end, pass, fail, equal }) => {
 
   aFlow()
   equal(await qFlow(), 3)
-
+  plan(1)
   end()
 })

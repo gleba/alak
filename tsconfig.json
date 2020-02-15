@@ -1,10 +1,22 @@
 {
   "compilerOptions": {
-    "lib": ["ES2017", "DOM"],
-    "module": "commonjs",
-    "target": "es6",
-    "declaration": false,
-    "outDir": "dist"
+    "baseUrl": ".",
+    "outDir": "dist",
+    "sourceMap": false,
+    "target": "esnext",
+//    "module": "esnext",
+    "moduleResolution": "node",
+    "removeComments": false,
+    "types": ["jest",  "node"],
+    "rootDir": ".",
+    "paths": {
+      "alak": ["packages"]
+    }
   },
-  "exclude": ["node_modules", "tests"]
+  "include": [
+    "packages/definitions/index.d.ts"
+  ],
+  "files": [
+    "packages/definitions/index.d.ts"
+  ]
 }
