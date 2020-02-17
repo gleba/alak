@@ -1,5 +1,5 @@
 import { test } from './ouput.shema'
-import { A } from '../packages'
+import { A } from '../packages/core'
 
 
 test('meta', ({ plan, ok, end, pass, fail }) => {

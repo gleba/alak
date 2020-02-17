@@ -1,5 +1,31 @@
 import { FState, notifyStateListeners } from './state'
-// import { dev } from '../dev/devConst'
+
+
+type AnyFunction = {
+  (...v: any[]): any
+}
+
+export type Functor = {
+  children: Set<AnyFunction>
+  grandChildren: Map<AnyFunction, AnyFunction>
+  stateListeners: Map<string, Set<AnyFunction>>
+  getterFn: any
+  wrapperFn: any
+  meta: any
+  // metaSet: Set<string>
+  metaMap: Map<string, any>
+  proxy: any
+  value: any
+  uid: number
+  id: string
+  flowName: string
+  haveFrom: boolean
+  isAsync: boolean
+  inAwaiting: boolean
+  strongFn: Function
+  (...a: any[]): void
+}
+
 
 export function setFunctorValue(functor: Functor, ...a) {
   if (!functor.children) {
@@ -58,6 +84,7 @@ export function grandUpFn(functor:Functor, f:AnyFunction, ff:AnyFunction):any {
   if (!functor.grandChildren) functor.grandChildren =  new Map()
   functor.grandChildren.set(f, ff)
   return functor.value[0]
+
 }
 export const createFunctor = () => {
   const functor = function() {
@@ -80,28 +107,6 @@ export const createFunctor = () => {
   // functor.grandChildren = new Map<AnyFunction, AnyFunction>()
   // functor.stateListeners = new Map<string, Set<AnyFunction>>()
   functor.value = []
-  functor.uid = Math.random()
+  // functor.uid = Math.random()
   return functor
-}
-
-
-export interface Functor {
-  children: Set<AnyFunction>
-  grandChildren: Map<AnyFunction, AnyFunction>
-  stateListeners: Map<string, Set<AnyFunction>>
-  getterFn: any
-  wrapperFn: any
-  meta: any
-  // metaSet: Set<string>
-  metaMap: Map<string, any>
-  proxy: any
-  value: any
-  uid: number
-  id: string
-  flowName: string
-  haveFrom: boolean
-  isAsync: boolean
-  inAwaiting: boolean
-  strongFn: Function
-  (...a: any[]): void
 }

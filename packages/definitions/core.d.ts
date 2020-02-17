@@ -1,6 +1,6 @@
-type ValueReceiver<T extends any> = (...a: T[]) => any
 
-interface AFlow<T> {
+
+export interface AFlow<T> {
   /** get value*/
   v: T
   /** get value*/
@@ -13,12 +13,12 @@ interface AFlow<T> {
   uid: string
   /** add event listener for change async state of data, "await, ready, etc...
    //  *@experimental*/
-  onAwait: (fn: (isAwaiting: boolean) => void) => void
-  offAwait: (fn: AnyFunction) => void
-  on: OnFlowState
+  onAwait(fn: (isAwaiting: boolean) => void):void
+  offAwait(fn: AnyFunction): void
+  on: FlowStateListner
   // /** remove event listener for change async state of data, "await, ready, etc...
   //  * @experimental*/
-  off: OnFlowState
+  off: FlowStateListner
   /** check 'from' or 'warp' function are async*/
   isAsync: Boolean
   inAwaiting: Boolean
@@ -99,3 +99,39 @@ interface AFlow<T> {
   /** get immutable clone of value*/
   injectOnce(targetObject: any, key?: string)
 }
+
+type UnpackedPromise<T> = T extends Promise<infer U> ? U : T
+type UnpackedFlow<T> = T extends (...args: any[]) => infer U ? U : T
+type ReturnArrayTypes<T extends any[]> = { [K in keyof T]: UnpackedPromise<UnpackedFlow<T[K]>> }
+type FromHandler<T, A extends any[]> = {
+  (...a: ReturnArrayTypes<A>): T | PromiseLike<T>
+}
+type FromFlowFn<T, A extends any[]> = {
+  (fn: FromHandler<T, A>): T
+}
+
+interface AFlowFrom<T, A extends any[]> {
+  /**
+   * {@inheritdoc AFlowFrom}
+   * The base class for all {@link https://en.wikipedia.org/wiki/Widget | widgets}.
+   *
+   * @remarks
+   * Implements the {@link ValueReceiver} interface.  To draw the widget,
+   * call the {@link FromFlowFn | draw() function}.
+   *
+   * @public
+   */
+  quantum: FromFlowFn<T, A>
+  some: FromFlowFn<T, A>
+  strong: FromFlowFn<T, A>
+  weak: FromFlowFn<T, A>
+}
+
+
+type ValueReceiver<T extends any> = (...a: T[]) => any
+
+type FlowStateListner = {
+  (eventName: FlowState, fn: AnyFunction): void
+}
+
+type FlowState = "empty" | "await" | "update" | string

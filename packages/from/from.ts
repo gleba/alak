@@ -1,6 +1,6 @@
 
-import { Functor, setFunctorValue } from './functor'
-import { isPromise } from './utils'
+import { Functor, setFunctorValue } from '../core/functor'
+import { isPromise } from '../core/utils'
 
 export function aFromFlows(functor: Functor, ...flows: AFlow<any>[]) {
   if (functor.haveFrom) {

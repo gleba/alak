@@ -1,5 +1,5 @@
 import { test } from './ouput.shema'
-import { A } from '../packages'
+import { A } from '../packages/core'
 
 
 
@@ -12,6 +12,8 @@ test('base functions', ({ ok, end, fall, plan }) => {
   flow.next(v => fall('next after clear should be never called'))
   flow.clear()
   flow.up(v => fall('up after clear should be never called'))
+  console.log(flow.value)
+
   ok(flow.value == undefined, 'clear')
 
   //next and up
