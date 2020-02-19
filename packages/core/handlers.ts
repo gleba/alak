@@ -1,4 +1,4 @@
-import { Functor, grandUpFn, notifyChildrens, setFunctorValue } from './functor'
+import { Atom, grandUpFn, notifyChildes, setAtomValue } from './atom'
 import {
   addStateEventListener,
   FState,
@@ -6,13 +6,11 @@ import {
   removeStateEventListener,
 } from './state'
 import { alive, deleteParams, nullFilter, someFilter, trueFilter } from './utils'
-import { patternMatch } from '../match/match'
-import { aFromFlows } from '../from/from'
 
 type FlowHadler = {
-  (this: Functor, ...a: any[]): any
+  (this: Atom, ...a: any[]): any
 }
-type FlowHandlers = {
+export type FlowHandlers = {
   [key: string]: FlowHadler
 }
 export const properties: FlowHandlers = {
@@ -31,9 +29,15 @@ export const properties: FlowHandlers = {
   id() {
     return this.id
   },
+  isAsync() {
+    return !!(this.isAsync || this.getterFn || this.wrapperFn || this.strongFn)
+  },
+  inAwaiting() {
+    return this.inAwaiting
+  },
 }
 
-export const handlers: FlowHandlers = {
+export const objectHandlers: FlowHandlers = {
   up(f) {
     this.children.add(f)
     if (this.value && this.value.length) f.apply(this.proxy, this.value)
@@ -45,14 +49,22 @@ export const handlers: FlowHandlers = {
     return this.proxy
   },
   clear() {
+    this.value = []
     this.children.clear()
     this.grandChildren && this.grandChildren.clear()
     this.stateListeners && this.stateListeners.clear()
-    this.value = []
-
     this.haveFrom && delete this.haveFrom
     return this.proxy
   },
+  onAwait(fun) {
+    addStateEventListener(this, FState.AWAIT, fun)
+  },
+  offAwait(fun) {
+    removeStateEventListener(this, FState.AWAIT, fun)
+  },
+}
+
+export const allHandlers: FlowHandlers = {
   clearValue() {
     notifyStateListeners(this, 'empty')
     this.value = []
@@ -64,7 +76,7 @@ export const handlers: FlowHandlers = {
     return this.proxy
   },
   notify() {
-    notifyChildrens(this)
+    notifyChildes(this)
     return this.proxy
   },
   next(f) {
@@ -80,110 +92,84 @@ export const handlers: FlowHandlers = {
       }
       this.children.add(once)
     }
+    return this.proxy
   },
-  is(f) {
-    return v => {
-      if (this.value && this.value.length) {
-        return this.value[0] === v
-      } else {
-        return v === undefined
-      }
+  is(value) {
+    if (this.value && this.value.length) {
+      return this.value[0] === value
+    } else {
+      return value === undefined
     }
   },
   upSome(f) {
-    return f => {
-      let v = grandUpFn(this, f, nullFilter(f))
-      if (alive(v)) f.apply(this.proxy, [v])
-    }
+    let v = grandUpFn(this, f, nullFilter(f))
+    if (alive(v)) f.apply(this.proxy, [v])
+    return this.proxy
   },
   upTrue(f) {
-    return f => {
-      let v = grandUpFn(this, f, trueFilter(f))
-      if (v) f.apply(this.proxy, [v])
-    }
+    let v = grandUpFn(this, f, trueFilter(f))
+    if (v) f.apply(this.proxy, [v])
+    return this.proxy
   },
   upNone(f) {
-    return f => {
-      let v = grandUpFn(this, f, someFilter(f))
-      if (this.value.length && !alive(v)) f.apply(f, [v])
-    }
+    let v = grandUpFn(this, f, someFilter(f))
+    if (this.value.length && !alive(v)) f.apply(f, [v])
+    return this.proxy
   },
   setId(id) {
     this.id = id
+    return this.proxy
   },
   setName(name) {
     this.flowName = name
+    return this.proxy
   },
   apply(context, v) {
     this.bind(context)
-    setFunctorValue(this, v[0])
+    setAtomValue(this, v[0])
   },
   addMeta(metaName, value?) {
     if (!this.metaMap) this.metaMap = new Map<string, any>()
     this.metaMap.set(metaName, value ? value : null)
+    return this.proxy
   },
   hasMeta(metaName) {
     if (!this.metaMap) return false
     return this.metaMap.has(metaName)
   },
-  getMeta(metaName){
+  getMeta(metaName) {
     if (!this.metaMap) return null
     return this.metaMap.get(metaName)
   },
-  onAwait(fn){
-     addStateEventListener(this, FState.AWAIT, fn)
-  }
-}
-
-function fz(functor: Functor, prop: string | number | symbol, receiver: any): any {
-  switch (prop) {
-
-    case 'onAwait':
-      return fn => addStateEventListener(functor, FState.AWAIT, fn)
-    case 'offAwait':
-      return fn => removeStateEventListener(functor, FState.AWAIT, fn)
-    case 'on':
-      return (stateEvent, fn) => addStateEventListener(functor, stateEvent, fn)
-    case 'off':
-      return (stateEvent, fn) => removeStateEventListener(functor, stateEvent, fn)
-
-    //strong
-    case 'useWarp':
-    case 'useGetter':
-      return fn => (functor.getterFn = fn)
-    case 'useWrapper':
-      return fn => (functor.wrapperFn = fn)
-    case 'isAsync':
-      return !!(functor.isAsync || functor.getterFn || functor.wrapperFn || functor.strongFn)
-    case 'inAwaiting':
-      return functor.inAwaiting
-    case 'match':
-      return (...pattern) => {
-        let f = patternMatch(pattern)
-        functor.children.add(f)
-        if (functor.value && functor.value.length) f.apply(f, functor.value)
-      }
-    case 'mutate':
-      return mutatorFn => setFunctorValue(functor, mutatorFn(...functor.value))
-    case 'from':
-      return (...flows) => aFromFlows(functor, ...flows)
-    case 'getImmutable':
-      return () =>
-        functor.value.length >= 1 ? JSON.parse(JSON.stringify(functor.value[0])) : undefined
-    case 'injectOnce':
-      return (o, key) => {
-        if (!key) {
-          key = functor.flowName ? functor.flowName : functor.id ? functor.id : functor.uid
-        }
-        if (!o) throw 'trying inject flow key : ' + key + ' to null object'
-        o[key] = functor.value[0]
-      }
-
-    case 'up':
-      return f => {
-        functor.children.add(f)
-        if (functor.value && functor.value.length) f.apply(functor.proxy, functor.value)
-      }
-  }
-  return false
+  on(stateEvent, fn) {
+    addStateEventListener(this, stateEvent, fn)
+    return this.proxy
+  },
+  off(stateEvent, fn) {
+    removeStateEventListener(this, stateEvent, fn)
+    return this.proxy
+  },
+  useGetter(getterFunction) {
+    this.getterFn = getterFunction
+    return this.proxy
+  },
+  useWrapper(wrapperFunction) {
+    this.wrapperFn = wrapperFunction
+    return this.proxy
+  },
+  mutate(mutatorFn) {
+    setAtomValue(this, mutatorFn(...this.value))
+    return this.proxy
+  },
+  injectOnce(o, key) {
+    if (!key) {
+      key = this.flowName ? this.flowName : this.id ? this.id : this.uid
+    }
+    if (!o) throw 'trying inject flow key : ' + key + ' to null object'
+    o[key] = this.value[0]
+    return this.proxy
+  },
+  getImmutable() {
+    return this.value.length ? JSON.parse(JSON.stringify(this.value[0])) : undefined
+  },
 }

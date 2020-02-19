@@ -1,5 +1,5 @@
 // import { getConnector } from './devTool'
-// import { Functor } from '../core/functor'
+// import { Atom } from '../core/atom'
 // // import { LogHook } from '../definitions'
 //
 // // value: any
@@ -16,7 +16,7 @@
 //     // console.log(h, "hook")
 //     this.post('/', { sid: this.sid, ...h })
 //   },
-//   updatingStarted(flow: Functor, context) {
+//   updatingStarted(flow: Atom, context) {
 //     let duration = Date.now()
 //     let uid = flow.uid
 //     this.flows[uid] = { uid, context, duration }

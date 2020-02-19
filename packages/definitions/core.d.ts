@@ -1,6 +1,6 @@
 
 
-export interface AFlow<T> {
+interface AFlow<T> {
   /** get value*/
   v: T
   /** get value*/
@@ -85,13 +85,13 @@ export interface AFlow<T> {
   useWrapper(fn: (newValue: T, prevValue: T) => T | Promise<T>): void
 
   /** pattern matching see examples https://github.com/gleba/alak/blob/master/tests/3_pattern_maching.ts*/
-  match(...pattern: any[]): any
+
 
   /** function that takes values and returns a new value for flow*/
   mutate(mutator: (v: T) => T): void
 
   /** mutate computed value from multi flow https://github.com/gleba/alak/blob/master/tests/2_mutate_from.ts*/
-  from<A extends AFlow<any>[]>(...a: A): AFlowFrom<T, A>
+
 
   /** get immutable clone of value*/
   getImmutable(): T
@@ -100,32 +100,7 @@ export interface AFlow<T> {
   injectOnce(targetObject: any, key?: string)
 }
 
-type UnpackedPromise<T> = T extends Promise<infer U> ? U : T
-type UnpackedFlow<T> = T extends (...args: any[]) => infer U ? U : T
-type ReturnArrayTypes<T extends any[]> = { [K in keyof T]: UnpackedPromise<UnpackedFlow<T[K]>> }
-type FromHandler<T, A extends any[]> = {
-  (...a: ReturnArrayTypes<A>): T | PromiseLike<T>
-}
-type FromFlowFn<T, A extends any[]> = {
-  (fn: FromHandler<T, A>): T
-}
 
-interface AFlowFrom<T, A extends any[]> {
-  /**
-   * {@inheritdoc AFlowFrom}
-   * The base class for all {@link https://en.wikipedia.org/wiki/Widget | widgets}.
-   *
-   * @remarks
-   * Implements the {@link ValueReceiver} interface.  To draw the widget,
-   * call the {@link FromFlowFn | draw() function}.
-   *
-   * @public
-   */
-  quantum: FromFlowFn<T, A>
-  some: FromFlowFn<T, A>
-  strong: FromFlowFn<T, A>
-  weak: FromFlowFn<T, A>
-}
 
 
 type ValueReceiver<T extends any> = (...a: T[]) => any

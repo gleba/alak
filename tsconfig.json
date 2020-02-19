@@ -10,11 +10,5 @@
     "paths": {
       "alak": ["packages"]
     }
-  },
-  "include": [
-    "packages/definitions/global.d.ts"
-  ],
-  "files": [
-    "packages/definitions/global.d.ts"
-  ]
+  }
 }

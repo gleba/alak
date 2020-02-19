@@ -40,7 +40,7 @@ async function extractApi(name) {
   prepare(cwd)
   const config = readJSONSync(path.join(homeDir, 'scripts', cfgFile))
   const outFilePath = `../input/${name}.api.json`
-  config.mainEntryPointFilePath = `../../packages/definitions/${name}.d.ts`
+  config.mainEntryPointFilePath = `../../lib/${name}/index.d.ts`
   config.docModel.apiJsonFilePath = outFilePath
   writeJSONSync(path.join(cwd, cfgFile), config)
   log0(`extract ${name} api..`)
@@ -59,17 +59,17 @@ async function extractApi(name) {
 }
 
 async function make() {
-  await Promise.all([checkModule(extractor), checkModule(documenter)])
+  await Promise.all([checkModule(extractor), checkModule(documenter), tsc()])
   info('extract api...')
   prepare(workDir)
 
-  await Promise.all([extractApi('core'), extractApi('entry')])
+  await Promise.all([extractApi('core'), extractApi('facade')])
   info('making documentation...')
   await executeCommand(`node ../${getModuleStartPath(documenter)} markdown`, workDir)
   log0('cleaning working directory')
   rm('docs')
   renameSync(path.resolve(workDir, 'markdown'), 'docs')
-  // rm(workDir)
+  rm(workDir)
   info('documentation ready')
 }
 make()

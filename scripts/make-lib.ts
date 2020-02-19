@@ -22,7 +22,7 @@ export const tsc = async () => {
   delete tsconfig.include
   writeFileSync(tsconfigPath, JSON.stringify(tsconfig))
   await executeCommand(
-    `node ${path.resolve('node_modules/typescript/lib/tsc')} --outDir ../lib`,
+    `node ${path.resolve('node_modules/typescript/lib/tsc')} -d --outDir ../lib`,
     path.resolve('packages'),
   )
   rm(tsconfigPath)
