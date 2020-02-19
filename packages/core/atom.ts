@@ -110,5 +110,5 @@ export const createAtom = (...a) => {
   if (a.length) {
     atom(...a)
   }
-  return atom
+  return atom as any
 }

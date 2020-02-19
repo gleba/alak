@@ -9,7 +9,7 @@ import {
 } from 'fs-extra'
 import * as path from 'path'
 import { exec, execSync, fork } from 'child_process'
-import { mkdirSync, readdirSync, renameSync, rmdirSync } from 'fs'
+import { mkdirSync, readdirSync, renameSync, rmdirSync, unlinkSync } from 'fs'
 import { info, log0, rm, prepare, executeCommand } from './helpers'
 import { tsc } from './make-lib'
 const chalk = require('chalk')
@@ -65,11 +65,15 @@ async function make() {
 
   await Promise.all([extractApi('core'), extractApi('facade')])
   info('making documentation...')
-  await executeCommand(`node ../${getModuleStartPath(documenter)} markdown`, workDir)
+  await Promise.all([
+    executeCommand(`node ../${getModuleStartPath(documenter)} markdown`, workDir),
+    executeCommand(`node ../${getModuleStartPath(documenter)} yaml`, workDir),
+    ])
   log0('cleaning working directory')
-  rm('docs')
-  renameSync(path.resolve(workDir, 'markdown'), 'docs')
-  rm(workDir)
-  info('documentation ready')
+  readdirSync('docs').forEach(f=>unlinkSync(path.join('docs',f)))
+  const markDir = path.resolve(workDir, 'markdown')
+  readdirSync(markDir).forEach(f=>renameSync(path.join(markDir, f), path.join('docs',f)))
+  // rm(workDir)
+  // info('documentation ready')
 }
 make()

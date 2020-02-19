@@ -11,10 +11,6 @@ interface AFlow<T> {
   id: string
   name: string
   uid: string
-  /** add event listener for change async state of data, "await, ready, etc...
-   //  *@experimental*/
-  onAwait(fn: (isAwaiting: boolean) => void):void
-  offAwait(fn: AnyFunction): void
   on: FlowStateListner
   // /** remove event listener for change async state of data, "await, ready, etc...
   //  * @experimental*/
@@ -23,6 +19,10 @@ interface AFlow<T> {
   isAsync: Boolean
   inAwaiting: Boolean
 
+  /** add event listener for change async state of data, "await, ready, etc...
+   //  *@experimental*/
+  onAwait(fn: (isAwaiting: boolean) => void):void
+  offAwait(fn: AnyFunction): void
   /** unsubscribe all listeners*/
   clear(): void
 

@@ -1,13 +1,26 @@
-import A, { createObjectFlow, ObjectFlow } from '../packages/core'
+import A, { createObjectFlow, createProxyFlow, ObjectFlow } from '../packages/core'
 
-
-const flow = A()
 
 
 import './benchmark'
 
 
-const fow = createObjectFlow<number>()
+function getV() {
+  return 1//new Promise(done=>done(1))
+}
 
-const n = fow(56)
+function xx(a) {
+
+  return a as ReturnType<typeof getV>
+}
+const x = xx(getV)
+
+
+const flow = createProxyFlow(1)
+
+
+flow.on
+flow.once(s=>s)
+
+
 
