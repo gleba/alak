@@ -1,21 +1,29 @@
-import { createObjectFlow, createProxyFlow, installExtension } from '../core/create'
-// import { AFlowFrom, fromFlows } from '../from/from'
+
 import { patternMatch } from '../match/match'
-import { ProxyFlow } from '../core'
+import { installExtension } from '../core/create'
+import { AC } from '../core'
+
 
 installExtension({
   handlers: {
-    // from: fromFlows,
     match: patternMatch,
-  }
+  },
 })
 
-export interface AFlow<T> extends ProxyFlow <T> {
-  // from<A extends AFlow<A>[]>(...a: A): AFlowFrom<T, A>
-  match(...pattern: any[]): AFlow<T>
-}
+// // @ts-ignore
+// declare module 'alak/lib/core' {
+//   interface ProxyFlow<T> {
+//     match(...pattern: any[]): ProxyFlow<T>
+//   }
+// }
 
-export const A = createProxyFlow
 
+export const A = Object.assign(AC, {
+  getter(getter){
+    const flow = AC.proxy()
+    flow.useGetter(getter)
+    return flow
+  }
+})
 
 export default A

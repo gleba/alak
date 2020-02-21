@@ -1,17 +1,18 @@
-import { createAtom, Atom } from './atom'
-import { allHandlers, objectHandlers, FlowHandlers, properties } from './handlers'
-import { ObjectFlow, ProxyFlow } from './index'
+import { createAtom } from './atom'
+import { allHandlers, objectHandlers,  properties } from './handlers'
+import { Atom, ObjectFlow, ProxyFlow } from './index'
 
 const handlers = Object.assign(objectHandlers, allHandlers)
 
-export type ExtensionHandlers = {
-  handlers?: FlowHandlers
-  properties?: FlowHandlers
-}
 
-export function installExtension(props: ExtensionHandlers) {
-  props.handlers && Object.assign(handlers, props.handlers)
-  props.properties && Object.assign(properties, props.properties)
+
+/**
+ * Установить расширения атома
+ * @param options - {@link ExtensionOptions}
+ */
+export function installExtension(options) {
+  options.handlers && Object.assign(handlers, options.handlers)
+  options.properties && Object.assign(properties, options.properties)
 }
 
 function get(atom: Atom, prop: string, receiver: any): any {
@@ -25,14 +26,7 @@ export const proxyHandler: ProxyHandler<Atom> = { get }
 
 type MaybeAny<T> = unknown extends T ? any : T
 
-/**
- * Создать {@link ObjectFlow} - контейнер потока
- * @remarks
- * Минимальные функции, максимальная скорость доставки, за счёт увеличения потребления памяти.
- * Используйте {@link ObjectFlow}, когда нет возможности использовать {@link ProxyFlow}.
- * @param value - необязательное стартовое значние
- * @returns {@link ObjectFlow}
- */
+
 export function createObjectFlow<T>(value?: T): ObjectFlow<MaybeAny<T>> {
   const atom = createAtom(...arguments)
   const flow = Object.assign(atom, objectHandlers)

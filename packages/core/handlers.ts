@@ -1,4 +1,4 @@
-import { Atom, grandUpFn, notifyChildes, setAtomValue } from './atom'
+import {  grandUpFn, notifyChildes, setAtomValue } from './atom'
 import {
   addStateEventListener,
   FState,
@@ -6,13 +6,8 @@ import {
   removeStateEventListener,
 } from './state'
 import { alive, deleteParams, nullFilter, someFilter, trueFilter } from './utils'
+import { FlowHandlers } from './index'
 
-type FlowHadler = {
-  (this: Atom, ...a: any[]): any
-}
-export type FlowHandlers = {
-  [key: string]: FlowHadler
-}
 export const properties: FlowHandlers = {
   value() {
     return this.value.length ? this.value[0] : undefined
@@ -56,11 +51,10 @@ export const objectHandlers: FlowHandlers = {
     this.haveFrom && delete this.haveFrom
     return this.proxy
   },
-  onAwait(fun) {
-    addStateEventListener(this, FState.AWAIT, fun)
-  },
-  offAwait(fun) {
-    removeStateEventListener(this, FState.AWAIT, fun)
+  close() {
+    this.children.clear()
+    deleteParams(this)
+    return this.proxy
   },
 }
 
@@ -70,10 +64,11 @@ export const allHandlers: FlowHandlers = {
     this.value = []
     return this.proxy
   },
-  close() {
-    this.children.clear()
-    deleteParams(this)
-    return this.proxy
+  onAwait(fun) {
+    addStateEventListener(this, FState.AWAIT, fun)
+  },
+  offAwait(fun) {
+    removeStateEventListener(this, FState.AWAIT, fun)
   },
   notify() {
     notifyChildes(this)
@@ -157,8 +152,8 @@ export const allHandlers: FlowHandlers = {
     this.wrapperFn = wrapperFunction
     return this.proxy
   },
-  mutate(mutatorFn) {
-    setAtomValue(this, mutatorFn(...this.value))
+  fmap(fun) {
+    setAtomValue(this, fun(...this.value))
     return this.proxy
   },
   injectOnce(o, key) {
@@ -169,7 +164,7 @@ export const allHandlers: FlowHandlers = {
     o[key] = this.value[0]
     return this.proxy
   },
-  getImmutable() {
+  cloneValue() {
     return this.value.length ? JSON.parse(JSON.stringify(this.value[0])) : undefined
   },
 }

@@ -1,30 +1,12 @@
 import { FState, notifyStateListeners } from './state'
+import { Atom } from './index'
 
 
 type AnyFunction = {
   (...v: any[]): any
 }
 
-export type Atom = {
-  children: Set<AnyFunction>
-  grandChildren: Map<AnyFunction, AnyFunction>
-  stateListeners: Map<string, Set<AnyFunction>>
-  getterFn: any
-  wrapperFn: any
-  meta: any
-  // metaSet: Set<string>
-  metaMap: Map<string, any>
-  proxy: any
-  value: any
-  uid: number
-  id: string
-  flowName: string
-  haveFrom: boolean
-  isAsync: boolean
-  inAwaiting: boolean
-  strongFn: Function
-  (...a: any[]): void
-}
+
 
 
 export function setAtomValue(atom: Atom, ...a) {

@@ -70,10 +70,11 @@ async function make() {
     executeCommand(`node ../${getModuleStartPath(documenter)} yaml`, workDir),
     ])
   log0('cleaning working directory')
-  readdirSync('docs').forEach(f=>unlinkSync(path.join('docs',f)))
+  if (!existsSync('docs')) mkdirSync('docs')
+  else readdirSync('docs').forEach(f=>unlinkSync(path.join('docs',f)))
   const markDir = path.resolve(workDir, 'markdown')
   readdirSync(markDir).forEach(f=>renameSync(path.join(markDir, f), path.join('docs',f)))
-  // rm(workDir)
-  // info('documentation ready')
+  rm(workDir)
+  info('documentation ready')
 }
 make()

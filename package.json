@@ -1,12 +1,9 @@
 {
   "name": "alak",
-  "version": "1.0.33",
-  "description": "Alak functor, the data flow library.",
-  "main": "lib/core/index.js",
-  "typings": "lib/index.d.ts",
-  "typescript": {
-    "definition": "index.d.ts"
-  },
+  "version": "1.1.1-alpha.3",
+  "description": "Alak reactive",
+  "main": "./lib/facade/index.js",
+  "typings": "./lib/facade/index.d.ts",
   "files": [
     "/lib"
   ],
@@ -32,18 +29,14 @@
     "@microsoft/api-extractor": "^7.7.8",
     "@types/core-js": "^2.5.0",
     "@types/node": "^12.6.8",
+    "chalk": "^3.0.0",
     "fs-extra": "^8.1.0",
     "husky": "^3.1.0",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
-    "socket.io-client": "^2.3.0",
     "tape": "^4.8.0",
     "ts-node": "^8.0.2",
     "typescript": "^3.4.4"
   },
-  "dependencies": {
-    "exectimer": "^2.2.2",
-    "flyd": "^0.2.8",
-    "minify-all": "^1.2.2"
-  }
+  "dependencies": {}
 }

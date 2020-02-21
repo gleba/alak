@@ -18,8 +18,12 @@ const x = xx(getV)
 
 const flow = createProxyFlow(1)
 
+const fo = createObjectFlow(0)
 
-flow.on
+
+flow.once(value => {
+
+})
 flow.once(s=>s)
 
 
