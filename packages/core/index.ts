@@ -1,5 +1,13 @@
-import { createObjectFlow, createProxyFlow } from './create'
+/**
+ * Ядро атома
+ * @remarks
+ *
+ *
+ * @packageDocumentation
+ */
 
+
+import { createObjectFlow, createProxyFlow } from './create'
 /**
  * Опции расширения
  * @remarks
@@ -10,10 +18,11 @@ export type ExtensionOptions = {
   properties?: FlowHandlers
 }
 
-/*обработчик потока*/
+/** Функция с контекстом {@link Atom | атома}*/
 export type FlowHandler = {
   (this: Atom, ...a: any[]): any
 }
+/** Объект с обработчиками {@link FlowHandler}*/
 export type FlowHandlers = {
   [key: string]: FlowHandler
 }
@@ -27,7 +36,6 @@ export const AC: AtomCreator = Object.assign(createProxyFlow, {
 })
 /** Функция-контейнер*/
 export type Atom = {
-  /** функции слушатели обновления значения */
   children: Set<AnyFunction>
   grandChildren: Map<AnyFunction, AnyFunction>
   stateListeners: Map<string, Set<AnyFunction>>
@@ -42,15 +50,20 @@ export type Atom = {
   id?: string
   flowName?: string
   haveFrom?: boolean
+  strongFn?: Function
   isAsync?: boolean
   inAwaiting?: boolean
-  strongFn?: Function
   (...a: any[]): void
 }
+
+
+export type MaybeAny<T> = unknown extends T ? any : T
 /**
- * Интерфейс создания атома
+ * Создание атома как контейнер потока
  */
 export interface AtomCreator {
+  /* Создать {@link ProxyFlow} - прокси контейнера потока*/
+  <T>(value?:T):ProxyFlow<MaybeAny<T>>
   /**
    * Создать {@link ProxyFlow} - прокси контейнера потока
    * @remarks
@@ -58,7 +71,7 @@ export interface AtomCreator {
    * @param value - необязательное стартовое значение, может быть асинхронной функцией возвращающей значение
    * @returns {@link ProxyFlow}
    */
-  proxy()
+  proxy<T>(value?:T):ProxyFlow<MaybeAny<T>>
   /**
    * Создать {@link ObjectFlow} - контейнер потока
    * @remarks
@@ -67,7 +80,7 @@ export interface AtomCreator {
    * @param value - необязательное стартовое значние
    * @returns {@link ObjectFlow}
    */
-  object()
+  object<T>(value?:T):ObjectFlow<MaybeAny<T>>
 }
 
 type ValueReceiver<T extends any> = (value: T) => void
