@@ -1,6 +1,6 @@
 import { createAtom } from './atom'
 import { allHandlers, objectHandlers,  properties } from './handlers'
-import { Atom, ObjectFlow, ProxyFlow } from './index'
+import { Atom, ObjectFlow, AFlow } from './index'
 
 const handlers = Object.assign(objectHandlers, allHandlers)
 

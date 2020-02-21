@@ -1,6 +1,6 @@
 import { patternMatch } from '../match/match'
 import { installExtension } from '../core/create'
-import { AC, MaybeAny, ProxyFlow } from '../core'
+import { AC, MaybeAny, AFlow } from '../core'
 import { fromFlows, FlowFrom } from '../from/from'
 
 installExtension({
@@ -12,22 +12,16 @@ installExtension({
 
 // @ts-ignore
 declare module 'alak/lib/core' {
-  interface ProxyFlow<T> {
-    match(...pattern: any[]): ProxyFlow<T>
-    from<A extends ProxyFlow<any>[]>(...a: A): FlowFrom<T, A>
+  interface AFlow<T> {
+    match(...pattern: any[]): AFlow<T>
+    from<A extends AFlow<any>[]>(...a: A): FlowFrom<T, A>
   }
 }
-
-export interface AFlow<T> extends ProxyFlow<T> {
-  match(...pattern: any[]): AFlow<T>
-  from<A extends ProxyFlow<any>[]>(...a: A): FlowFrom<T, A>
-}
-
 //**
 export interface AFacade {
-  <T>(value?: T): ProxyFlow<MaybeAny<T>>
+  <T>(value?: T): AFlow<MaybeAny<T>>
 
-  getter<T>(fun:()=>T):ProxyFlow<T>
+  getter<T>(fun:()=>T):AFlow<T>
 }
 
 export const A = Object.assign(AC, {
@@ -39,3 +33,6 @@ export const A = Object.assign(AC, {
 }) as any as AFacade
 
 export default A
+
+
+export {AFlow} from "../core"

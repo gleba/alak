@@ -1,6 +1,6 @@
 import { setAtomValue } from '../core/atom'
 import { isPromise } from '../core/utils'
-import { Atom, ProxyFlow } from '../core'
+import { Atom, AFlow } from '../core'
 
 
 type UnpackedPromise<T> = T extends Promise<infer U> ? U : T
@@ -31,7 +31,7 @@ export interface FlowFrom<T, A extends any[]> {
 }
 
 
-export function fromFlows(atom: Atom, ...flows: ProxyFlow<any>[]) {
+export function fromFlows(atom: Atom, ...flows: AFlow<any>[]) {
   if (atom.haveFrom) {
     throw `atom ${
       atom.id ? atom.id : ''
@@ -44,7 +44,7 @@ export function fromFlows(atom: Atom, ...flows: ProxyFlow<any>[]) {
     while (someoneIsWaiting.length) someoneIsWaiting.pop()(v)
   }
   const makeMix = mixFn => {
-    const inAwaiting: ProxyFlow<any>[] = []
+    const inAwaiting: AFlow<any>[] = []
     let values = flows.map(flow => {
       if (flow.inAwaiting) {
         inAwaiting.push(flow)
