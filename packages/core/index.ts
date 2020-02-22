@@ -1,5 +1,14 @@
 /**
  * Ядро атома
+ * @remarks
+ * Атом - это функция-контейнер, предназначенная для множественной доставки значения контейнера
+ * в дочерние функции-получатели.
+ *
+ * - Передача значения в функцию-атом установит значение контейнера и
+ * доставит значение в функции-получатели.
+ *
+ * - Вызов функции-атома без аргументов - вернёт текущее
+ * значение контейнера если оно есть.
  * @packageDocumentation
  */
 
@@ -9,7 +18,6 @@ import { createObjectAtom, createProxyFlow } from './create'
  * @remarks
  * Содержит параметры расширения для методов и свойств атома.
  * Доступ к атому из {@link FlowHandler| функций обработчиков}  происходит через контекст `this`.
-
  */
 export interface ExtensionOptions {
   /** {@link FlowHandlers | обработчики методов атома}
@@ -69,33 +77,32 @@ type AnyFunction = {
 export type MaybeAny<T> = unknown extends T ? any : T
 
 /**
- * Создание атома и прокси-атома
+ * Создание прокси-атома и атома
  * @example
  * ```javascript
  * const flow = AC() // сокращённая запись AC.proxy()
  * ```
  */
 export interface AtomCreator {
-  /** Создать {@link ProxyAtom} с опциональным аргументом как стартовое значение*/
+  /** Создать {@link ProxyAtom} с необязательным аргументом как стартовое значение*/
   <T>(value?: T): ProxyAtom<MaybeAny<T>>
   /**
-   * Создать {@link ProxyAtom} с опциональным аргументом как стартовое значение
+   * Создать {@link ProxyAtom} с необязательным аргументом как стартовое значение
    * @remarks
-   * Базовые функции, максимальная скорость создания, минимальное потребление памяти.
-   * @param value - необязательное стартовое значение, может быть асинхронной функцией возвращающей значение
+   * Максимальные функции, максимальная скорость создания, минимальное потребление памяти.
+   * @param value - необязательное стартовое значение
    * @returns {@link ProxyAtom}
    * @readonly
    */
-  object<T>(value?: T): ProxyAtom<MaybeAny<T>>
+  proxy<T>(value?: T): ProxyAtom<MaybeAny<T>>
   /**
-   * Создать {@link ObjectAtom} - контейнер потока
+   * Создать {@link ObjectAtom} с необязательным аргументом как стартовое значение
    * @remarks
-   * Минимальные функции, максимальная скорость доставки, за счёт увеличения потребления памяти.
-   * Используйте {@link ObjectAtom}, когда нет возможности использовать {@link ProxyAtom}.
-   * @param value - необязательное стартовое значние
+   * Минимальные функции, максимальная скорость доставки значения за счёт увеличения потребления памяти.
+   * @param value - необязательное стартовое значение
    * @returns {@link ObjectAtom}
    */
-  proxy<T>(value?: T): ObjectAtom<MaybeAny<T>>
+  object<T>(value?: T): ObjectAtom<MaybeAny<T>>
 }
 
 type ValueReceiver<T extends any> = (v: T) => void
@@ -107,11 +114,11 @@ type ValueReceiver<T extends any> = (v: T) => void
  */
 export declare interface ObjectAtom<T> {
   /**
-   * Вызов функции потока без аргументов вернёт текущее значение контейнера
+   * Вернуть текущее значение контейнера
    */
   (): Promise<T> | T
   /**
-   * Доставить значение всем дочерним слушателям потока и установить новое значение в контейнер.
+   * Доставить значение всем дочерним слушателям и установить новое значение в контейнер.
    * @param value устанавливаемое значние
    */
   (value?: T): T
@@ -128,17 +135,14 @@ export declare interface ObjectAtom<T> {
 
 /** Контейнер прокси-атома
  * @remarks
- * Прокси поток - является функцией-контейнером
- * аргумент которой устанавливает значение контейнера
- * и передаёт значение всем функциям-слушателям.
- * Вызов функции без аргументов - вернёт значение контейнера.
+ * Прокси-атом, расширяет функцию-контейнер атом.
  */
 export interface ProxyAtom<T> {
   /** Доставить значение всем дочерним слушателям и установить новое значение в контейнер.*/
   (value?: T, ...auxiliaryValues): void
 
   /**
-   * Вызов функции без аргументов вернёт текущее значение контейнера
+   * Вернуть текущее значение контейнера
    */
   (): Promise<T> | T
 
@@ -148,12 +152,12 @@ export interface ProxyAtom<T> {
   readonly value: T
   /** Вернёт `true` при отсутствующем значении в контейнере*/
   readonly isEmpty: boolean
-  /** Идентификатор потока, вернёт `uid` если не был задан {@link ProxyAtom.setId}*/
+  /** Идентификатор, вернёт `uid` если не был задан {@link ProxyAtom.setId}*/
   readonly id: string
-  /** Имя потока, заданное {@link ProxyAtom.setName} */
+  /** Имя заданное {@link ProxyAtom.setName} */
   readonly name: string
 
-  /** Уникальный идентификатор потока, генерируется при создании.*/
+  /** Уникальный идентификатор генерируется при создании.*/
   readonly uid: string
   // on: FlowStateListner
   // /** remove event listener for change async state of data, "await, ready, etc...
@@ -162,7 +166,7 @@ export interface ProxyAtom<T> {
   /** check 'from' or 'warp' function are async*/
   /** Является ли уставленный добытчик {@link ProxyAtom.useGetter} асинхронным */
   readonly isAsync: Boolean
-  /** Находится ли поток в процессе получения значения от асинхронного добытчика
+  /** Находится ли атом в процессе получения значения от асинхронного добытчика
    * {@link ProxyAtom.useGetter}*/
   readonly inAwaiting: Boolean
 
@@ -225,19 +229,19 @@ export interface ProxyAtom<T> {
    * @returns {@link core#ProxyAtom} */
   clearValue(): ProxyAtom<T>
 
-  /** Закрыть поток, удалить все свойства {@link core#ProxyAtom}*/
+  /** Закрыть и удалить все свойства {@link core#ProxyAtom}*/
   close(): void
 
   /** Повторно отправить значение всем функциям-получателям
    * @returns {@link ProxyAtom} */
   resend(): ProxyAtom<T>
 
-  /** Установить идентификатор потока
+  /** Установить идентификатор
    * @param id - идентификатор
    * @returns {@link ProxyAtom} */
   setId(id: string): ProxyAtom<T>
 
-  /** Установить имя потока
+  /** Установить имя
    * @param name - имя
    * @returns {@link ProxyAtom} */
   setName(name: string): ProxyAtom<T>
@@ -260,19 +264,21 @@ export interface ProxyAtom<T> {
 
   /** Использовать функцию-добытчик значения контейнера
    * @remarks
-   * Функция-добытчик вызывается каждый раз при вызове функции-потока
+   * Функция-добытчик вызывается каждый раз при вызове функции-атома
    * @param getter - функция-добытчик
    * @returns {@link ProxyAtom} */
   useGetter(getter: () => T | Promise<T>): ProxyAtom<T>
 
   /** Использовать функцию-обёртку
-   * Каждое значение переданное в функцию-потока, обновление контейнера, перед
+   * Каждое новое обновление значение контейнера атома,
+   * всегда будет проходить сперва через функцию-обёртку
    * @param wrapper
    * @returns {@link ProxyAtom} */
   useWrapper(wrapper: (newValue: T, prevValue: T) => T | Promise<T>): ProxyAtom<T>
 
   /** Применить функцию к значению в контейнере
-   * @param fun - функция принимающая текушее значение и возвращающей новое зачение в поток
+   * @param fun - функция принимающая текущее значение и возвращающей
+   * новое значение в контейнер и дочерним функциям-получателям
    * @returns {@link ProxyAtom} */
   fmap(fun: (v: T) => T): ProxyAtom<T>
 
