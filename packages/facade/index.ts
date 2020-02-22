@@ -1,7 +1,16 @@
-import { patternMatch } from '../match/match'
+/**
+ * Корневой модуль библиотеки.
+ * @remarks
+ * Сборка всех частей библиотеки в {@link AConstant| A} константе.
+ * Импорт модуля устанавливает модули: `computed`, `matching`.
+ * @public
+ * @packageDocumentation
+ */
+
+import { patternMatch } from '../ext-matching'
 import { installExtension } from '../core/create'
-import { AC, MaybeAny, AFlow } from '../core'
-import { fromFlows, FlowFrom } from '../from/from'
+import { AC, MaybeAny, ProxyAtom, AtomCreator } from '../core'
+import { fromFlows, ComputeStrategy } from '../ext-computed'
 
 installExtension({
   handlers: {
@@ -12,27 +21,38 @@ installExtension({
 
 // @ts-ignore
 declare module 'alak/lib/core' {
-  interface AFlow<T> {
-    match(...pattern: any[]): AFlow<T>
-    from<A extends AFlow<any>[]>(...a: A): FlowFrom<T, A>
+  interface ProxyAtom<T> {
+    match(...pattern: any[]): ProxyAtom<T>
+    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
   }
 }
-//**
-export interface AFacade {
-  <T>(value?: T): AFlow<MaybeAny<T>>
+/** Конструктор атома
+ * @remarks
+ * Функция-константа, расширяет {@link core#AtomCreator}
+ * @example
+ * ```javascript
+ * const flow = A() // сокращённая запись A.proxy()
+ * ```
+ * */
+export interface AConstant extends AtomCreator{
+  <T>(value?: T): ProxyAtom<MaybeAny<T>>
 
-  getter<T>(fun:()=>T):AFlow<T>
+  /**
+   * Создать атом
+   * @param fun
+   */
+  getter<T>(fun:()=>T):ProxyAtom<T>
 }
-
+/**{@link AConstant}*/
 export const A = Object.assign(AC, {
   getter(getterFun){
     const flow = AC.proxy()
     flow.useGetter(getterFun)
     return flow
   },
-}) as any as AFacade
+}) as any as AConstant
 
 export default A
 
 
-export {AFlow} from "../core"
+export {ProxyAtom} from "../core"

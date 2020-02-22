@@ -1,6 +1,6 @@
 import { createAtom } from './atom'
 import { allHandlers, objectHandlers,  properties } from './handlers'
-import { Atom, ObjectFlow, AFlow } from './index'
+import { Atom, ObjectAtom, ProxyAtom } from './index'
 
 const handlers = Object.assign(objectHandlers, allHandlers)
 
@@ -26,7 +26,7 @@ export const proxyHandler: ProxyHandler<Atom> = { get }
 
 
 
-export function createObjectFlow<T>(value?: T) {
+export function createObjectAtom<T>(value?: T) {
   const atom = createAtom(...arguments)
   const flow = Object.assign(atom, objectHandlers)
   atom.proxy = flow

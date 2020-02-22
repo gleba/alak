@@ -63,7 +63,12 @@ async function make() {
   info('extract api...')
   prepare(workDir)
 
-  await Promise.all([extractApi('core'), extractApi('facade')])
+  await Promise.all([
+    extractApi('core'),
+    extractApi('facade'),
+    extractApi('ext-matching'),
+    extractApi('ext-computed'),
+  ])
   info('making documentation...')
   await Promise.all([
     executeCommand(`node ../${getModuleStartPath(documenter)} markdown`, workDir),
