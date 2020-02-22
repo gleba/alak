@@ -1,10 +1,5 @@
-import {  grandUpFn, notifyChildes, setAtomValue } from './atom'
-import {
-  addStateEventListener,
-  FState,
-  notifyStateListeners,
-  removeStateEventListener,
-} from './state'
+import { grandUpFn, notifyChildes, setAtomValue } from './atom'
+import { addStateEventListener, FState, notifyStateListeners, removeStateEventListener } from './state'
 import { alive, deleteParams, nullFilter, someFilter, trueFilter } from './utils'
 import { FlowHandlers } from './index'
 

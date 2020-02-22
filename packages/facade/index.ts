@@ -8,17 +8,10 @@
  * @packageDocumentation
  */
 
-import { patternMatch } from '../ext-matching'
-import { installExtension } from '../core/create'
-import { AC, MaybeAny, ProxyAtom, AtomCreator } from '../core'
-import { fromFlows, ComputeStrategy, ComputeStrategicAtom } from '../ext-computed'
+import { AC, AtomCreator, MaybeAny, ProxyAtom } from '../core'
+import { ComputeStrategicAtom, ComputeStrategy, installComputedExtension } from '../ext-computed'
 
-installExtension({
-  handlers: {
-    match: patternMatch,
-    from: fromFlows,
-  },
-})
+installComputedExtension()
 
 // @ts-ignore
 declare module 'alak/lib/core' {
