@@ -1,9 +1,29 @@
+import { ComputeStrategy, fromFlows } from '../ext-computed'
+import A from '../facade'
+import { installExtension } from '../core'
+
 /**
  * Расширение паттерн-матчинга
  * @remarks
  * @public
  * @packageDocumentation
  */
+
+
+// @ts-ignore
+declare module 'alak/core' {
+  interface ProxyAtom<T> {
+    match(...pattern: any[]): ProxyAtom<T>
+  }
+}
+
+function installMatchingExtension(){
+  installExtension({
+    handlers: {
+      match,
+    },
+  })
+}
 
 function isFunction(functionToCheck) {
   return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
@@ -43,18 +63,13 @@ function parsePattern(pattern) {
   return o
 }
 
-export function patternMatch(arg) {
+export function match(arg) {
   let a = arg
   if (a.length >= 2) {
     let pattern = parsePattern(a)
-    // console.log(p)
 
     return (...value) => {
       let v = value[0]
-      // if (value.length>1 ) {
-      //   console.warn("multiple newFlow argument not support in current pattern matching, use multiple argument match((a,b,x)=>[pattern]")
-      //   // return
-      // }
       let matchFn
       if (pattern.map.has(v)) {
         matchFn = pattern.map.get(v)

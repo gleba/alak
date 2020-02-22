@@ -42,6 +42,13 @@ export function installComputedExtension(){
     },
   })
 }
+// @ts-ignore
+declare module 'alak/core' {
+  interface ProxyAtom<T> {
+    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
+  }
+}
+
 
 type UnpackedPromise<T> = T extends Promise<infer U> ? U : T
 type UnpackedFlow<T> = T extends (...args: any[]) => infer U ? U : T
@@ -54,12 +61,6 @@ type ComputedIn<T, IN extends any[]> = {
   (fn: FunComputeIn<T, IN>): T
 }
 
-// @ts-ignore
-declare module 'alak/core' {
-  interface ProxyAtom<T> {
-    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
-  }
-}
 
 /**
  * Описание стратегий вычисления значения
@@ -97,7 +98,8 @@ export type ComputeStrategicAtom<IN extends any[]> = {
 }
 
 /** @internal */
-export function fromFlows(atom: Atom, ...flows: ProxyAtom<any>[]) {
+export function fromFlows(...flows: ProxyAtom<any>[]) {
+  const atom: Atom = this
   if (atom.haveFrom) {
     throw `atom ${
       atom.id ? atom.id : ''

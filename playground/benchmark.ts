@@ -1,6 +1,7 @@
-import A from '../packages/core'
+// import A from '../packages/core'
 import { Tick, timers } from 'exectimer'
 import chalk from 'chalk'
+import A from '../packages/facade'
 
 const log = console.log
 const unknownResult = (...text) => log(chalk.green(text.shift() + ':\t'), chalk.yellow(...text))
@@ -36,13 +37,14 @@ let instancesList: any[] = []
 let timeBefore = Date.now()
 let i = instancesCount
 
-import * as flyd from 'flyd'
 
 
 
+function someHandler() {
+  return calls++
+}
 while (i--) {
-  instancesList.push(flyd.stream(5))
-  // instancesList.push(A(5))
+  instancesList.push(A.getter(someHandler))
 }
 const memAfterCreate = process.memoryUsage()
 log('\ncreate')
@@ -54,9 +56,6 @@ knownResult(`${instancesCount} instances at`, `${Date.now() - timeBefore}ms`)
 global.gc()
 let calls = 0
 
-function someHandler(v) {
-  calls++
-}
 // const someHandler = (v)=>calls++
 
 memBefore = process.memoryUsage()
@@ -66,7 +65,7 @@ let iterations = 10000
 while (iterations--) {
   Tick.wrap(function myFunction(done) {
     instancesList.forEach(f => {
-      someHandler(0)
+      f()
     })
     done()
   })

@@ -26,16 +26,10 @@ export function setAtomValue(atom: Atom, ...a) {
     } else {
       atom.value = [finalValue]
     }
-    // if (dev.debug) dev.updatingFinished(atom.uid, finalValue)
     notifyChildes(atom)
-    return atom.value[0]
   }
 
-  if (value && value.then) {
-    return setAsyncValue(atom, value)
-  } else {
-    return setValue(value)
-  }
+  return setValue(value)
 }
 
 async function setAsyncValue(atom: Atom, promise: PromiseLike<any>) {
@@ -79,7 +73,13 @@ export const createAtom = (...a) => {
       if (atom.strongFn) {
         return atom.strongFn()
       }
-      if (atom.getterFn) return setAtomValue(atom, atom.getterFn(), 'getter')
+      if (atom.getterFn) {
+        if (atom.getterFn.then) {
+          return setAsyncValue(atom, atom.getterFn)
+        } else {
+          return setAtomValue(atom, atom.getterFn(), 'getter')
+        }
+      }
       let v = atom.value
       return v && v.length ? v[0] : undefined
     }

@@ -20,7 +20,7 @@ export const properties: FlowHandlers = {
     return this.id
   },
   isAsync() {
-    return !!(this.isAsync || this.getterFn || this.wrapperFn || this.strongFn)
+    return !!(this.isAsync && this.isAsync || this.getterFn || this.wrapperFn || this.strongFn)
   },
   inAwaiting() {
     return this.inAwaiting
@@ -65,7 +65,7 @@ export const allHandlers: FlowHandlers = {
   offAwait(fun) {
     removeStateEventListener(this, FState.AWAIT, fun)
   },
-  notify() {
+  resend() {
     notifyChildes(this)
     return this.proxy
   },

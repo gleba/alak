@@ -6,8 +6,9 @@ export const FState = {
 }
 
 export function notifyStateListeners(atom, state:string, ...value) {
-  if (atom.stateListeners && atom.stateListeners.has(state))
+  if (atom.stateListeners && atom.stateListeners.has(state)) {
     atom.stateListeners.get(state).forEach(f => f.apply(f, value))
+  }
 }
 
 export function addStateEventListener(atom, state, fun) {
@@ -15,7 +16,7 @@ export function addStateEventListener(atom, state, fun) {
   if (!atom.stateListeners.has(state)) {
     let set = new Set()
     set.add(fun)
-    atom.stateListeners.set(state, fun)
+    atom.stateListeners.set(state, set)
   } else atom.stateListeners.get(state).add(fun)
 }
 

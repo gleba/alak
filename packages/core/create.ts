@@ -15,11 +15,14 @@ export function installExtension(options) {
   options.properties && Object.assign(properties, options.properties)
 }
 
+function warp(context, fn) {
+
+}
 function get(atom: Atom, prop: string, receiver: any): any {
   let keyFn = handlers[prop]
   if (keyFn) return keyFn.bind(atom)
   keyFn = properties[prop]
-  if (keyFn) return keyFn.apply(atom)
+  if (keyFn) return keyFn.call(atom)
   throw 'unknown property - ' + prop
 }
 export const proxyHandler: ProxyHandler<Atom> = { get }

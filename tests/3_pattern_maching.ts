@@ -1,5 +1,5 @@
 import { test } from './ouput.shema'
-import { A } from '../packages/core'
+import A from '../packages/facade'
 
 
 test('pattern matching', ({ plan, ok, end, pass, fail }) => {

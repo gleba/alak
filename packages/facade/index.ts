@@ -9,19 +9,9 @@
  */
 
 import { AC, AtomCreator, MaybeAny, ProxyAtom } from '../core'
-import { ComputeStrategicAtom, ComputeStrategy, installComputedExtension } from '../ext-computed'
+import { ComputeStrategicAtom, installComputedExtension } from '../ext-computed'
 
 installComputedExtension()
-
-// @ts-ignore
-declare module 'alak/lib/core' {
-  interface ProxyAtom<T> {
-    match(...pattern: any[]): ProxyAtom<T>
-    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
-  }
-}
-
-type ComputedAtom<T, IN> = {}
 
 /** Конструктор атома
  * @remarks
@@ -70,11 +60,5 @@ export const A = (Object.assign(AC, {
 
 export default A
 
-A.from(A(1), A('2'))
-  .quantum((a, b) => {
-    console.log(a, b)
-    return 2
-  })
-  .up(x => x)
 
 export { ProxyAtom } from '../core'
