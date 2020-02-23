@@ -21,14 +21,15 @@ export const rm = name =>
 
 export const executeCommand = (command, cwd) =>
   new Promise(async done => {
-    exec(command, { cwd: cwd }, (error, stdout) => {
+
+    exec(command, { cwd: cwd}, (error, stdout) => {
       if (error) {
         log(chalk.grey('Error:'), chalk.yellow(cwd))
         log(chalk.redBright(error))
         log(chalk.redBright(stdout))
         process.exit()
       }
-      // log(chalk.gray(stdout))
+      console.log("stdout", stdout)
       log(chalk.green('done'), chalk.grey(command))
       done()
     })

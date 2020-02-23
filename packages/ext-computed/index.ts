@@ -114,7 +114,7 @@ export function fromFlows(...flows: ProxyAtom<any>[]) {
   const makeMix = mixFn => {
     const inAwaiting: ProxyAtom<any>[] = []
     let values = flows.map(flow => {
-      if (flow.inAwaiting) {
+      if (flow.isAwaiting) {
         inAwaiting.push(flow)
       }
       return flow.value

@@ -1,5 +1,5 @@
 import { test } from './ouput.shema'
-import A from '../packages/facade'
+import A from '../../packages/facade'
 
 test('promise, getter, wrapper', async ({ plan, ok, end, pass, fail, equal }) => {
 
@@ -7,19 +7,33 @@ test('promise, getter, wrapper', async ({ plan, ok, end, pass, fail, equal }) =>
   const flow = A()
 
   ok(!flow.isAsync, 'is Async false')
-  const asyncWait = () =>
-    new Promise<number>(done =>
+  const asyncWait = () => {
+    console.log("asyncWait")
+    return new Promise<number>(done =>
       setTimeout(() => {
         done(testValue)
       }, 200),
     )
+  }
   flow.onAwait(s => {
     pass('promise await state:' + s)
   })
+  console.log("isAsync", flow.isAsync)
   flow.useGetter(asyncWait)
-  console.log(flow(), flow.isAsync)
+  flow()
+  console.log("isAsync", flow.isAsync)
+  console.log("isAsync", flow.value)
+  console.log(flow.isAwaiting)
+  await flow()
+  console.log(flow.value)
+  console.log(flow.isAwaiting)
 
-  ok(flow.isEmpty, 'promise is empty')
+
+  // flow.useGetter(()=>true)
+  // console.log("isAsync", flow.isAsync)
+  // console.log(flow(), flow.isAsync)
+
+  // ok(flow.isEmpty, 'promise is empty')
 
   // ok(flow.is(testValue), 'promise')
   //

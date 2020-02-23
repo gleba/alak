@@ -15,10 +15,10 @@ export function installExtension(options) {
   options.properties && Object.assign(properties, options.properties)
 }
 
-function warp(context, fn) {
-
-}
 function get(atom: Atom, prop: string, receiver: any): any {
+  if (!atom.alive) {
+    return undefined
+  }
   let keyFn = handlers[prop]
   if (keyFn) return keyFn.bind(atom)
   keyFn = properties[prop]
@@ -27,12 +27,11 @@ function get(atom: Atom, prop: string, receiver: any): any {
 }
 export const proxyHandler: ProxyHandler<Atom> = { get }
 
-
-
 export function createObjectAtom<T>(value?: T) {
   const atom = createAtom(...arguments)
   const flow = Object.assign(atom, objectHandlers)
   atom.proxy = flow
+  atom.alive = true
   return flow
 }
 
@@ -40,5 +39,7 @@ export function createProxyFlow<T>(value?: T) {
   const atom = createAtom(...arguments)
   const flow = new Proxy(atom, proxyHandler)
   atom.proxy = flow
+  atom.uid = Math.random()
+  atom.alive = true
   return flow
 }

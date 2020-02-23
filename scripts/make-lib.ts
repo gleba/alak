@@ -2,6 +2,7 @@ import { executeCommand, info, rm } from './helpers'
 import * as path from "path"
 import { copyFileSync, readFileSync, writeFileSync } from 'fs'
 import { removeSync } from 'fs-extra'
+import { fork } from 'child_process'
 const {log} = console
 const chalk = require('chalk')
 
@@ -27,6 +28,13 @@ export const tsc = async () => {
   )
   rm(tsconfigPath)
   log(chalk.grey('typescript compiled'))
+
+  // fork("node_modules/jest/bin/jest")
+  // console.log(path.resolve('.'))
+  // executeCommand(`jest`, path.resolve('.'))
 }
-tsc()
+
+// executeCommand(`node ${path.resolve('node_modules/jest/bin/jest')}`, path.resolve('.'))
+// fork("node_modules/jest/bin/jest")
+// tsc()
 

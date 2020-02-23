@@ -10,10 +10,10 @@ switch (task) {
     require('./scripts/make-lib')
     break
   case 'dev':
-    require('./tests')
+    require('./playground/ot')
     break
   case 'play':
-    require('./playground/benchmark')
+    require('./playground/')
     break
   //default:
   //  require('./scripts/make-lib')

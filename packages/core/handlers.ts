@@ -1,5 +1,10 @@
 import { grandUpFn, notifyChildes, setAtomValue } from './atom'
-import { addStateEventListener, FState, notifyStateListeners, removeStateEventListener } from './state'
+import {
+  addStateEventListener,
+  FState,
+  notifyStateListeners,
+  removeStateEventListener,
+} from './state'
 import { alive, deleteParams, nullFilter, someFilter, trueFilter } from './utils'
 import { FlowHandlers } from './index'
 
@@ -17,13 +22,14 @@ export const properties: FlowHandlers = {
     return this.uid
   },
   id() {
-    return this.id
+    if (this.id) return this.id
+    else return this.uid
   },
   isAsync() {
-    return !!(this.isAsync && this.isAsync || this.getterFn || this.wrapperFn || this.strongFn)
+    return this._isAsync
   },
-  inAwaiting() {
-    return this.inAwaiting
+  isAwaiting() {
+    return !!this._isAwaiting
   },
 }
 
@@ -47,9 +53,8 @@ export const objectHandlers: FlowHandlers = {
     return this.proxy
   },
   close() {
-    this.children.clear()
+    this.proxy.clear()
     deleteParams(this)
-    return this.proxy
   },
 }
 
@@ -139,12 +144,14 @@ export const allHandlers: FlowHandlers = {
     removeStateEventListener(this, stateEvent, fn)
     return this.proxy
   },
-  useGetter(getterFunction) {
+  useGetter(getterFunction, isAsync) {
     this.getterFn = getterFunction
+    this._isAsync = isAsync
     return this.proxy
   },
-  useWrapper(wrapperFunction) {
+  useWrapper(wrapperFunction, isAsync) {
     this.wrapperFn = wrapperFunction
+    this._isAsync = isAsync
     return this.proxy
   },
   fmap(fun) {

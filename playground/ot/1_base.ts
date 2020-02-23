@@ -1,5 +1,5 @@
 import { test } from './ouput.shema'
-import A from '../packages/facade'
+import A from '../../packages/facade'
 
 
 

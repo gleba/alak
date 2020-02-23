@@ -1,13 +1,9 @@
 import { FState, notifyStateListeners } from './state'
 import { Atom } from './index'
 
-
 type AnyFunction = {
   (...v: any[]): any
 }
-
-
-
 
 export function setAtomValue(atom: Atom, ...a) {
   if (!atom.children) {
@@ -15,7 +11,6 @@ export function setAtomValue(atom: Atom, ...a) {
     console.warn("it's possible memory leak in application")
     return atom.proxy
   }
-
   let [value, context] = a
   // if (dev.debug) dev.updatingStarted(atom, context)
   const setValue = finalValue => {
@@ -28,23 +23,24 @@ export function setAtomValue(atom: Atom, ...a) {
     }
     notifyChildes(atom)
   }
-
+  if (value && value.then) {
+    return setAsyncValue(atom, value)
+  }
   return setValue(value)
 }
 
 async function setAsyncValue(atom: Atom, promise: PromiseLike<any>) {
   notifyStateListeners(atom, FState.AWAIT, true)
-  atom.inAwaiting = true
-  atom.isAsync = true
+  atom._isAwaiting = promise
+  atom._isAsync = true
   let v = await promise
   atom.value = [v]
-  atom.inAwaiting = false
+  atom._isAwaiting = false
   notifyStateListeners(atom, FState.AWAIT, false)
   // if (dev.debug) dev.updatingFinished(atom.uid, v)
   notifyChildes(atom)
   return v
 }
-
 
 const notify = (atom: Atom, whose) =>
   whose && whose.size > 0 && whose.forEach(f => f.apply(atom.proxy, atom.value))
@@ -55,12 +51,12 @@ export function notifyChildes(atom: Atom) {
   notify(atom, atom.grandChildren)
 }
 
-
-export function grandUpFn(atom:Atom, f:AnyFunction, ff:AnyFunction):any {
-  if (!atom.grandChildren) atom.grandChildren =  new Map()
+export function grandUpFn(atom: Atom, f: AnyFunction, ff: AnyFunction): any {
+  if (!atom.grandChildren) atom.grandChildren = new Map()
   atom.grandChildren.set(f, ff)
   return atom.value[0]
 }
+
 export const createAtom = (...a) => {
   const atom = function() {
     if (arguments.length) {
@@ -70,15 +66,19 @@ export const createAtom = (...a) => {
         return setAtomValue(atom, ...arguments)
       }
     } else {
+      if (atom._isAwaiting) {
+        return atom._isAwaiting
+      }
       if (atom.strongFn) {
-        return atom.strongFn()
+        let strongFn = atom.strongFn()
+        if (strongFn.then) {
+          strongFn.then(() => (atom._isAwaiting = false))
+          atom._isAwaiting = strongFn
+        }
+        return strongFn
       }
       if (atom.getterFn) {
-        if (atom.getterFn.then) {
-          return setAsyncValue(atom, atom.getterFn)
-        } else {
-          return setAtomValue(atom, atom.getterFn(), 'getter')
-        }
+        return setAtomValue(atom, atom.getterFn(), 'getter')
       }
       let v = atom.value
       return v && v.length ? v[0] : undefined
@@ -88,7 +88,6 @@ export const createAtom = (...a) => {
   // atom.grandChildren = new Map<AnyFunction, AnyFunction>()
   // atom.stateListeners = new Map<string, Set<AnyFunction>>()
   atom.value = []
-  // atom.uid = Math.random()
   if (a.length) {
     atom(...a)
   }

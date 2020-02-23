@@ -1,6 +1,6 @@
 import { test } from './ouput.shema'
-import { A } from '../packages/core'
-import { FState } from '../packages/core/state'
+import { A } from '../../packages/core'
+import { FState } from '../../packages/core/state'
 
 test('plugins', async ({ plan, ok, end, pass, fail, equal }) => {
   const testValue = 'testValue'

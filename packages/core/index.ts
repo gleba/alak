@@ -62,13 +62,14 @@ export type Atom = {
   metaMap?: Map<string, any>
   proxy: any
   value: any
-  uid?: number
-  id?: string
-  flowName?: string
-  haveFrom?: boolean
-  strongFn?: Function
-  isAsync?: boolean
-  inAwaiting?: boolean
+  uid: number
+  id: string
+  flowName: string
+  haveFrom: boolean
+  alive: boolean
+  strongFn: Function | any
+  _isAsync: boolean
+  _isAwaiting: boolean | any
   (...a: any[]): void
 }
 type AnyFunction = {
@@ -164,12 +165,13 @@ export interface ProxyAtom<T> {
   // /** remove event listener for change async state of data, "await, ready, etc...
   //  * @experimental*/
   // off: FlowStateListner
+
   /** check 'from' or 'warp' function are async*/
   /** Является ли уставленный добытчик {@link ProxyAtom.useGetter} асинхронным */
   readonly isAsync: Boolean
   /** Находится ли атом в процессе получения значения от асинхронного добытчика
    * {@link ProxyAtom.useGetter}*/
-  readonly inAwaiting: Boolean
+  readonly isAwaiting: Boolean
 
   /** Добавить функцию-получатель обновлений значения контейнера
    * и передать текущее значение контейнера, если оно есть
@@ -267,15 +269,17 @@ export interface ProxyAtom<T> {
    * @remarks
    * Функция-добытчик вызывается каждый раз при вызове функции-атома
    * @param getter - функция-добытчик
+   * @param isAsync - установить значение returns {@link ProxyAtom.isAsync}
    * @returns {@link ProxyAtom} */
-  useGetter(getter: () => T | Promise<T>): ProxyAtom<T>
+  useGetter(getter: () => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
 
   /** Использовать функцию-обёртку
    * Каждое новое обновление значение контейнера атома,
    * всегда будет проходить сперва через функцию-обёртку
-   * @param wrapper
+   * @param wrapper - функция-обёртка
+   * @param isAsync - установить значение returns {@link ProxyAtom.isAsync}
    * @returns {@link ProxyAtom} */
-  useWrapper(wrapper: (newValue: T, prevValue: T) => T | Promise<T>): ProxyAtom<T>
+  useWrapper(wrapper: (newValue: T, prevValue: T) => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
 
   /** Применить функцию к значению в контейнере
    * @param fun - функция принимающая текущее значение и возвращающей

@@ -1,8 +1,8 @@
 import { test } from './ouput.shema'
-import A from '../packages/facade'
-import { ComputeStrategy } from '../packages/ext-computed'
+import A from '../../packages/facade'
+import { ComputeStrategy } from '../../packages/ext-computed'
 
-declare module '../packages/core' {
+declare module '../../packages/core' {
   interface ProxyAtom<T> {
     from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
   }
