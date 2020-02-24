@@ -8,11 +8,24 @@
  * @packageDocumentation
  */
 
-import { AC, AtomCreator, MaybeAny, ProxyAtom } from '../core'
-import { ComputeStrategicAtom, installComputedExtension } from '../ext-computed'
+import { AC, AtomCreator, installExtension, MaybeAny, ProxyAtom } from '../core'
+import { ComputeStrategicAtom, fromFlows, installComputedExtension } from '../ext-computed'
 
 installComputedExtension()
 
+
+// @ts-ignore
+declare module 'alak/core' {
+  import { ComputeStrategy } from '../ext-computed'
+  interface ProxyAtom<T> {
+    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
+  }
+}
+// installExtension({
+//   handlers: {
+//     from: fromFlows,
+//   },
+// })
 /** Конструктор атома
  * @remarks
  * Функция-константа, расширяет {@link core#AtomCreator}
@@ -56,6 +69,10 @@ export const A = (Object.assign(AC, {
     flow.useGetter(getterFun)
     return flow
   },
+  from(...atoms){
+    const a = A()
+    return (a as any).from(...atoms)
+  }
 }) as any) as AConstant
 
 export default A

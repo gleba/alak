@@ -1,7 +1,7 @@
 export const alive = v => (v !== undefined && v !== null) as boolean
 export const isTruth = v => !!v
-export const nullFilter = f => v => (alive(v) ? f(v) : null)
-export const someFilter = f => v => (!alive(v) ? f(v) : null)
+export const nullFilter = f => v => (!alive(v) ? f(v) : null)
+export const someFilter = f => v => (alive(v) ? f(v) : null)
 export const trueFilter = f => v => (isTruth(v) ? f(v) : null)
 
 

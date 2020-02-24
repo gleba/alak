@@ -11,6 +11,7 @@ const handlers = Object.assign(objectHandlers, allHandlers)
  * @param options - {@link ExtensionOptions}
  */
 export function installExtension(options) {
+  console.log("installExtension", options)
   options.handlers && Object.assign(handlers, options.handlers)
   options.properties && Object.assign(properties, options.properties)
 }

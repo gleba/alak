@@ -96,19 +96,16 @@ export const allHandlers: FlowHandlers = {
       return value === undefined
     }
   },
-  upSome(f) {
-    let v = grandUpFn(this, f, nullFilter(f))
-    if (alive(v)) f.apply(this.proxy, [v])
+  upSome(fun) {
+    grandUpFn(this, fun, someFilter)
     return this.proxy
   },
-  upTrue(f) {
-    let v = grandUpFn(this, f, trueFilter(f))
-    if (v) f.apply(this.proxy, [v])
+  upTrue(fun) {
+    grandUpFn(this, fun, trueFilter)
     return this.proxy
   },
-  upNone(f) {
-    let v = grandUpFn(this, f, someFilter(f))
-    if (this.value.length && !alive(v)) f.apply(f, [v])
+  upNone(fun) {
+    grandUpFn(this, fun, nullFilter)
     return this.proxy
   },
   setId(id) {

@@ -35,6 +35,6 @@ export const tsc = async () => {
 }
 
 // executeCommand(`node ${path.resolve('node_modules/jest/bin/jest')}`, path.resolve('.'))
-// fork("node_modules/jest/bin/jest")
+fork("node_modules/jest/bin/jest")
 // tsc()
 

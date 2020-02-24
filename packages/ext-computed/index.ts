@@ -33,9 +33,12 @@
 import { setAtomValue } from '../core/atom'
 import { isPromise } from '../core/utils'
 import { Atom, installExtension, ProxyAtom } from '../core'
+import { createPrivateKey } from 'crypto'
 
 /** Установить расширение вычисления множеств прокси-атома*/
 export function installComputedExtension(){
+  console.log("installComputedExtension")
+
   installExtension({
     handlers: {
       from: fromFlows,
@@ -122,7 +125,10 @@ export function fromFlows(...flows: ProxyAtom<any>[]) {
     if (inAwaiting.length > 0) {
       return new Promise(_ => someoneIsWaiting.push(_))
     }
-    atom.getterFn = () => makeMix(mixFn)
+    // atom.getterFn = () => makeMix(mixFn)
+    atom.getterFn = () => {
+      return makeMix(mixFn)
+    }
     let nextValues = mixFn(...values)
     if (isPromise(nextValues)) {
       nextValues.then(v => {
@@ -133,6 +139,8 @@ export function fromFlows(...flows: ProxyAtom<any>[]) {
       freeWaiters(nextValues)
       setAtomValue(atom, nextValues)
     }
+    atom._isAwaiting = false
+    console.log("?", nextValues)
     return nextValues
   }
 
@@ -147,16 +155,19 @@ export function fromFlows(...flows: ProxyAtom<any>[]) {
     let needToRun = flows.length
     let waitCount = 0
     let waitSet = new Set()
-    return new Promise(done => {
+    atom._isAwaiting = new Promise(done => {
       atom.getterFn = () => new Promise(_ => someoneIsWaiting.push(_))
       function countActiveFlows() {
-        if (waitSet) {
-          waitSet.add(this)
-          if (waitSet.size == needToRun) {
-            waitSet = null
-            done(makeMix(mixFn))
-          }
-        } else done(makeMix(mixFn))
+        waitSet.add(this)
+        if (waitSet.size == needToRun) {
+          waitSet = null
+          done(makeMix(mixFn))
+        }
+        // if (waitSet) {
+        // } else {
+        //   console.log("make mix")
+        //   done(makeMix(mixFn))
+        // }
       }
       flows.forEach(flow => {
         //for this flow in mix
@@ -178,6 +189,7 @@ export function fromFlows(...flows: ProxyAtom<any>[]) {
         }
       })
     })
+    return atom.proxy
   }
   function strong(mixFn) {
     const strong = []

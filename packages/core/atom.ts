@@ -17,11 +17,11 @@ export function setAtomValue(atom: Atom, ...a) {
     if (atom.wrapperFn) {
       let wrappedValue = atom.wrapperFn(finalValue, atom.value[0])
       if (wrappedValue.then) return setAsyncValue(atom, wrappedValue)
-      atom.value = [wrappedValue]
-    } else {
-      atom.value = [finalValue]
+      finalValue = wrappedValue
     }
+    atom.value = [finalValue]
     notifyChildes(atom)
+    return finalValue
   }
   if (value && value.then) {
     return setAsyncValue(atom, value)
@@ -42,19 +42,31 @@ async function setAsyncValue(atom: Atom, promise: PromiseLike<any>) {
   return v
 }
 
-const notify = (atom: Atom, whose) =>
-  whose && whose.size > 0 && whose.forEach(f => f.apply(atom.proxy, atom.value))
+const notify = (atom: Atom, children) =>
+  children &&
+  children.size > 0 &&
+  children.forEach(f => {
+    console.log(atom.id, children.size)
+    f.bind({ a: 'a' })
+    f('2')
+    // f.apply({ hello:"xx" }, 0)
+  })
 
 export function notifyChildes(atom: Atom) {
-  // console.log('→', atom.flowName, atom.value)
-  notify(atom, atom.children)
-  notify(atom, atom.grandChildren)
+  const v = atom.value[0]
+  atom.children.size > 0 && atom.children.forEach(f => f.call(atom.proxy, v))
+  atom.grandChildren && atom.grandChildren.size > 0
+  && atom.grandChildren.forEach((f, k) => {
+    f(v)
+  })
 }
 
-export function grandUpFn(atom: Atom, f: AnyFunction, ff: AnyFunction): any {
+export function grandUpFn(atom: Atom, keyFun: AnyFunction, grandFun: AnyFunction): any {
   if (!atom.grandChildren) atom.grandChildren = new Map()
-  atom.grandChildren.set(f, ff)
-  return atom.value[0]
+  const grandUpFun = grandFun(keyFun.bind(atom.proxy))
+  atom.grandChildren.set(keyFun, grandUpFun)
+  const [v] = atom.value
+  v && grandUpFun(v)
 }
 
 export const createAtom = (...a) => {

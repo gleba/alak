@@ -2,11 +2,6 @@ const { A } = require('../facade')
 
 const startValue = 0
 const finalValue = 1
-function asyncFn() {
-  return new Promise(done => {
-    setTimeout(() => done(finalValue), 24)
-  })
-}
 
 const beStart = v => expect(v).toBe(startValue)
 const beFinal = v => expect(v).toBe(finalValue)
@@ -25,6 +20,17 @@ test('up down next', async () => {
   expect.assertions(3)
 })
 
+
+test('context', async () => {
+  let a = A()
+  a.setId("zero")
+  function fn() {
+    expect(this.id).toBe("zero")
+  }
+  a.up(fn)
+  expect.assertions(1)
+})
+
 test('resend', async () => {
   let a = A(startValue)
   a.next(beStart)
@@ -32,15 +38,19 @@ test('resend', async () => {
   expect.assertions(1)
 })
 
-test('name id', ()=>{
+test('name id meta', () => {
   let a = A()
-  a.setId("sky")
-  a.setName("bob")
-  expect(a.id).toBe("sky")
-  expect(a.name).toBe("bob")
+  a.setId('sky')
+  a.setName('bob')
+  expect(a.id).toBe('sky')
+  expect(a.name).toBe('bob')
+  a.addMeta('m')
+  a.addMeta('k', finalValue)
+  expect(a.hasMeta('m')).toBeTruthy()
+  expect(a.getMeta('k')).toBe(finalValue)
 })
 
-test('sugar', ()=>{
+test('sugar', () => {
   let a = A()
   a.upSome(v => expect(v !== undefined && v !== null).toBeTruthy())
   a.upTrue(v => expect(v).toBeTruthy())
@@ -52,8 +62,10 @@ test('sugar', ()=>{
   expect.assertions(5)
 })
 
-
-test('fmap', ()=>{
+test('fmap', () => {
+  const a = A(3)
+  a.fmap(v => v + 2)
+  expect(a()).toBe(5)
 })
 
 test('clear', () => {
@@ -68,7 +80,7 @@ test('clear', () => {
   expect.assertions(3)
 })
 
-test("close", ()=>{
+test('close', () => {
   let a = A(startValue)
   expect(!!a.id).toBeTruthy()
   a.close()

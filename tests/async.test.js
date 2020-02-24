@@ -1,4 +1,4 @@
-const { A } = require('../../facade')
+const { A } = require('../facade')
 
 
 const startValue = 0
