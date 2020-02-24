@@ -31,17 +31,17 @@
  */
 
 import { setAtomValue } from '../core/atom'
-import { isPromise } from '../core/utils'
+import { alive, isPromise } from '../core/utils'
 import { Atom, installExtension, ProxyAtom } from '../core'
 import { createPrivateKey } from 'crypto'
 
 /** Установить расширение вычисления множеств прокси-атома*/
-export function installComputedExtension(){
-  console.log("installComputedExtension")
+export function installComputedExtension() {
+  console.log('installComputedExtension')
 
   installExtension({
     handlers: {
-      from: fromFlows,
+      from,
     },
   })
 }
@@ -51,7 +51,6 @@ declare module 'alak/core' {
     from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
   }
 }
-
 
 type UnpackedPromise<T> = T extends Promise<infer U> ? U : T
 type UnpackedFlow<T> = T extends (...args: any[]) => infer U ? U : T
@@ -63,7 +62,6 @@ type FunComputeIn<T, IN extends any[]> = {
 type ComputedIn<T, IN extends any[]> = {
   (fn: FunComputeIn<T, IN>): T
 }
-
 
 /**
  * Описание стратегий вычисления значения
@@ -101,35 +99,43 @@ export type ComputeStrategicAtom<IN extends any[]> = {
 }
 
 /** @internal */
-export function fromFlows(...flows: ProxyAtom<any>[]) {
+export function from(...fromAtoms: ProxyAtom<any>[]) {
   const atom: Atom = this
   if (atom.haveFrom) {
     throw `atom ${
       atom.id ? atom.id : ''
-    } already has a assigned 'from(flows..', reassign 'from' to attest to logic errors`
+    } already has a assigned 'from(atoms..', reassign 'from' to attest to logic errors`
   } else {
     atom.haveFrom = true
   }
   let someoneIsWaiting = []
+  const addWaiter = () => new Promise(_ => someoneIsWaiting.push(_))
   const freeWaiters = v => {
     while (someoneIsWaiting.length) someoneIsWaiting.pop()(v)
   }
   const makeMix = mixFn => {
     const inAwaiting: ProxyAtom<any>[] = []
-    let values = flows.map(flow => {
-      if (flow.isAwaiting) {
-        inAwaiting.push(flow)
+    const some = mixFn.some
+    let values = fromAtoms.map(a => {
+      if (a.isAwaiting) {
+        inAwaiting.push(a)
       }
-      return flow.value
+      if (some && !alive(a.value)) {
+        inAwaiting.push(a)
+      }
+      return a.value
     })
+    // console.log(inAwaiting.length)
+
     if (inAwaiting.length > 0) {
-      return new Promise(_ => someoneIsWaiting.push(_))
+      atom.getterFn = addWaiter
+      return atom._isAwaiting = addWaiter()
     }
     // atom.getterFn = () => makeMix(mixFn)
-    atom.getterFn = () => {
-      return makeMix(mixFn)
-    }
+    atom.getterFn = () => makeMix(mixFn)
     let nextValues = mixFn(...values)
+    // console.log({ nextValues })
+
     if (isPromise(nextValues)) {
       nextValues.then(v => {
         freeWaiters(v)
@@ -140,71 +146,44 @@ export function fromFlows(...flows: ProxyAtom<any>[]) {
       setAtomValue(atom, nextValues)
     }
     atom._isAwaiting = false
-    console.log("?", nextValues)
     return nextValues
   }
 
   function weak(mixFn) {
-    flows.forEach(flow => {
-      if (flow != atom.proxy) flow.next(() => makeMix(mixFn))
+    fromAtoms.forEach(a => {
+      if (a !== atom.proxy) a.next(() => makeMix(mixFn))
     })
     makeMix(mixFn)
   }
 
-  function quantum(mixFn, opt?: { strong?: any[]; some?: boolean }) {
-    let needToRun = flows.length
-    let waitCount = 0
-    let waitSet = new Set()
-    atom._isAwaiting = new Promise(done => {
-      atom.getterFn = () => new Promise(_ => someoneIsWaiting.push(_))
-      function countActiveFlows() {
-        waitSet.add(this)
-        if (waitSet.size == needToRun) {
-          waitSet = null
-          done(makeMix(mixFn))
-        }
-        // if (waitSet) {
-        // } else {
-        //   console.log("make mix")
-        //   done(makeMix(mixFn))
-        // }
+  function quantum(mixFn, opt?: { fromAtoms?: any[]; some?: boolean }) {
+    mixFn.some = true
+    const mixer = ()=> makeMix(mixFn)
+    fromAtoms.forEach(a => {
+      if (opt.fromAtoms) {
+        a()
+        opt.fromAtoms.push(a)
       }
-      flows.forEach(flow => {
-        //for this flow in mix
-        if (flow == atom.proxy) needToRun--
-        else {
-          if (!opt) {
-            flow.up(countActiveFlows)
-          } else {
-            if (opt.strong && flow.isAsync) {
-              flow()
-              opt.strong.push(flow)
-            } else {
-              waitCount++
-            }
-            if (opt.some) {
-              flow.upSome(countActiveFlows)
-            }
-          }
-        }
-      })
+      a.next(mixer)
     })
+    mixer()
     return atom.proxy
   }
+
   function strong(mixFn) {
-    const strong = []
+    const fromAtoms = []
     atom.strongFn = () => {
-      return new Promise(fin => {
-        if (strong.length) {
-          Promise.all(strong.map(f => f())).then(() => {
-            fin(atom.value[0])
+      return new Promise(resolve => {
+        if (fromAtoms.length) {
+          Promise.all(fromAtoms.map(a => a())).then(() => {
+            resolve(atom.value[0])
           })
         } else {
-          return fin(makeMix(mixFn))
+          return resolve(makeMix(mixFn))
         }
       })
     }
-    return quantum(mixFn, { strong })
+    return quantum(mixFn, { fromAtoms })
   }
 
   function some(mixFn) {

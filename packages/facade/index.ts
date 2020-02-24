@@ -9,7 +9,7 @@
  */
 
 import { AC, AtomCreator, installExtension, MaybeAny, ProxyAtom } from '../core'
-import { ComputeStrategicAtom, fromFlows, installComputedExtension } from '../ext-computed'
+import { ComputeStrategicAtom, from, installComputedExtension } from '../ext-computed'
 
 installComputedExtension()
 
@@ -38,9 +38,17 @@ export interface AConstant extends AtomCreator {
   <T>(value?: T): ProxyAtom<MaybeAny<T>>
 
   /**
-   * Создать атом c функцией добытчика {@link ProxyAtom.useGetter}.
+   * Создать атом c предустановленным идентификатором {@link ProxyAtom.setId}.
    * @remarks
    * Сокращённая запись `A().useGetter(fun)`
+   * @id id - идентификатор
+   */
+  id<T>(id: string | number): ProxyAtom<T>
+
+  /**
+   * Создать атом c функцией добытчика {@link ProxyAtom.useGetter}.
+   * @remarks
+   * Сокращённая запись `A().setId(id)`
    * @param getterFn
    */
   getter<T>(getterFn: () => T): ProxyAtom<T>
@@ -65,13 +73,16 @@ export interface AConstant extends AtomCreator {
 /**{@link AConstant}*/
 export const A = (Object.assign(AC, {
   getter(getterFun) {
-    const flow = AC.proxy()
+    const flow = A()
     flow.useGetter(getterFun)
     return flow
   },
   from(...atoms){
     const a = A()
     return (a as any).from(...atoms)
+  },
+  id(id) {
+    return  A().setId(id)
   }
 }) as any) as AConstant
 

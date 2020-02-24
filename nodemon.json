@@ -1,5 +1,5 @@
 {
-  "watch": ["packages", "scripts", "tests", "playground","tsconfig.json"],
+  "watch": ["scripts"],
   "ext": "ts, js",
   "exec": "node --expose-gc build"
 }

@@ -2,6 +2,7 @@ require('ts-node').register()
 
 const task = process.argv[2]
 
+
 switch (task) {
   case 'docs':
     require('./scripts/make-docs')
@@ -14,6 +15,9 @@ switch (task) {
     break
   case 'play':
     require('./playground/')
+    break
+  case 'tests':
+    require('./scripts/dev-tests')
     break
   //default:
   //  require('./scripts/make-lib')

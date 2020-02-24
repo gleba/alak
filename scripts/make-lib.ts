@@ -28,15 +28,14 @@ export const tsc = async () => {
   )
   rm(tsconfigPath)
   log(chalk.grey('typescript compiled'))
-
   // fork("node_modules/jest/bin/jest")
   // console.log(path.resolve('.'))
   // executeCommand(`jest`, path.resolve('.'))
-  fork("node_modules/jest/bin/jest")
+  // fork("node_modules/jest/bin/jest")
 }
 
 // executeCommand(`node ${path.resolve('node_modules/jest/bin/jest')}`, path.resolve('.'))
 
 // tsc()
-fork("node_modules/jest/bin/jest")
+
 

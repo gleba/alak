@@ -1,4 +1,4 @@
-import { ComputeStrategy, fromFlows } from '../ext-computed'
+import { ComputeStrategy, from } from '../ext-computed'
 import A from '../facade'
 import { installExtension } from '../core'
 
