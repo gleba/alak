@@ -23,7 +23,7 @@ export const tsc = async () => {
   delete tsconfig.include
   writeFileSync(tsconfigPath, JSON.stringify(tsconfig))
   await executeCommand(
-    `node ${path.resolve('node_modules/typescript/lib/tsc')} -d --outDir ../lib`,
+    `node ${path.resolve('node_modules/typescript/lib/tsc')} -d --outDir ../`,
     path.resolve('packages'),
   )
   rm(tsconfigPath)
@@ -32,9 +32,11 @@ export const tsc = async () => {
   // fork("node_modules/jest/bin/jest")
   // console.log(path.resolve('.'))
   // executeCommand(`jest`, path.resolve('.'))
+  fork("node_modules/jest/bin/jest")
 }
 
 // executeCommand(`node ${path.resolve('node_modules/jest/bin/jest')}`, path.resolve('.'))
-fork("node_modules/jest/bin/jest")
+
 // tsc()
+fork("node_modules/jest/bin/jest")
 

@@ -21,7 +21,6 @@ export const rm = name =>
 
 export const executeCommand = (command, cwd) =>
   new Promise(async done => {
-
     exec(command, { cwd: cwd}, (error, stdout) => {
       if (error) {
         log(chalk.grey('Error:'), chalk.yellow(cwd))

@@ -206,6 +206,19 @@ export interface ProxyAtom<T> {
    * @returns {@link ProxyAtom}*/
   upTrue(receiver: ValueReceiver<T>): ProxyAtom<T>
 
+  /** Добавить функцию-получатель значений равных `false`
+   * после приведения значения к типу `boolean` методом `!value`
+   * @param receiver - функция-получатель
+   * @returns {@link ProxyAtom}*/
+  upFalse(receiver: ValueReceiver<T>): ProxyAtom<T>
+
+  /** Добавить функцию-получатель значений равных `false`
+   * после приведения значения к типу `boolean` методом `!value`
+   * за исключением `null` и `undefined`
+   * @param receiver - функция-получатель
+   * @returns {@link ProxyAtom}*/
+  upSomeFalse(receiver: ValueReceiver<T>): ProxyAtom<T>
+
   /** Добавить функцию-получатель значений равных `null` и `undefined`
    * @param receiver - функция-получатель
    * @returns {@link ProxyAtom}*/

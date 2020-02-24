@@ -1,8 +1,10 @@
 export const alive = v => (v !== undefined && v !== null) as boolean
 export const isTruth = v => !!v
-export const nullFilter = f => v => (!alive(v) ? f(v) : null)
+export const noneFilter = f => v => (!alive(v) ? f(v) : null)
 export const someFilter = f => v => (alive(v) ? f(v) : null)
 export const trueFilter = f => v => (isTruth(v) ? f(v) : null)
+export const someFalseFilter = f => v => ((alive(v) && !isTruth(v)) ? f(v) : null)
+export const falseFilter = f => v => (!isTruth(v) ? f(v) : null)
 
 
 export const deepClone = v => (typeof v === 'object' ? JSON.parse(JSON.stringify(v)) : v)

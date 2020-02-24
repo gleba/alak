@@ -5,7 +5,7 @@ import {
   notifyStateListeners,
   removeStateEventListener,
 } from './state'
-import { alive, deleteParams, nullFilter, someFilter, trueFilter } from './utils'
+import { alive, deleteParams, falseFilter, noneFilter, someFalseFilter, someFilter, trueFilter } from './utils'
 import { FlowHandlers } from './index'
 
 export const properties: FlowHandlers = {
@@ -104,8 +104,16 @@ export const allHandlers: FlowHandlers = {
     grandUpFn(this, fun, trueFilter)
     return this.proxy
   },
+  upFalse(fun) {
+    grandUpFn(this, fun, falseFilter)
+    return this.proxy
+  },
+  upSomeFalse(fun) {
+    grandUpFn(this, fun, someFalseFilter)
+    return this.proxy
+  },
   upNone(fun) {
-    grandUpFn(this, fun, nullFilter)
+    grandUpFn(this, fun, noneFilter)
     return this.proxy
   },
   setId(id) {
