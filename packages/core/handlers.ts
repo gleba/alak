@@ -154,6 +154,15 @@ export const allHandlers: FlowHandlers = {
     this._isAsync = isAsync
     return this.proxy
   },
+  useOnceGet(getterFunction, isAsync) {
+    this.getterFn = ()=> {
+      delete this.getterFn
+      delete this._isAsync
+      return getterFunction()
+    }
+    this._isAsync = isAsync
+    return this.proxy
+  },
   useWrapper(wrapperFunction, isAsync) {
     this.wrapperFn = wrapperFunction
     this._isAsync = isAsync

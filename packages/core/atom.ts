@@ -81,14 +81,6 @@ export const createAtom = (...a) => {
       if (atom._isAwaiting) {
         return atom._isAwaiting
       }
-      if (atom.strongFn) {
-        let strongFn = atom.strongFn()
-        if (strongFn.then) {
-          strongFn.then(() => (atom._isAwaiting = false))
-          atom._isAwaiting = strongFn
-        }
-        return strongFn
-      }
       if (atom.getterFn) {
         return setAtomValue(atom, atom.getterFn(), 'getter')
       }

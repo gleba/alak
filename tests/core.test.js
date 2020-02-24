@@ -17,7 +17,7 @@ test('up down next', async () => {
   a(finalValue)
   a.clear()
   a.up(neverBe)
-  expect(a.value).toBe(undefined)
+  expect(a.value).toBeUndefined()
   expect.assertions(3)
 })
 

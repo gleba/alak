@@ -11,7 +11,7 @@ switch (task) {
     require('./scripts/make-lib')
     break
   case 'dev':
-    require('./playground/ot')
+    require('./scripts/dev-play')
     break
   case 'play':
     require('./playground/')

@@ -40,18 +40,27 @@ export interface AConstant extends AtomCreator {
   /**
    * Создать атом c предустановленным идентификатором {@link ProxyAtom.setId}.
    * @remarks
-   * Сокращённая запись `A().useGetter(fun)`
-   * @id id - идентификатор
+   * Сокращённая запись  `A().setId(id)`
+   * @param id - идентификатор
+   * @param startValue - стартовое значение
    */
-  id<T>(id: string | number): ProxyAtom<T>
+  id<T>(id: string | number, startValue?:T): ProxyAtom<MaybeAny<T>>
 
   /**
    * Создать атом c функцией добытчика {@link ProxyAtom.useGetter}.
    * @remarks
-   * Сокращённая запись `A().setId(id)`
-   * @param getterFn
+   * Сокращённая запись `A().useGetter(fun)`
+   * @param getterFn - функция-добытчик
    */
   getter<T>(getterFn: () => T): ProxyAtom<T>
+
+  /**
+   * Создать атом c функцией добытчика {@link ProxyAtom.useGetter}.
+   * @remarks
+   * Сокращённая запись `A().useOnceGet(fun)`
+   * @param getterFn - функция-добытчик
+   */
+  getOnce<T>(getterFn: () => T): ProxyAtom<T>
 
   /**
    * Создать атом из нескольких других атомов и стратегии вычисления.
@@ -72,17 +81,22 @@ export interface AConstant extends AtomCreator {
 }
 /**{@link AConstant}*/
 export const A = (Object.assign(AC, {
+  getOnce(getterFun) {
+    return A().useOnceGet(getterFun)
+  },
   getter(getterFun) {
-    const flow = A()
-    flow.useGetter(getterFun)
-    return flow
+    const a = A()
+    a.useGetter(getterFun)
+    return a
   },
   from(...atoms){
     const a = A()
     return (a as any).from(...atoms)
   },
-  id(id) {
-    return  A().setId(id)
+  id(id, v) {
+    const a = A().setId("id"+id)
+    v && a(v)
+    return  a
   }
 }) as any) as AConstant
 

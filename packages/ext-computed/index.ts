@@ -68,10 +68,6 @@ type ComputedIn<T, IN extends any[]> = {
  */
 export interface ComputeStrategy<T, IN extends any[]> {
   /**
-   * Функция-обработчик вызывается при заполнении всех атомов любыми значениями.
-   */
-  quantum: ComputedIn<T, IN>
-  /**
    * Функция-обработчик вызывается при наличии значения всех атомов исключая `null` и `undefined`.
    */
   some: ComputedIn<T, IN>
@@ -113,28 +109,33 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
   const freeWaiters = v => {
     while (someoneIsWaiting.length) someoneIsWaiting.pop()(v)
   }
+
   const makeMix = mixFn => {
+    console.log('MakeMix', mixFn, fromAtoms.length)
+
     const inAwaiting: ProxyAtom<any>[] = []
-    const some = mixFn.some
+    const { strong, some } = mixFn
+    const needFull = strong || some
     let values = fromAtoms.map(a => {
       if (a.isAwaiting) {
         inAwaiting.push(a)
       }
-      if (some && !alive(a.value)) {
+      if (needFull && !alive(a.value)) {
         inAwaiting.push(a)
+        strong && a()
       }
+      console.log("::", a.value)
       return a.value
     })
-    // console.log(inAwaiting.length)
-
+    // const needWait = needFull ? values.length === fromAtoms.length : false
     if (inAwaiting.length > 0) {
       atom.getterFn = addWaiter
-      return atom._isAwaiting = addWaiter()
+      return (atom._isAwaiting = addWaiter())
     }
     // atom.getterFn = () => makeMix(mixFn)
-    atom.getterFn = () => makeMix(mixFn)
+    // atom.getterFn = () => makeMix(mixFn)
     let nextValues = mixFn(...values)
-    // console.log({ nextValues })
+
 
     if (isPromise(nextValues)) {
       nextValues.then(v => {
@@ -145,53 +146,39 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
       freeWaiters(nextValues)
       setAtomValue(atom, nextValues)
     }
-    atom._isAwaiting = false
+    atom.getterFn && delete atom.getterFn
+    atom._isAwaiting && delete atom._isAwaiting
     return nextValues
   }
-
+  const linkedValues = {}
   function weak(mixFn) {
+    function mixer(v){
+      const linedValue = linkedValues[this.id]
+      if (v != linedValue) {
+        makeMix(mixFn)
+      }
+    }
     fromAtoms.forEach(a => {
-      if (a !== atom.proxy) a.next(() => makeMix(mixFn))
+      if (a !== atom.proxy) {
+        linkedValues[a.id] = a.value
+        a.next(mixer)
+      }
     })
     makeMix(mixFn)
-  }
-
-  function quantum(mixFn, opt?: { fromAtoms?: any[]; some?: boolean }) {
-    mixFn.some = true
-    const mixer = ()=> makeMix(mixFn)
-    fromAtoms.forEach(a => {
-      if (opt.fromAtoms) {
-        a()
-        opt.fromAtoms.push(a)
-      }
-      a.next(mixer)
-    })
-    mixer()
     return atom.proxy
   }
 
   function strong(mixFn) {
-    const fromAtoms = []
-    atom.strongFn = () => {
-      return new Promise(resolve => {
-        if (fromAtoms.length) {
-          Promise.all(fromAtoms.map(a => a())).then(() => {
-            resolve(atom.value[0])
-          })
-        } else {
-          return resolve(makeMix(mixFn))
-        }
-      })
-    }
-    return quantum(mixFn, { fromAtoms })
+    mixFn.strong = true
+    return weak(mixFn)
   }
 
   function some(mixFn) {
-    return quantum(mixFn, { some: true })
+    mixFn.some = true
+    return weak(mixFn)
   }
 
   return {
-    quantum,
     some,
     weak,
     strong,

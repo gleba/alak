@@ -67,7 +67,6 @@ export type Atom = {
   flowName: string
   haveFrom: boolean
   alive: boolean
-  strongFn: Function | any
   _isAsync: boolean
   _isAwaiting: boolean | any
   (...a: any[]): void
@@ -282,9 +281,14 @@ export interface ProxyAtom<T> {
    * @remarks
    * Функция-добытчик вызывается каждый раз при вызове функции-атома
    * @param getter - функция-добытчик
-   * @param isAsync - установить значение returns {@link ProxyAtom.isAsync}
+   * @param isAsync - установить значение {@link ProxyAtom.isAsync}
    * @returns {@link ProxyAtom} */
   useGetter(getter: () => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
+  /** Использовать функцию-добытчик только один раз
+   * @param getter - функция-добытчик
+   * @param isAsync - установить значение {@link ProxyAtom.isAsync}
+   * @returns {@link ProxyAtom} */
+  useOnceGet(getter: () => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
 
   /** Использовать функцию-обёртку
    * Каждое новое обновление значение контейнера атома,
