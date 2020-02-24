@@ -4,6 +4,7 @@ const task = process.argv[2]
 
 
 switch (task) {
+  case 'doc':
   case 'docs':
     require('./scripts/make-docs')
     break
@@ -16,9 +17,10 @@ switch (task) {
   case 'play':
     require('./playground/')
     break
+  case 'test':
   case 'tests':
     require('./scripts/dev-tests')
     break
-  //default:
-  //  require('./scripts/make-lib')
+  default:
+    console.log('no task', task)
 }
