@@ -153,6 +153,9 @@ export interface ProxyAtom<T> {
   readonly value: T
   /** Вернёт `true` при отсутствующем значении в контейнере*/
   readonly isEmpty: boolean
+
+  /** Вернёт `true` при наличии функции-добытчика */
+  readonly isComposite: boolean
   /** Идентификатор, вернёт `uid` если не был задан {@link ProxyAtom.setId}*/
   readonly id: string
   /** Имя заданное {@link ProxyAtom.setName} */

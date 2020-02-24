@@ -110,34 +110,8 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
     while (someoneIsWaiting.length) someoneIsWaiting.pop()(v)
   }
 
-  const makeMix = async mixFn => {
-    const inAwaiting: ProxyAtom<any>[] = []
-    const { strong, some } = mixFn
-    const needFull = strong || some
-    // console.log('mix')
-    let values = fromAtoms.map(async a => {
-      if (a.isAwaiting) {
-        inAwaiting.push(a)
-      } else if (needFull && !alive(a.value)) {
-        inAwaiting.push(a)
-      }
-      return a.value
-    })
-    // console.log('-', inAwaiting.length)
-
-    // const fullWait = needFull ? values.length !== fromAtoms.length : false
-    // console.log("next", fullWait, values)
-
-    if (inAwaiting.length > 0) {
-      atom.getterFn = addWaiter
-      return (atom._isAwaiting = addWaiter())
-      // await atom._isAwaiting
-    }
-
-    // atom.getterFn = () => makeMix(mixFn)
-    // atom.getterFn = () => makeMix(mixFn)
+  function mixValue(mixFn, ...values){
     let mixedValue = mixFn(...values)
-
     if (isPromise(mixedValue)) {
       mixedValue.then(v => {
         freeWaiters(v)
@@ -145,23 +119,41 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
       })
     } else {
       freeWaiters(mixedValue)
-      setAtomValue(atom, mixedValue)
     }
-
-    // if (strong) {
-    //   atom.getterFn = () => 'x' //makeMix(mixFn)
-    // }
     atom._isAwaiting && delete atom._isAwaiting
     return mixedValue
+  }
+  const makeMix = mixFn => {
+    console.log(":: mix ::")
+    const inAwaiting: ProxyAtom<any>[] = []
+    const { strong, some } = mixFn
+    const needFull = strong || some
+    // console.log('mix')
+    let values = fromAtoms.map(a => {
+      if (a.isAwaiting) {
+        inAwaiting.push(a)
+      } else if (needFull && !alive(a.value)) {
+        inAwaiting.push(a)
+      }
+      return a.value
+    })
+    console.log('-', inAwaiting.length)
+
+    // const fullWait = needFull ? values.length !== fromAtoms.length : false
+    // console.log("next", fullWait, values)
+
+    if (inAwaiting.length > 0) {
+      atom.getterFn = addWaiter
+      return (atom._isAwaiting = addWaiter())
+    }
+    atom.getterFn = () => mixFn(...values)
+    return mixValue(mixFn, values)
   }
   const linkedValues = {}
   function weak(mixFn) {
     function mixer(v) {
-      // console.log('mixer', v)
       const linkedValue = linkedValues[this.id]
-      // console.log(v , linkedValue)
       if (v !== linkedValue) {
-        // console.log("make")
         makeMix(mixFn)
         linkedValues[this.id] = v
       }
@@ -177,16 +169,39 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
   }
 
   function strong(mixFn) {
-    mixFn.strong = true
-    const strongFn = () =>
-       fromAtoms.forEach(async a => {
-        if (a !== atom.proxy) {
-          a.next(()=>makeMix(mixFn))
-          await a()
+    let mutex = false
+    atom.getterFn = () => {
+      const waiters = []
+      mutex = true
+      const values = fromAtoms.map(a => {
+        let v = a()
+        if (isPromise(v)){
+          waiters.push(a)
         }
+        return v
       })
-    atom.getterFn = strongFn
-    strongFn()
+      if (waiters.length > 0) {
+        atom.getterFn = addWaiter
+        return (atom._isAwaiting = addWaiter())
+      }
+      console.log('------------')
+      return mixValue(mixFn, values)
+    }
+    function mixer(v) {
+      const linkedValue = linkedValues[this.id]
+      if (v !== linkedValue) {
+        linkedValues[this.id] = v
+        atom.getterFn()
+      }
+    }
+    fromAtoms.forEach(async a => {
+      if (a !== atom.proxy) {
+        a.next(mixer)
+        await a()
+        linkedValues[a.id] = a.value
+      }
+    })
+    atom.getterFn()
     return atom.proxy
   }
 

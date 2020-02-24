@@ -28,6 +28,9 @@ export const properties: FlowHandlers = {
   isAsync() {
     return this._isAsync
   },
+  isComposite(){
+    return !!this.getterFn
+  },
   isAwaiting() {
     return !!this._isAwaiting
   },

@@ -1,27 +1,37 @@
 import A from '../packages/facade'
 const inAwaiting = atom => console.log(typeof atom().then === 'function')
 
-
-
-const a1 = A.getter(()=>{
-  console.log("f1")
+const a1 = A.getter(() => {
   return Math.random()
 })
 
-a1.up(v=>{
-  console.log("a1 up", v)
-  // a1(1)
-})
-const a2 = A.getOnce(()=>{
-  console.log("f2")
-  return "-"
+const a2 = A.getOnce(() => {
+  // console.log('f2')
+  return '-'
 })
 // const a3 = A()
-const c = A.from(a1, a2).strong((v1, v2) => v1+v2)
+const c = A.from(a1, a2).strong((v1, v2) => v1 + v2)
+c.up(v => {
+  console.log("xxx", v)
+})
+console.log("----")
+c()
+console.log("-")
+
+// console.log('---')
+// console.log(c())
+// // console.log(c.value)
+// console.log('-')
 //
-console.log("---")
-console.log(c())
-console.log(c())
+// console.log('---')
+// console.log(c())
+// // console.log(c.value)
+// console.log('-')
+
+// console.log(c.value)
+// console.log(c())
+// console.log(c())
+// console.log(c.value)
 
 // a1.up(console.log)
 // a1()
@@ -57,24 +67,27 @@ console.log(c())
 //   console.log("up")
 // })
 // console.log(c.value)
+
 // const a1 = A(1)
 // const a2 = A()
 // const a3 = A()
 // const c = A.from(a1, a2, a3).some((v1, v2, v3) => {
-//   expect(a2).toBeDefined()
+//   console.log("::", v1,v2,v3)
 //   return v1 + v2 + (v3 ? '!' : ':')
 // })
-// a2("a")
+//
+// a2('a')
 // inAwaiting(c)
 // a3(true)
 // console.log(c())
-//
 // a3(null)
 // inAwaiting(c)
 // console.log(c.value)
 // a3(false)
 // console.log(c())
 
+// console.log(c())
+// console.log(c())
 
 //
 // const aHero = A()
@@ -116,7 +129,6 @@ console.log(c())
 // aProfile.up(()=>{
 //   console.log("end")
 // })
-
 
 // expect(c()).toBe("1a!")
 // const us = name => v=> console.log(name, v)

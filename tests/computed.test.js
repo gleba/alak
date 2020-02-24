@@ -19,12 +19,11 @@ test('some strategy', () => {
   expect(c.value).toBe('1a!')
   a3(false)
   expect(c()).toBe('1a:')
-  expect.assertions(7)
+  expect.assertions(9)
 })
 
 test('strong get strategy', () => {
   const fn1 = jest.fn()
-
   const fn2 = jest.fn()
   const a1 = A.getter(() => {
     fn1()
@@ -34,21 +33,12 @@ test('strong get strategy', () => {
     fn2()
     return '-'
   })
-  //const a3 = A()
+
   const c = A.from(a1, a2).strong((v1, v2) => v1 + v2)
+  const fn3 = jest.fn()
+  c.up(fn3)
   c()
-  c()
-
-  //console.log(c())
-
   expect(fn1).toHaveBeenCalledTimes(2)
   expect(fn2).toHaveBeenCalledTimes(1)
-  //inAwaiting(c)
-  //a3(true)
-  //expect(c()).toBe("1a!")
-  //a3(null)
-  //inAwaiting(c)
-  //expect(c.value).toBe("1a!")
-  //a3(false)
-  //expect(c()).toBe("1a:")
+  expect(fn3).toHaveBeenCalledTimes(2)
 })
