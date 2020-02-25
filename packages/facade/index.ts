@@ -10,6 +10,7 @@
 
 import { AC, AtomCreator, installExtension, MaybeAny, ProxyAtom } from '../core'
 import { ComputeStrategicAtom, from, installComputedExtension } from '../ext-computed'
+import { alive } from '../core/utils'
 
 installComputedExtension()
 
@@ -104,8 +105,8 @@ export const A = (Object.assign(AC, {
     return (a as any).from(...atoms)
   },
   id(id, v) {
-    const a = A().setId("id"+id)
-    v && a(v)
+    const a = A().setId(id)
+    alive(v) && a(v)
     return  a
   }
 }) as any) as AConstant<any>

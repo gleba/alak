@@ -32,6 +32,16 @@ test('async onAwait', async () => {
     isWait = !isWait
   })
   await a()
-  expect.assertions(2)
+
+  a.clear()
+  const fn = jest.fn()
+  a.onAwait(fn)
+  a.onAwait(()=>null)
+  await a()
+  a.offAwait(fn)
+  await a()
+  await a()
+  expect(fn).toHaveBeenCalledTimes(2)
+  expect.assertions(3)
 })
 

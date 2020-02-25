@@ -8,7 +8,6 @@ const beStart = v => expect(v).toBe(startValue)
 const beFinal = v => expect(v).toBe(finalValue)
 const neverBe = v => expect(v).toThrow
 
-
 test('mini', () => {
   let a = A.object()
   a.up(beStart)
@@ -27,6 +26,19 @@ test('up down next', async () => {
   a.up(neverBe)
   expect(a.value).toBeUndefined()
   expect.assertions(3)
+})
+
+test('once is', () => {
+  const a = A()
+  expect(a.is(undefined)).toBeTruthy()
+  a.once(beStart)
+  a(startValue)
+  a(finalValue)
+  a.once(beFinal)
+  expect(a.is(finalValue)).toBeTruthy()
+  expect(a.is(startValue)).toBeFalsy()
+  a(startValue)
+  expect.assertions(5)
 })
 
 test('context', async () => {
@@ -51,15 +63,22 @@ test('resend', async () => {
 })
 
 test('name id meta', () => {
-  let a = A()
+  let a = A.id('ground', startValue)
+  expect(a.id).toBe('ground')
+  expect(a.value).toBe(startValue)
   a.setId('sky')
   a.setName('bob')
   expect(a.id).toBe('sky')
   expect(a.name).toBe('bob')
+
+  expect(a.hasMeta('x')).toBeFalsy()
+  expect(a.getMeta('x')).toBeFalsy()
+
   a.addMeta('m')
   a.addMeta('k', finalValue)
   expect(a.hasMeta('m')).toBeTruthy()
   expect(a.getMeta('k')).toBe(finalValue)
+  expect(A.id(finalValue).id).toBe(finalValue)
 })
 
 test('fmap', () => {
@@ -73,9 +92,25 @@ test('wrap', async () => {
   a(2)
   expect(a()).toBe(4)
 
-  const b = A.wrap(v => new Promise(done=>setTimeout(()=>done(v*v),24)))
+  const b = A.wrap(v => new Promise(done => setTimeout(() => done(v * v), 24)))
   await b(4)
   expect(a()).toBe(4)
+})
+
+test('inject', () => {
+  const a = A.id('start', finalValue)
+  const o = {}
+  a.injectOnce(o)
+  a.injectOnce(o, 'final')
+  expect(o).toHaveProperty('final', finalValue)
+  expect(o).toHaveProperty('start', finalValue)
+
+  const c = A(o)
+  const c_clone = c.cloneValue()
+  expect(c_clone.start).toBe(c.value.start)
+  c.value.final = startValue
+  expect(c_clone.final).not.toBe(c.value.final)
+  expect(() => a.injectOnce(null)).toThrowError()
 })
 
 test('clear', () => {
@@ -93,9 +128,9 @@ test('clear', () => {
 test('close', () => {
   let a = A(startValue)
   expect(!!a.id).toBeTruthy()
-  expect(()=>a.illusion).toThrowError()
+  expect(() => a.illusion).toThrowError()
   a.decay()
-  expect(()=>a()).toThrowError()
-  expect(()=>a.id).toThrowError()
-  expect(()=>a.up).toThrowError()
+  expect(() => a()).toThrowError()
+  expect(() => a.id).toThrowError()
+  expect(() => a.up).toThrowError()
 })

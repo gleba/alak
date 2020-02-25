@@ -7,8 +7,6 @@ export const someFalseFilter = f => v => ((alive(v) && !isTruth(v)) ? f(v) : nul
 export const falseFilter = f => v => (!isTruth(v) ? f(v) : null)
 
 
-export const deepClone = v => (typeof v === 'object' ? JSON.parse(JSON.stringify(v)) : v)
-
 
 export const DECAY_ATOM_ERROR = "Attempt to pass into the decayed atom"
 export const PROPERTY_ATOM_ERROR = "undefined atom property"
@@ -20,15 +18,7 @@ export const deleteParams = o => {
     delete o[k]
   })
 }
-//
-// export function remove(target, value) {
-//   target.forEach((v, i) => {
-//     if (v[1] == value) {
-//       return target.splice(i, 1)
-//     }
-//   })
-//   return false
-// }
+
 
 export function isPromise(obj) {
   return (

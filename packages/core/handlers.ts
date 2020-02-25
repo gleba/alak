@@ -127,10 +127,10 @@ export const allHandlers: FlowHandlers = {
     this.flowName = name
     return this.proxy
   },
-  apply(context, v) {
-    this.bind(context)
-    setAtomValue(this, v[0])
-  },
+  // apply(context, v) {
+  //   this.bind(context)
+  //   setAtomValue(this, v[0])
+  // },
   addMeta(metaName, value?) {
     if (!this.metaMap) this.metaMap = new Map<string, any>()
     this.metaMap.set(metaName, value ? value : null)
@@ -144,14 +144,14 @@ export const allHandlers: FlowHandlers = {
     if (!this.metaMap) return null
     return this.metaMap.get(metaName)
   },
-  on(stateEvent, fn) {
-    addStateEventListener(this, stateEvent, fn)
-    return this.proxy
-  },
-  off(stateEvent, fn) {
-    removeStateEventListener(this, stateEvent, fn)
-    return this.proxy
-  },
+  // on(stateEvent, fn) {
+  //   addStateEventListener(this, stateEvent, fn)
+  //   return this.proxy
+  // },
+  // off(stateEvent, fn) {
+  //   removeStateEventListener(this, stateEvent, fn)
+  //   return this.proxy
+  // },
   useGetter(getterFunction, isAsync) {
     this.getterFn = getterFunction
     this._isAsync = isAsync
@@ -179,7 +179,7 @@ export const allHandlers: FlowHandlers = {
     if (!key) {
       key = this.flowName ? this.flowName : this.id ? this.id : this.uid
     }
-    if (!o) throw 'trying inject flow key : ' + key + ' to null object'
+    if (!o) throw 'trying inject atom to null object'
     o[key] = this.value[0]
     return this.proxy
   },
