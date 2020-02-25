@@ -9,22 +9,26 @@ export const falseFilter = f => v => (!isTruth(v) ? f(v) : null)
 
 export const deepClone = v => (typeof v === 'object' ? JSON.parse(JSON.stringify(v)) : v)
 
+
+export const DECAY_ATOM_ERROR = "Attempt to pass into the decayed atom"
+export const PROPERTY_ATOM_ERROR = "undefined atom property"
+
+
 export const deleteParams = o => {
-  // console.log("→→→→", typeof o, o)
   Object.keys(o).forEach(k => {
     if (o[k]) o[k] = null
     delete o[k]
   })
 }
-
-export function remove(target, value) {
-  target.forEach((v, i) => {
-    if (v[1] == value) {
-      return target.splice(i, 1)
-    }
-  })
-  return false
-}
+//
+// export function remove(target, value) {
+//   target.forEach((v, i) => {
+//     if (v[1] == value) {
+//       return target.splice(i, 1)
+//     }
+//   })
+//   return false
+// }
 
 export function isPromise(obj) {
   return (

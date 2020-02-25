@@ -1,14 +1,12 @@
 import { FState, notifyStateListeners } from './state'
 import { Atom } from './index'
+import { DECAY_ATOM_ERROR } from './utils'
 
 type AnyFunction = {
   (...v: any[]): any
 }
 
 export function setAtomValue(atom: Atom, ...a) {
-  if (!atom.children) {
-    throw "Attempt to pass into the closed atom"
-  }
   let [value, context] = a
   const setValue = finalValue => {
     if (atom.wrapperFn) {
@@ -59,6 +57,9 @@ export function grandUpFn(atom: Atom, keyFun: AnyFunction, grandFun: AnyFunction
 
 export const createAtom = (...a) => {
   const atom = function() {
+    if (!atom.children) {
+      throw DECAY_ATOM_ERROR
+    }
     if (arguments.length) {
       return setAtomValue(atom, ...arguments)
     } else {

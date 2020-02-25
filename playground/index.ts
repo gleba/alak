@@ -1,35 +1,64 @@
 import A from '../packages/facade'
-const inAwaiting = atom => console.log(typeof atom().then === 'function')
+import chalk from 'chalk'
+import { installComputedExtension } from '../packages/ext-computed'
+import { AC } from '../packages/core'
+const inAwaiting = atom =>
+  typeof atom().then === 'function'
+    ? console.log(chalk.green('async'))
+    : console.log(chalk.red('sync'))
 
-const a1 = A.getter(() => {
-  console.log("f1")
+installComputedExtension()
+let a = AC()
+// console.log(a.children)
+// const a = A()
+// a.decay()
+// a()
+// console.log(a.up)
 
-  return new Promise(done=> setTimeout(()=>done(Math.random()),100))
-})
+// const c = A.wrap<number>(v => v * v)
+// c(2)
+// c.up(console.log)
 
-const a2 = A.getOnce(() => {
-  // console.log('f2')
-  return '-'
-})
+// c.from(a).some(v=>{
+//
+// })
+// c.from(a).weak(a_V => a_V)
+
+//
+// const a1 = A.getter(() => {
+//   console.log("f1")
+//   return new Promise(done=> setTimeout(()=>done(Math.random()),100))
+// })
+//
+// const a2 = A.getOnce(() => {
+//   // console.log('f2')
+//   return '-'
+// })
 // const a3 = A()
-const c = A.from(a1, a2).weak((v1, v2) => v1 + v2)
-c.up(v => {
-  console.log("up", v)
-})
-console.log("==============")
-async function test(){
-  // console.log(c())
-  // await c()
-  // console.log(c())
-  // console.log(c())
-  // await c()
-  // a2()
-  // await a1()
-  // await a1()
-  // await a1()
-  // await a1()
-}
-test()
+// a1()
+//
+// const c = A.from(a1, a2, a3).some((v1, v2, v3) => {
+//   return new Promise(done => setTimeout(()=>done(v1 + v2 + (v3 ? '!' : ':')),24))
+// })
+// a2()
+// c.up(v => {
+//   console.log("up", v)
+// })
+// a3(true)
+// console.log("==============")
+// async function test(){
+//   inAwaiting(c)
+//   await c()
+//   console.log(c())
+//   // console.log(c())
+//   // await c()
+//   // a2()
+//   // await a1()
+//   // await a1()
+//   // await a1()
+//   // await a1()
+// }
+// test()
 
 // console.log(c())
 

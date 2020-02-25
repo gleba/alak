@@ -1,6 +1,7 @@
 import { createAtom } from './atom'
 import { allHandlers, objectHandlers, properties } from './handlers'
 import { Atom } from './index'
+import { DECAY_ATOM_ERROR, PROPERTY_ATOM_ERROR } from './utils'
 
 const handlers = Object.assign(objectHandlers, allHandlers)
 
@@ -16,14 +17,14 @@ export function installExtension(options) {
 }
 
 function get(atom: Atom, prop: string, receiver: any): any {
-  if (!atom.alive) {
-    return undefined
+  if (!atom.children) {
+    throw DECAY_ATOM_ERROR
   }
   let keyFn = handlers[prop]
   if (keyFn) return keyFn.bind(atom)
   keyFn = properties[prop]
   if (keyFn) return keyFn.call(atom)
-  throw 'unknown property - ' + prop
+  throw PROPERTY_ATOM_ERROR
 }
 export const proxyHandler: ProxyHandler<Atom> = { get }
 

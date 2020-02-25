@@ -55,7 +55,7 @@ export const objectHandlers: FlowHandlers = {
     this.haveFrom && delete this.haveFrom
     return this.proxy
   },
-  close() {
+  decay() {
     this.proxy.clear()
     deleteParams(this)
   },

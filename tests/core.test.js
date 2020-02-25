@@ -1,3 +1,4 @@
+//const { AC } = require('../core')
 const { A } = require('../facade')
 
 const startValue = 0
@@ -7,6 +8,13 @@ const beStart = v => expect(v).toBe(startValue)
 const beFinal = v => expect(v).toBe(finalValue)
 const neverBe = v => expect(v).toThrow
 
+
+test('mini', () => {
+  let a = A.object()
+  a.up(beStart)
+  a(startValue)
+  expect.assertions(1)
+})
 
 test('up down next', async () => {
   let a = A()
@@ -21,17 +29,18 @@ test('up down next', async () => {
   expect.assertions(3)
 })
 
-
 test('context', async () => {
   let a = A()
-  a.setId("zero")
+  a.setId('zero')
+  expect(a.uid).toBeDefined()
+  expect(a.uid).not.toBe(a.id)
   function fn() {
-    expect(this.id).toBe("zero")
+    expect(this.id).toBe('zero')
   }
   a.up(fn)
   a.upSome(fn)
   a(startValue)
-  expect.assertions(2)
+  expect.assertions(4)
 })
 
 test('resend', async () => {
@@ -53,11 +62,20 @@ test('name id meta', () => {
   expect(a.getMeta('k')).toBe(finalValue)
 })
 
-
 test('fmap', () => {
   const a = A(3)
   a.fmap(v => v + 2)
   expect(a()).toBe(5)
+})
+
+test('wrap', async () => {
+  const a = A.wrap(v => v * v)
+  a(2)
+  expect(a()).toBe(4)
+
+  const b = A.wrap(v => new Promise(done=>setTimeout(()=>done(v*v),24)))
+  await b(4)
+  expect(a()).toBe(4)
 })
 
 test('clear', () => {
@@ -75,7 +93,9 @@ test('clear', () => {
 test('close', () => {
   let a = A(startValue)
   expect(!!a.id).toBeTruthy()
-  a.close()
-  expect(a.id).toBeUndefined()
-  expect(a.up).toBeUndefined()
+  expect(()=>a.illusion).toThrowError()
+  a.decay()
+  expect(()=>a()).toThrowError()
+  expect(()=>a.id).toThrowError()
+  expect(()=>a.up).toThrowError()
 })

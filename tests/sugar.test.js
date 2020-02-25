@@ -67,3 +67,20 @@ test('upNone', () => {
   a(undefined)  // +
   expect.assertions(2)
 })
+
+test('grand down', () => {
+  const a = A()
+  const fn = jest.fn()
+  a.upSome(fn)
+  a(false)
+  a(1) // +
+  a.down(fn)
+  a(true)
+  expect(fn).toHaveBeenCalledTimes(2)
+  a.clearValue()
+  a.upSome(fn)
+  a(true)
+  a.clear()
+  a(true)
+  expect(fn).toHaveBeenCalledTimes(3)
+})

@@ -96,9 +96,7 @@ export type ComputeStrategicAtom<IN extends any[]> = {
 export function from(...fromAtoms: ProxyAtom<any>[]) {
   const atom: Atom = this
   if (atom.haveFrom) {
-    throw `atom ${
-      atom.id ? atom.id : ''
-    } already has a assigned 'from(atoms..', reassign 'from' to attest to logic errors`
+    throw `from atoms already has a assigned`
   } else {
     atom.haveFrom = true
   }
@@ -109,8 +107,6 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
   }
 
   function applyValue(mixedValue) {
-    // console.log("applyValue", mixedValue)
-
     if (isPromise(mixedValue)) {
       mixedValue.then(v => {
         freeWaiters(v)
@@ -140,8 +136,7 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
       return (atom._isAwaiting = addWaiter())
     }
     atom.getterFn = () => mixFn(...values)
-    let mixedValue = mixFn(...values)
-    return applyValue(mixedValue)
+    return applyValue(mixFn(...values))
   }
   const linkedValues = {}
   function weak(mixFn) {

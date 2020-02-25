@@ -66,7 +66,6 @@ export type Atom = {
   id: string
   flowName: string
   haveFrom: boolean
-  alive: boolean
   _isAsync: boolean
   _isAwaiting: boolean | any
   (...a: any[]): void
@@ -128,8 +127,8 @@ export declare interface ObjectAtom<T> {
   up<T>(fun: ValueReceiver<T>): ObjectAtom<T>
   /** {@inheritDoc ProxyAtom.down} */
   down(receiver: ValueReceiver<T>): ObjectAtom<T>
-  /** {@inheritDoc ProxyAtom.close} */
-  close(): void
+  /** {@inheritDoc ProxyAtom.decay} */
+  decay(): void
   /** {@inheritDoc ProxyAtom.clear} */
   clear(): ObjectAtom<T>
 }
@@ -247,8 +246,8 @@ export interface ProxyAtom<T> {
    * @returns {@link core#ProxyAtom} */
   clearValue(): ProxyAtom<T>
 
-  /** Закрыть и удалить все свойства {@link core#ProxyAtom}*/
-  close(): void
+  /** Удалить все свойства, функции и ссылки,  {@link core#ProxyAtom}*/
+  decay(): void
 
   /** Повторно отправить значение всем функциям-получателям
    * @returns {@link ProxyAtom} */

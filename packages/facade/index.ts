@@ -34,7 +34,7 @@ declare module 'alak/core' {
  * const atom = A() // сокращённая запись A.proxy()
  * ```
  * */
-export interface AConstant extends AtomCreator {
+export interface AConstant<D> extends AtomCreator {
   <T>(value?: T): ProxyAtom<MaybeAny<T>>
 
   /**
@@ -46,6 +46,13 @@ export interface AConstant extends AtomCreator {
    */
   id<T>(id: string | number, startValue?:T): ProxyAtom<MaybeAny<T>>
 
+  /**
+   * Создать атом c функцией обёртки {@link ProxyAtom.useWrapper}.
+   * @remarks
+   * Сокращённая запись `A().useWrapper(wrapperFun)`
+   * @param wrapperFun - функция-обёртка
+   */
+  wrap<T>(wrapperFun: (v:D) => T): ProxyAtom<MaybeAny<T>>
   /**
    * Создать атом c функцией добытчика {@link ProxyAtom.useGetter}.
    * @remarks
@@ -60,7 +67,7 @@ export interface AConstant extends AtomCreator {
    * Сокращённая запись `A().useOnceGet(fun)`
    * @param getterFn - функция-добытчик
    */
-  getOnce<T>(getterFn: () => T): ProxyAtom<T>
+  getOnce<D>(getterFn: () => D): ProxyAtom<D>
 
   /**
    * Создать атом из нескольких других атомов и стратегии вычисления.
@@ -89,6 +96,9 @@ export const A = (Object.assign(AC, {
     a.useGetter(getterFun)
     return a
   },
+  wrap(wrapperFun) {
+    return A().useWrapper(wrapperFun)
+  },
   from(...atoms){
     const a = A()
     return (a as any).from(...atoms)
@@ -98,7 +108,7 @@ export const A = (Object.assign(AC, {
     v && a(v)
     return  a
   }
-}) as any) as AConstant
+}) as any) as AConstant<any>
 
 export default A
 

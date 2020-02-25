@@ -13,6 +13,7 @@ function asyncFn() {
 test('async getter', async () => {
   let a = A(startValue)
   a.useGetter(asyncFn)
+  expect(a.isComposite).toBeTruthy()
   expect(a.isAsync).toBeFalsy()
   a()
   expect(a.value).toBe(startValue)
