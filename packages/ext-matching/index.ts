@@ -17,7 +17,7 @@ declare module 'alak/core' {
   }
 }
 
-function installMatchingExtension(){
+export function installMatchingExtension(){
   installExtension({
     handlers: {
       match,
@@ -62,12 +62,14 @@ function parsePattern(pattern) {
   })
   return o
 }
+export function match(...pattern) {
+  const matcher = matching(...pattern)
+  this.proxy.up(matcher)
+}
 
-export function match(arg) {
-  let a = arg
-  if (a.length >= 2) {
-    let pattern = parsePattern(a)
-
+function matching(...args) {
+  if (args.length >= 2) {
+    let pattern = parsePattern(args)
     return (...value) => {
       let v = value[0]
       let matchFn
@@ -86,8 +88,7 @@ export function match(arg) {
       if (matchFn) matchFn.apply(matchFn, value)
     }
   } else {
-    a = a[0]
-
+    const a = args[0]
     if (isFunction(a)) {
       let fn = (a as any) as Function
       return (...value) => {
@@ -106,8 +107,5 @@ export function match(arg) {
         runFns.forEach(f => f.apply(fn, value))
       }
     }
-  }
-  return v => {
-    console.error('patternMatch unsupported pattern', v, arg)
   }
 }

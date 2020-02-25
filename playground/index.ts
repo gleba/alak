@@ -1,14 +1,39 @@
 import A from '../packages/facade'
 import chalk from 'chalk'
-import { installComputedExtension } from '../packages/ext-computed'
+import { ComputeStrategy, installComputedExtension } from '../packages/ext-computed'
 import { AC } from '../packages/core'
+import { installMatchingExtension } from '../packages/ext-matching'
 const inAwaiting = atom =>
   typeof atom().then === 'function'
     ? console.log(chalk.green('async'))
     : console.log(chalk.red('sync'))
 
 installComputedExtension()
-let a = AC()
+installMatchingExtension()
+
+declare module '../packages/core' {
+  interface ProxyAtom<T> {
+    match(...pattern: any[]): ProxyAtom<T>
+    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
+  }
+}
+let a = A()
+
+a.match(
+  3, v => console.log("is 3"),
+  Array.isArray, v=> console.log("is array", v),
+  _ => console.log("мимо")
+)
+
+a(1)
+a(3)
+a('8')
+a([0])
+
+
+console.log(a.match)
+
+
 // console.log(a.children)
 // const a = A()
 // a.decay()

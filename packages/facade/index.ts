@@ -11,14 +11,16 @@
 import { AC, AtomCreator, installExtension, MaybeAny, ProxyAtom } from '../core'
 import { ComputeStrategicAtom, from, installComputedExtension } from '../ext-computed'
 import { alive } from '../core/utils'
+import { installMatchingExtension } from '../ext-matching'
 
 installComputedExtension()
-
+installMatchingExtension()
 
 // @ts-ignore
 declare module 'alak/core' {
   import { ComputeStrategy } from '../ext-computed'
   interface ProxyAtom<T> {
+    match(...pattern: any[]): ProxyAtom<T>
     from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
   }
 }

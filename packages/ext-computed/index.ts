@@ -163,14 +163,12 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
   }
 
   function strong(mixFn) {
-    let mutex = false
     let firstRun = true
     let getting = {}
     function getterFn(){
       // console.log('---------')
       // console.log("getting", getting)
       const waiters = []
-      mutex = true
       const values = fromAtoms.map(a => {
         let v: any = getting[a.id]
         if (v) return v
@@ -202,7 +200,6 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
         return (atom._isAwaiting = addWaiter())
       }
       atom.getterFn = getterFn
-      mutex = false
       getting = {}
       return mixFn(...values)
     }
@@ -211,7 +208,6 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
       const linkedValue = linkedValues[this.id]
       if (v !== linkedValue) {
         linkedValues[this.id] = v
-        !mutex && atom.getterFn()
       }
     }
     fromAtoms.forEach(a => {
