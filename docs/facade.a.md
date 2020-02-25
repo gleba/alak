@@ -9,5 +9,5 @@
 <b>Signature:</b>
 
 ```typescript
-A: AConstant
+A: AConstant<any>
 ```

@@ -7,16 +7,16 @@
 <b>Signature:</b>
 
 ```typescript
-export declare function match(arg: any): (...value: any[]) => void;
+export declare function match(...pattern: any[]): void;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  arg | <code>any</code> |  |
+|  pattern | <code>any[]</code> |  |
 
 <b>Returns:</b>
 
-`(...value: any[]) => void`
+`void`
 

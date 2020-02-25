@@ -13,5 +13,6 @@
 
 |  Function | Description |
 |  --- | --- |
-|  [match(arg)](./ext-matching.match.md) |  |
+|  [installMatchingExtension()](./ext-matching.installmatchingextension.md) |  |
+|  [match(pattern)](./ext-matching.match.md) |  |
 

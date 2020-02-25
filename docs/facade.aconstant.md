@@ -9,7 +9,7 @@
 <b>Signature:</b>
 
 ```typescript
-export interface AConstant extends AtomCreator 
+export interface AConstant<D> extends AtomCreator 
 ```
 
 ## Remarks
@@ -29,5 +29,8 @@ const atom = A() // сокращённая запись A.proxy()
 |  Method | Description |
 |  --- | --- |
 |  [from(atoms)](./facade.aconstant.from.md) | Создать атом из нескольких других атомов и стратегии вычисления. Смотрите описание стратегий: [ComputeStrategy](./ext-computed.computestrategy.md)<!-- -->. |
+|  [getOnce(getterFn)](./facade.aconstant.getonce.md) | Создать атом c функцией добытчика [ProxyAtom.useGetter()](./facade.proxyatom.usegetter.md)<!-- -->. |
 |  [getter(getterFn)](./facade.aconstant.getter.md) | Создать атом c функцией добытчика [ProxyAtom.useGetter()](./facade.proxyatom.usegetter.md)<!-- -->. |
+|  [id(id, startValue)](./facade.aconstant.id.md) | Создать атом c предустановленным идентификатором [ProxyAtom.setId()](./facade.proxyatom.setid.md)<!-- -->. |
+|  [wrap(wrapperFun)](./facade.aconstant.wrap.md) | Создать атом c функцией обёртки [ProxyAtom.useWrapper()](./facade.proxyatom.usewrapper.md)<!-- -->. |
 

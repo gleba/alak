@@ -23,6 +23,7 @@ export interface ProxyAtom<T>
 |  [id](./facade.proxyatom.id.md) | <code>string</code> | Идентификатор, вернёт <code>uid</code> если не был задан [ProxyAtom.setId()](./facade.proxyatom.setid.md) |
 |  [isAsync](./facade.proxyatom.isasync.md) | <code>Boolean</code> | Является ли уставленный добытчик [ProxyAtom.useGetter()](./facade.proxyatom.usegetter.md) асинхронным |
 |  [isAwaiting](./facade.proxyatom.isawaiting.md) | <code>Boolean</code> | Находится ли атом в процессе получения значения от асинхронного добытчика [ProxyAtom.useGetter()](./facade.proxyatom.usegetter.md) |
+|  [isComposite](./facade.proxyatom.iscomposite.md) | <code>boolean</code> | Вернёт <code>true</code> при наличии функции-добытчика |
 |  [isEmpty](./facade.proxyatom.isempty.md) | <code>boolean</code> | Вернёт <code>true</code> при отсутствующем значении в контейнере |
 |  [name](./facade.proxyatom.name.md) | <code>string</code> | Имя заданное [ProxyAtom.setName()](./facade.proxyatom.setname.md) |
 |  [uid](./facade.proxyatom.uid.md) | <code>string</code> | Уникальный идентификатор генерируется при создании. |
@@ -36,7 +37,7 @@ export interface ProxyAtom<T>
 |  [clear()](./facade.proxyatom.clear.md) | Удалить связи всех функций-получателей, слушателей, и очистить значение контейнера |
 |  [clearValue()](./facade.proxyatom.clearvalue.md) | Очистить значение контейнера |
 |  [cloneValue()](./facade.proxyatom.clonevalue.md) | Создать дубликат значение |
-|  [close()](./facade.proxyatom.close.md) | Закрыть и удалить все свойства [ProxyAtom](./core.proxyatom.md) |
+|  [decay()](./facade.proxyatom.decay.md) | Удалить все свойства, функции и ссылки, [ProxyAtom](./core.proxyatom.md) |
 |  [down(receiver)](./facade.proxyatom.down.md) | Удалить функцию-получатель |
 |  [fmap(fun)](./facade.proxyatom.fmap.md) | Применить функцию к значению в контейнере |
 |  [getMeta(metaName)](./facade.proxyatom.getmeta.md) | Получить мета-данные по имени |
@@ -51,9 +52,12 @@ export interface ProxyAtom<T>
 |  [setId(id)](./facade.proxyatom.setid.md) | Установить идентификатор |
 |  [setName(name)](./facade.proxyatom.setname.md) | Установить имя |
 |  [up(receiver)](./facade.proxyatom.up.md) | Добавить функцию-получатель обновлений значения контейнера и передать текущее значение контейнера, если оно есть |
+|  [upFalse(receiver)](./facade.proxyatom.upfalse.md) | Добавить функцию-получатель значений равных <code>false</code> после приведения значения к типу <code>boolean</code> методом <code>!value</code> |
 |  [upNone(receiver)](./facade.proxyatom.upnone.md) | Добавить функцию-получатель значений равных <code>null</code> и <code>undefined</code> |
 |  [upSome(receiver)](./facade.proxyatom.upsome.md) | Добавить функцию-получатель значений не равных <code>null</code> и <code>undefined</code> |
+|  [upSomeFalse(receiver)](./facade.proxyatom.upsomefalse.md) | Добавить функцию-получатель значений равных <code>false</code> после приведения значения к типу <code>boolean</code> методом <code>!value</code> за исключением <code>null</code> и <code>undefined</code> |
 |  [upTrue(receiver)](./facade.proxyatom.uptrue.md) | Добавить функцию-получатель значений равных <code>true</code> после приведения значения к типу <code>boolean</code> методом <code>!!value</code> |
 |  [useGetter(getter, isAsync)](./facade.proxyatom.usegetter.md) | Использовать функцию-добытчик значения контейнера |
+|  [useOnceGet(getter, isAsync)](./facade.proxyatom.useonceget.md) | Использовать функцию-добытчик только один раз |
 |  [useWrapper(wrapper, isAsync)](./facade.proxyatom.usewrapper.md) | Использовать функцию-обёртку Каждое новое обновление значение контейнера атома, всегда будет проходить сперва через функцию-обёртку |
 

@@ -40,7 +40,7 @@ async function extractApi(name) {
   prepare(cwd)
   const config = readJSONSync(path.join(homeDir, 'scripts', cfgFile))
   const outFilePath = `../input/${name}.api.json`
-  config.mainEntryPointFilePath = `../../lib/${name}/index.d.ts`
+  config.mainEntryPointFilePath = `../../${name}/index.d.ts`
   config.docModel.apiJsonFilePath = outFilePath
   writeJSONSync(path.join(cwd, cfgFile), config)
   log0(`extract ${name} api..`)

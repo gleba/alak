@@ -16,7 +16,6 @@ export interface ComputeStrategy<T, IN extends any[]>
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [quantum](./ext-computed.computestrategy.quantum.md) | <code>ComputedIn&lt;T, IN&gt;</code> | Функция-обработчик вызывается при заполнении всех атомов любыми значениями. |
 |  [some](./ext-computed.computestrategy.some.md) | <code>ComputedIn&lt;T, IN&gt;</code> | Функция-обработчик вызывается при наличии значения всех атомов исключая <code>null</code> и <code>undefined</code>. |
 |  [strong](./ext-computed.computestrategy.strong.md) | <code>ComputedIn&lt;T, IN&gt;</code> | Вызвать функцию-добытчик у асинхронных атомов-источников. Функция-обработчик вызывается при заполнении всех атомов любыми значениями. |
 |  [weak](./ext-computed.computestrategy.weak.md) | <code>ComputedIn&lt;T, IN&gt;</code> | Функция-обработчик вызывается обновлением любого атома-источника. |

@@ -23,8 +23,6 @@ export declare type Atom = {
     id: string;
     flowName: string;
     haveFrom: boolean;
-    alive: boolean;
-    strongFn: Function | any;
     _isAsync: boolean;
     _isAwaiting: boolean | any;
     (...a: any[]): void;

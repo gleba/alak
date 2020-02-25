@@ -21,7 +21,7 @@ export declare interface ObjectAtom<T>
 |  Method | Description |
 |  --- | --- |
 |  [clear()](./core.objectatom.clear.md) | Удалить связи всех функций-получателей, слушателей, и очистить значение контейнера |
-|  [close()](./core.objectatom.close.md) | Закрыть и удалить все свойства [ProxyAtom](./core.proxyatom.md) |
+|  [decay()](./core.objectatom.decay.md) | Удалить все свойства, функции и ссылки, [ProxyAtom](./core.proxyatom.md) |
 |  [down(receiver)](./core.objectatom.down.md) | Удалить функцию-получатель |
 |  [up(fun)](./core.objectatom.up.md) | Добавить функцию-получатель обновлений значения контейнера и передать текущее значение контейнера, если оно есть |
 
