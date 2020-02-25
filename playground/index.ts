@@ -2,7 +2,9 @@ import A from '../packages/facade'
 const inAwaiting = atom => console.log(typeof atom().then === 'function')
 
 const a1 = A.getter(() => {
-  return Math.random()
+  console.log("f1")
+
+  return new Promise(done=> setTimeout(()=>done(Math.random()),100))
 })
 
 const a2 = A.getOnce(() => {
@@ -10,13 +12,29 @@ const a2 = A.getOnce(() => {
   return '-'
 })
 // const a3 = A()
-const c = A.from(a1, a2).strong((v1, v2) => v1 + v2)
+const c = A.from(a1, a2).weak((v1, v2) => v1 + v2)
 c.up(v => {
-  console.log("xxx", v)
+  console.log("up", v)
 })
-console.log("----")
-c()
-console.log("-")
+console.log("==============")
+async function test(){
+  // console.log(c())
+  // await c()
+  // console.log(c())
+  // console.log(c())
+  // await c()
+  // a2()
+  // await a1()
+  // await a1()
+  // await a1()
+  // await a1()
+}
+test()
+
+// console.log(c())
+
+// c()
+// console.log("-")
 
 // console.log('---')
 // console.log(c())

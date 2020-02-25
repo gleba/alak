@@ -11,7 +11,7 @@ nodemon({
 const forked = []
 const play = () => {
   while (forked.length) forked.pop().kill()
-
+  console.clear()
   forked.push(fork('build.js', ['play']))
 }
 

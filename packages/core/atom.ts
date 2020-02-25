@@ -7,12 +7,9 @@ type AnyFunction = {
 
 export function setAtomValue(atom: Atom, ...a) {
   if (!atom.children) {
-    console.error('Attempt to pass in the ended newFlow ', atom.id ? atom.id : '')
-    console.warn("it's possible memory leak in application")
-    return atom.proxy
+    throw "Attempt to pass into the closed atom"
   }
   let [value, context] = a
-  // if (dev.debug) dev.updatingStarted(atom, context)
   const setValue = finalValue => {
     if (atom.wrapperFn) {
       let wrappedValue = atom.wrapperFn(finalValue, atom.value[0])
@@ -42,15 +39,6 @@ async function setAsyncValue(atom: Atom, promise: PromiseLike<any>) {
   return v
 }
 
-const notify = (atom: Atom, children) =>
-  children &&
-  children.size > 0 &&
-  children.forEach(f => {
-    console.log(atom.id, children.size)
-    f.bind({ a: 'a' })
-    f('2')
-    // f.apply({ hello:"xx" }, 0)
-  })
 
 export function notifyChildes(atom: Atom) {
   const v = atom.value[0]
@@ -72,11 +60,7 @@ export function grandUpFn(atom: Atom, keyFun: AnyFunction, grandFun: AnyFunction
 export const createAtom = (...a) => {
   const atom = function() {
     if (arguments.length) {
-      if (typeof arguments[0] == 'function') {
-        atom.getterFn = arguments[0]
-      } else {
-        return setAtomValue(atom, ...arguments)
-      }
+      return setAtomValue(atom, ...arguments)
     } else {
       if (atom._isAwaiting) {
         return atom._isAwaiting

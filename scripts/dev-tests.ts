@@ -8,7 +8,12 @@ nodemon({
   watch: 'tests',
 })
 
-const runTests = () => fork('node_modules/jest/bin/jest')
+const forked = []
+const runTests = () => {
+  while (forked.length) forked.pop().kill()
+  console.clear()
+  forked.push(fork('node_modules/jest/bin/jest'))
+}
 
 nodemon
   .on('start', () => tsc().then(runTests))

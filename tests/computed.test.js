@@ -22,7 +22,7 @@ test('some strategy', () => {
   expect.assertions(9)
 })
 
-test('strong get strategy', () => {
+test('strong get sync strategy', () => {
   const fn1 = jest.fn()
   const fn2 = jest.fn()
   const a1 = A.getter(() => {
@@ -33,11 +33,32 @@ test('strong get strategy', () => {
     fn2()
     return '-'
   })
-
   const c = A.from(a1, a2).strong((v1, v2) => v1 + v2)
   const fn3 = jest.fn()
   c.up(fn3)
   c()
+  expect(fn1).toHaveBeenCalledTimes(2)
+  expect(fn2).toHaveBeenCalledTimes(1)
+  expect(fn3).toHaveBeenCalledTimes(2)
+})
+
+test('strong get async strategy', async () => {
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+  const a1 = A.getter(() => {
+    fn1()
+    return new Promise(done => setTimeout(() => done(Math.random()), 24))
+  })
+  const a2 = A.getOnce(() => {
+    fn2()
+    return '-'
+  })
+  const c = A.from(a1, a2).strong((v1, v2) => v1 + v2)
+  inAwaiting(c)
+  const fn3 = jest.fn()
+  c.up(fn3)
+  await c()
+  await c()
   expect(fn1).toHaveBeenCalledTimes(2)
   expect(fn2).toHaveBeenCalledTimes(1)
   expect(fn3).toHaveBeenCalledTimes(2)

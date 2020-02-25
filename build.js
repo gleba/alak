@@ -21,6 +21,4 @@ switch (task) {
   case 'tests':
     require('./scripts/dev-tests')
     break
-  default:
-    console.log('no task', task)
 }
