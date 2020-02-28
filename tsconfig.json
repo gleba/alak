@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
-    "lib": ["ES2017", "DOM"],
+    "sourceMap": false,
     "module": "commonjs",
     "target": "es6",
-    "declaration": false,
-    "outDir": "dist"
-  },
-  "exclude": ["node_modules", "tests"]
+    "removeComments": false,
+    "esModuleInterop": true,
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["packages/"],
+      "alak/*": ["lib/"]
+    }
+  }
 }
