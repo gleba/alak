@@ -1,6 +1,5 @@
-import { ComputeStrategy, from } from '../ext-computed'
-import A from '../facade'
-import { installExtension } from '../core'
+import { installExtension } from '../core/create'
+// import { installExtension } from '../core'
 
 /**
  * Расширение паттерн-матчинга

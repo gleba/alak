@@ -14,6 +14,9 @@ switch (task) {
   case 'dev':
     require('./scripts/dev-play')
     break
+  case 'site':
+    require('./scripts/make-site')
+    break
   case 'play':
     require('./playground/')
     break

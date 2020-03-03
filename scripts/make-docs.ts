@@ -29,7 +29,7 @@ async function checkModule(name) {
   const modulePath = getModuleStartPath(name)
   if (!existsSync(modulePath)) {
     info(`installing ${name}...`)
-    await executeCommand(`npm i @microsoft/api-${name}`, homeDir)
+    await executeCommand(`npm i @microsoft/api-${name} --no-save`, homeDir)
   } else {
     log0(`${name} found`)
   }
@@ -72,7 +72,6 @@ async function make() {
   info('making documentation...')
   await Promise.all([
     executeCommand(`node ../${getModuleStartPath(documenter)} markdown`, workDir),
-    executeCommand(`node ../${getModuleStartPath(documenter)} yaml`, workDir),
     ])
   log0('cleaning working directory')
   if (!existsSync('docs')) mkdirSync('docs')

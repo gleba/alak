@@ -8,22 +8,23 @@
  * @packageDocumentation
  */
 
-import { AC, AtomCreator, installExtension, MaybeAny, ProxyAtom } from '../core'
-import { ComputeStrategicAtom, from, installComputedExtension } from '../ext-computed'
+import { AC, AtomCreator, installExtension, MaybeAny, ProxyAtom } from '../core/index'
+import { ComputeStrategicAtom, from, installComputedExtension } from '../ext-computed/index'
 import { alive } from '../core/utils'
-import { installMatchingExtension } from '../ext-matching'
+import { installMatchingExtension } from '../ext-matching/index'
 
 installComputedExtension()
 installMatchingExtension()
 
-// @ts-ignore
-declare module 'alak/core' {
-  import { ComputeStrategy } from '../ext-computed'
-  interface ProxyAtom<T> {
-    match(...pattern: any[]): ProxyAtom<T>
-    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
-  }
-}
+// // @ts-ignore
+// declare module 'alak/core' {
+//   // @ts-ignore
+//   import { ComputeStrategy } from 'alak/ext-computed'
+//   interface ProxyAtom<T> {
+//     match(...pattern: any[]): ProxyAtom<T>
+//     from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
+//   }
+// }
 // installExtension({
 //   handlers: {
 //     from: fromFlows,
@@ -116,4 +117,4 @@ export const A = (Object.assign(AC, {
 export default A
 
 
-export { ProxyAtom } from '../core'
+export { ProxyAtom } from '../core/index'

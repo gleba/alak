@@ -1,0 +1,187 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+
+/*,*/
+/*"",*/
+@import url('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/codemirror.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/theme/nord.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/addon/lint/lint.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/addon/hint/show-hint.min.css');
+:root {
+  --ifm-color-primary: #c926ff;
+  --ifm-color-primary-dark: #d98b2b;
+  --ifm-color-primary-darker: #a65a17;
+  --ifm-color-primary-darkest: #732c03;
+  --ifm-color-primary-light: #f2b950;
+  --ifm-color-primary-lighter: #f2b950;
+  --ifm-color-primary-lightest: #f2e399;
+  --ifm-code-font-size: 95%;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgb(72, 77, 91);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.start {
+  color: white !important;
+}
+
+.CodeMirror-lint-tooltip {
+  height: auto !important;
+  background-color: #6e3baf;
+  border: 1px solid #000;
+  border-radius: 4px 4px 4px 4px;
+  color: #000;
+  font-family: monospace;
+  font-size: 10pt;
+  overflow: hidden;
+  padding: 2px 5px;
+  position: fixed;
+  white-space: pre;
+  white-space: pre-wrap;
+  z-index: 100;
+  max-width: 600px;
+  opacity: 0;
+  transition: opacity 0.4s;
+  -moz-transition: opacity 0.4s;
+  -webkit-transition: opacity 0.4s;
+  -o-transition: opacity 0.4s;
+  -ms-transition: opacity 0.4s;
+}
+
+
+.atom-stats {
+  display: flex;
+  /*background-color: #4c566a;*/
+
+}
+.atom-stats pre {
+  margin: 0 0;
+  padding: 5px 4px;
+  width: 100%;
+  /*background-color: #e6a700;*/
+  word-wrap: break-word;
+  border-radius: 0;
+  /*font-size: 14px;*/
+}
+.atom-stats table {
+  font-size: 12px;
+  padding: 0 0 !important;
+  margin: 0 0 !important;
+}
+.atom-stats td {
+  padding: 3px 7px;
+}
+
+.cm-s-nord.CodeMirror {
+  background: #2e3440;
+  color: #d8dee9;
+}
+.cm-s-nord div.CodeMirror-selected {
+  background: #434c5e;
+}
+.cm-s-nord .CodeMirror-line::selection,
+.cm-s-nord .CodeMirror-line > span::selection,
+.cm-s-nord .CodeMirror-line > span > span::selection {
+  background: #3b4252;
+}
+.cm-s-nord .CodeMirror-line::-moz-selection,
+.cm-s-nord .CodeMirror-line > span::-moz-selection,
+.cm-s-nord .CodeMirror-line > span > span::-moz-selection {
+  background: #3b4252;
+}
+.cm-s-nord .CodeMirror-gutters {
+  background: #2e3440;
+  border-right: 0;
+}
+.cm-s-nord .CodeMirror-guttermarker {
+  color: #4c566a;
+}
+.cm-s-nord .CodeMirror-guttermarker-subtle {
+  color: #4c566a;
+}
+.cm-s-nord .CodeMirror-linenumber {
+  color: #4c566a;
+}
+.cm-s-nord .CodeMirror-cursor {
+  border-left: 1px solid #f8f8f0;
+}
+.cm-s-nord span.cm-comment {
+  color: #4c566a;
+}
+.cm-s-nord span.cm-atom {
+  color: #b48ead;
+}
+.cm-s-nord span.cm-number {
+  color: #b48ead;
+}
+.cm-s-nord span.cm-comment.cm-attribute {
+  color: #97b757;
+}
+.cm-s-nord span.cm-comment.cm-def {
+  color: #bc9262;
+}
+.cm-s-nord span.cm-comment.cm-tag {
+  color: #bc6283;
+}
+.cm-s-nord span.cm-comment.cm-type {
+  color: #5998a6;
+}
+.cm-s-nord span.cm-attribute,
+.cm-s-nord span.cm-property {
+  color: #8fbcbb;
+}
+.cm-s-nord span.cm-keyword {
+  color: #81a1c1;
+}
+.cm-s-nord span.cm-builtin {
+  color: #81a1c1;
+}
+.cm-s-nord span.cm-string {
+  color: #a3be8c;
+}
+.cm-s-nord span.cm-variable {
+  color: #d8dee9;
+}
+.cm-s-nord span.cm-variable-2 {
+  color: #d8dee9;
+}
+.cm-s-nord span.cm-type,
+.cm-s-nord span.cm-variable-3 {
+  color: #d8dee9;
+}
+.cm-s-nord span.cm-def {
+  color: #8fbcbb;
+}
+.cm-s-nord span.cm-bracket {
+  color: #81a1c1;
+}
+.cm-s-nord span.cm-tag {
+  color: #bf616a;
+}
+.cm-s-nord span.cm-header {
+  color: #b48ead;
+}
+.cm-s-nord span.cm-link {
+  color: #b48ead;
+}
+.cm-s-nord span.cm-error {
+  background: #bf616a;
+  color: #f8f8f0;
+}
+.cm-s-nord .CodeMirror-activeline-background {
+  background: #3b4252;
+}
+.cm-s-nord .CodeMirror-matchingbracket {
+  text-decoration: underline;
+  color: #fff !important;
+}
+/*# sourceMappingURL=nord.min.css.map */
