@@ -6,15 +6,26 @@ type AnyFunction = {
   (...v: any[]): any
 }
 
+export const debug = {} as {
+  enabled: boolean
+  updateAsyncStart(atom: Atom, context?: string)
+  updateAsyncFinish(atom: Atom)
+  updateValue(atom: Atom, context: string)
+}
+
 export function setAtomValue(atom: Atom, ...a) {
   let [value, context] = a
   const setValue = finalValue => {
     if (atom.wrapperFn) {
       let wrappedValue = atom.wrapperFn(finalValue, atom.value[0])
-      if (wrappedValue.then) return setAsyncValue(atom, wrappedValue)
+      if (wrappedValue.then) {
+        debug.enabled && debug.updateAsyncStart(atom, context)
+        return setAsyncValue(atom, wrappedValue)
+      }
       finalValue = wrappedValue
     }
     atom.value = [finalValue]
+    debug.enabled && debug.updateValue(atom, context)
     notifyChildes(atom)
     return finalValue
   }
@@ -32,19 +43,19 @@ async function setAsyncValue(atom: Atom, promise: PromiseLike<any>) {
   atom.value = [v]
   atom._isAwaiting = false
   notifyStateListeners(atom, FState.AWAIT, false)
-  // if (dev.debug) dev.updatingFinished(atom.uid, v)
+  debug.enabled && debug.updateAsyncFinish(atom)
   notifyChildes(atom)
   return v
 }
 
-
 export function notifyChildes(atom: Atom) {
   const v = atom.value[0]
   atom.children.size > 0 && atom.children.forEach(f => f.call(atom.proxy, v))
-  atom.grandChildren && atom.grandChildren.size > 0
-  && atom.grandChildren.forEach((f, k) => {
-    f(v)
-  })
+  atom.grandChildren &&
+    atom.grandChildren.size > 0 &&
+    atom.grandChildren.forEach((f, k) => {
+      f(v)
+    })
 }
 
 export function grandUpFn(atom: Atom, keyFun: AnyFunction, grandFun: AnyFunction): any {

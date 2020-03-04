@@ -43,7 +43,7 @@ export type FlowHandler = {
 export type FlowHandlers = {
   [key: string]: FlowHandler
 }
-export { installExtension } from './create'
+export { installAtomExtension } from './create'
 
 /** {@link AtomCreator} */
 export const AC: AtomCreator = Object.assign(createProxyFlow, {

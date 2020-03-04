@@ -32,12 +32,12 @@
 
 import { setAtomValue } from '../core/atom'
 import { alive, isPromise } from '../core/utils'
-import { Atom, installExtension, ProxyAtom } from '../core/index'
+import { Atom, installAtomExtension, ProxyAtom } from '../core/index'
 import { createPrivateKey } from 'crypto'
 
 /** Установить расширение вычисления множеств прокси-атома*/
 export function installComputedExtension() {
-  installExtension({
+  installAtomExtension({
     handlers: {
       from,
     },

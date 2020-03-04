@@ -405,7 +405,7 @@
       options.handlers && Object.assign(handlers$1, options.handlers);
       options.properties && Object.assign(handlers.properties, options.properties);
     }
-    exports.installExtension = installExtension;
+    exports.installAtomExtension = installExtension;
     function get(atom, prop, receiver) {
       if (!atom.children) {
         throw utils.DECAY_ATOM_ERROR;
@@ -461,7 +461,7 @@
     Object.defineProperty(exports, "__esModule", { value: true });
 
     var create_2 = create;
-    exports.installExtension = create_2.installExtension;
+    exports.installAtomExtension = create_2.installExtension;
     /** {@link AtomCreator} */
     exports.AC = Object.assign(create.createProxyFlow, {
       proxy: create.createProxyFlow,

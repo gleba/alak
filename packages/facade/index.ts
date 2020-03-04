@@ -8,7 +8,7 @@
  * @packageDocumentation
  */
 
-import { AC, AtomCreator, installExtension, MaybeAny, ProxyAtom } from '../core/index'
+import { AC, AtomCreator, installAtomExtension, MaybeAny, ProxyAtom } from '../core/index'
 import { ComputeStrategicAtom, from, installComputedExtension } from '../ext-computed/index'
 import { alive } from '../core/utils'
 import { installMatchingExtension } from '../ext-matching/index'

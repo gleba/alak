@@ -11,7 +11,7 @@ const handlers = Object.assign(objectHandlers, allHandlers)
  * Установить расширения атома
  * @param options - {@link ExtensionOptions}
  */
-export function installExtension(options) {
+export function installAtomExtension(options) {
   options.handlers && Object.assign(handlers, options.handlers)
   options.properties && Object.assign(properties, options.properties)
 }

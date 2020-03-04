@@ -1,4 +1,4 @@
-import { installExtension } from '../core/create'
+import { installAtomExtension } from '../core/create'
 // import { installExtension } from '../core'
 
 /**
@@ -17,7 +17,7 @@ declare module 'alak/core' {
 }
 
 export function installMatchingExtension(){
-  installExtension({
+  installAtomExtension({
     handlers: {
       match,
     },
