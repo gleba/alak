@@ -7,11 +7,11 @@ export function debugInstance() {
   let collection: AtomLog[] = []
 
   function startCollect() {
-    isCollecting = false
+    isCollecting = true
     collection = []
   }
   function stopCollect() {
-    isCollecting = true
+    isCollecting = false
     return collection
   }
 
@@ -36,7 +36,7 @@ export function debugInstance() {
     controller,
     receiver(event: string, atom, ...context) {
       const snap = atomSnapshot(atom)
-      context && snap.push(context)
+      context.length>0 && snap.push(...context)
       const record = [Date.now() - timeStart, event, ...snap] as AtomLog
       isCollecting && collection.push(record)
       records.push(record)

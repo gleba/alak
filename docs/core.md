@@ -18,7 +18,7 @@
 
 |  Function | Description |
 |  --- | --- |
-|  [installExtension(options)](./core.installextension.md) | Установить расширения атома |
+|  [installAtomExtension(options)](./core.installatomextension.md) | Установить расширения атома |
 
 ## Interfaces
 

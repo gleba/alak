@@ -26,7 +26,7 @@ module.exports = {
     },
   },
   scripts: [
-    "/alak.js",
+    //"/alak.js",
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/codemirror.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/mode/javascript/javascript.min.js",
     "https://unpkg.com/jshint@2.9.6/dist/jshint.js",

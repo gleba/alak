@@ -1,9 +1,12 @@
 import React from 'react'
+import A from 'alak'
+import { installAtomDebuggerTool } from 'alak/debug'
 
 export class MirrorRepl extends React.Component {
   constructor(props) {
     super()
     this.code = props.code
+    this.onCodeChange = props.onCodeChange
   }
   componentDidMount() {
     const repl = CodeMirror.fromTextArea(this.el, {
@@ -15,13 +18,9 @@ export class MirrorRepl extends React.Component {
         esversion: 6,
       },
     })
-    repl.setValue(this.code)
-    CodeMirror.on(repl, 'change', v => {
-      //try {
-      //  const x = eval(v.doc.getValue())
-      //} catch (e) {
-      //  console.log(e)
-      //}
+    this.code && repl.setValue(this.code)
+    this.onCodeChange && CodeMirror.on(repl, 'change', ()=>{
+      this.onCodeChange(repl.getValue())
     })
   }
 

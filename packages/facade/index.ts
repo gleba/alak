@@ -8,7 +8,7 @@
  * @packageDocumentation
  */
 
-import { AC, AtomCreator, installAtomExtension, MaybeAny, ProxyAtom } from '../core/index'
+import { AC, AtomCreator, installAtomExtension, MaybeAny, Atom } from '../core/index'
 import { ComputeStrategicAtom, from, installComputedExtension } from '../ext-computed/index'
 import { alive } from '../core/utils'
 import { installMatchingExtension } from '../ext-matching/index'
@@ -39,39 +39,39 @@ installMatchingExtension()
  * ```
  * */
 export interface AConstant<D> extends AtomCreator {
-  <T>(value?: T): ProxyAtom<MaybeAny<T>>
+  <T>(value?: T): Atom<MaybeAny<T>>
 
   /**
-   * Создать атом c предустановленным идентификатором {@link ProxyAtom.setId}.
+   * Создать атом c предустановленным идентификатором {@link Atom.setId}.
    * @remarks
    * Сокращённая запись  `A().setId(id)`
    * @param id - идентификатор
    * @param startValue - стартовое значение
    */
-  id<T>(id: string | number, startValue?:T): ProxyAtom<MaybeAny<T>>
+  id<T>(id: string | number, startValue?:T): Atom<MaybeAny<T>>
 
   /**
-   * Создать атом c функцией обёртки {@link ProxyAtom.useWrapper}.
+   * Создать атом c функцией обёртки {@link Atom.useWrapper}.
    * @remarks
    * Сокращённая запись `A().useWrapper(wrapperFun)`
    * @param wrapperFun - функция-обёртка
    */
-  wrap<T>(wrapperFun: (v:D) => T): ProxyAtom<MaybeAny<T>>
+  wrap<T>(wrapperFun: (v:D) => T): Atom<MaybeAny<T>>
   /**
-   * Создать атом c функцией добытчика {@link ProxyAtom.useGetter}.
+   * Создать атом c функцией добытчика {@link Atom.useGetter}.
    * @remarks
    * Сокращённая запись `A().useGetter(fun)`
    * @param getterFn - функция-добытчик
    */
-  getter<T>(getterFn: () => T): ProxyAtom<T>
+  getter<T>(getterFn: () => T): Atom<T>
 
   /**
-   * Создать атом c функцией добытчика {@link ProxyAtom.useGetter}.
+   * Создать атом c функцией добытчика {@link Atom.useGetter}.
    * @remarks
    * Сокращённая запись `A().useOnceGet(fun)`
    * @param getterFn - функция-добытчик
    */
-  getOnce<D>(getterFn: () => D): ProxyAtom<D>
+  getOnce<D>(getterFn: () => D): Atom<D>
 
   /**
    * Создать атом из нескольких других атомов и стратегии вычисления.
@@ -88,7 +88,7 @@ export interface AConstant<D> extends AtomCreator {
    * @param atoms - набор входных атомов для вычисления значения
    * @returns {@link ext-computed#ComputeStrategy}
    */
-  from<IN extends ProxyAtom<any>[]>(...atoms: IN): ComputeStrategicAtom<IN>
+  from<IN extends Atom<any>[]>(...atoms: IN): ComputeStrategicAtom<IN>
 }
 /**{@link AConstant}*/
 export const A = (Object.assign(AC, {
@@ -117,4 +117,4 @@ export const A = (Object.assign(AC, {
 export default A
 
 
-export { ProxyAtom } from '../core/index'
+export { Atom } from '../core/index'

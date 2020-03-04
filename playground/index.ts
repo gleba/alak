@@ -1,33 +1,41 @@
-import A from '../packages/facade'
-import chalk from 'chalk'
-import { ComputeStrategy, installComputedExtension } from '../packages/ext-computed'
-import { AC } from '../packages/core'
-import { installMatchingExtension } from '../packages/ext-matching'
-import { installAtomDebuggerTool } from '../packages/dev'
-const inAwaiting = atom =>
-  typeof atom().then === 'function'
-    ? console.log(chalk.green('async'))
-    : console.log(chalk.red('sync'))
-
-installComputedExtension()
-installMatchingExtension()
-
-declare module '../packages/core' {
-  interface ProxyAtom<T> {
-    match(...pattern: any[]): ProxyAtom<T>
-    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
-  }
-}
-let a = A()
-
-const debugInstance = installAtomDebuggerTool.instance()
-debugInstance.onRecord(log => {
-  console.log(log.toString())
-})
-a('sd')
-a('sd-s')
-console.log('?')
-
+import './benchmark'
+// import A from '../packages/facade'
+// import chalk from 'chalk'
+// import { ComputeStrategy, installComputedExtension } from '../packages/ext-computed'
+// import { AC } from '../packages/core'
+// import { installMatchingExtension } from '../packages/ext-matching'
+// import { installAtomDebuggerTool } from '../packages/debug'
+// const inAwaiting = atom =>
+//   typeof atom().then === 'function'
+//     ? console.log(chalk.green('async'))
+//     : console.log(chalk.red('sync'))
+//
+// installComputedExtension()
+// installMatchingExtension()
+//
+// declare module '../packages/core' {
+//   interface ProxyAtom<T> {
+//     match(...pattern: any[]): ProxyAtom<T>
+//     from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
+//   }
+// }
+// let a = A()
+//
+// console.log("?")
+//
+// const debugInstance = installAtomDebuggerTool.instance()
+// debugInstance.onRecord(log => {
+//   console.log(log.toString())
+// })
+// a('sd')
+// a('sd-s')
+//
+// debugInstance.startCollect()
+// a('!')
+// a('!')
+// a('!')
+// console.log(debugInstance.stopCollect())
+//
 // a.match(
 //   3, v => console.log("is 3"),
 //   Array.isArray, v=> console.log("is array", v),

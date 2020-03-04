@@ -9,7 +9,7 @@ const beFinal = v => expect(v).toBe(finalValue)
 const neverBe = v => expect(v).toThrow
 
 test('mini', () => {
-  let a = A.object()
+  let a = A()
   a.up(beStart)
   a(startValue)
   expect.assertions(1)

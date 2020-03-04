@@ -1,49 +1,49 @@
-import React from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { MirrorRepl } from './Mirror'
+import { installAtomDebuggerTool } from 'alak/debug'
+import A from 'alak'
+import { DebugTable } from './DebugTable'
 
-function AtomCol() {
-  const atomSelect = () => {
-    console.log('selected')
+const debugTool = installAtomDebuggerTool.instance()
+global.A = A
+let traced = []
+global.trace = function(...a) {
+  console.log(a.join(' '))
+  traced.push(`> ${a.join(' ')}`)
+}
+let lastChange
+export function useRpl(startCode) {
+  const [log, setLog] = useState()
+  const [debugLog, setDebug] = useState()
+  function runCode(code) {
+    clearTimeout(lastChange)
+    lastChange = setTimeout(() => {
+      try {
+        traced = []
+        debugTool.startCollect()
+        eval(code)
+        setLog(traced.join('\n'))
+        setDebug(debugTool.stopCollect())
+      } catch (e) {
+        setLog(`${traced.join('\n')}
+ERROR: ${e.toString()}`)
+      }
+    }, 200)
   }
-  return (
-    <tr onClick={atomSelect}>
-      <td>x</td>
-      <td>x</td>
-      <td>x</td>
-      <td>x</td>
-    </tr>
-  )
+  useEffect(() => runCode(startCode), [])
+  return [log, debugLog, debugTool. runCode]
 }
 
 export function AtomRepl(props) {
-  function codeChange(code) {
-    console.log({ code })
-  }
+  const [log, debug, codeChange] = useRpl(props.code)
+
+
   return (
     <>
-      <MirrorRepl code={props.code} onChange={codeChange} />
+      <MirrorRepl code={props.code} onCodeChange={codeChange} />
       <div className='atom-stats'>
-        {/*<div className='log'>*/}
-          <pre>
-            {JSON.stringify({
-              x:1,
-              y:3
-            }, null, 2)}
-          </pre>
-        {/*</div>*/}
-        <table >
-          <thead>
-            <td>Atom</td>
-            <td>Value</td>
-            <td>Childs</td>
-            <td>Updates</td>
-          </thead>
-          <tbody>
-            {[0, 2, 3, 4, 5].map(i => (
-              <AtomCol key={i} />
-            ))}
-          </tbody>
-        </table>
+        <pre>{log}</pre>
+        <DebugTable debug={debug} head={debugTool.logsHead}/>
       </div>
     </>
   )

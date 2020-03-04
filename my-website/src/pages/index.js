@@ -30,7 +30,7 @@ const features = [
     ),
   },
   {
-    title: <>Синтез параддигм</>,
+    title: <>Синтез практик</>,
     imageUrl: 'img/dna-tee.jpg',
     description: (
       <>
@@ -97,7 +97,16 @@ function Home() {
         {/*  </div>*/}
         {/*</header>*/}
         <main>
-          <AtomRepl code='const a = A();'/>
+          <AtomRepl code={`const a = A();
+a(1);
+trace(a());
+trace(a());
+
+a.up(v=> {
+  trace("update listener:", v);
+});
+a(2);
+`}/>
         </main>
         <main>
           {features && features.length && (

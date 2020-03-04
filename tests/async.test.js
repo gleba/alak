@@ -10,10 +10,17 @@ function asyncFn() {
 }
 
 
+test('async proxy', async () => {
+  let a = A.proxy(startValue)
+  a.useGetter(asyncFn)
+  expect(a.isAsync).toBeFalsy()
+  await a()
+  expect(a.isAsync).toBeTruthy()
+})
+
 test('async getter', async () => {
   let a = A(startValue)
   a.useGetter(asyncFn)
-  expect(a.isComposite).toBeTruthy()
   expect(a.isAsync).toBeFalsy()
   a()
   expect(a.value).toBe(startValue)

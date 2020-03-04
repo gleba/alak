@@ -1,6 +1,6 @@
 import { createAtom } from './atom'
 import { allHandlers, objectHandlers, properties } from './handlers'
-import { Atom } from './index'
+import { CoreAtom } from './index'
 import { DECAY_ATOM_ERROR, PROPERTY_ATOM_ERROR } from './utils'
 
 const handlers = Object.assign(objectHandlers, allHandlers)
@@ -16,7 +16,7 @@ export function installAtomExtension(options) {
   options.properties && Object.assign(properties, options.properties)
 }
 
-function get(atom: Atom, prop: string, receiver: any): any {
+function get(atom: CoreAtom, prop: string, receiver: any): any {
   if (!atom.children) {
     throw DECAY_ATOM_ERROR
   }
@@ -26,21 +26,22 @@ function get(atom: Atom, prop: string, receiver: any): any {
   if (keyFn) return keyFn.call(atom)
   throw PROPERTY_ATOM_ERROR
 }
-export const proxyHandler: ProxyHandler<Atom> = { get }
+export const proxyHandler: ProxyHandler<CoreAtom> = { get }
 
-export function createObjectAtom<T>(value?: T) {
+export function createProtoAtom<T>(value?: T) {
   const atom = createAtom(...arguments)
-  const flow = Object.assign(atom, objectHandlers)
-  atom.proxy = flow
-  atom.alive = true
-  return flow
-}
-
-export function createProxyFlow<T>(value?: T) {
-  const atom = createAtom(...arguments)
-  const flow = new Proxy(atom, proxyHandler)
-  atom.proxy = flow
+  atom.__proto__ = handlers
+  atom.proxy = atom
   atom.uid = Math.random()
   atom.alive = true
-  return flow
+  return atom
+}
+
+export function createProxyAtom<T>(value?: T) {
+  const atom = createAtom(...arguments)
+  const proxy = new Proxy(atom, proxyHandler)
+  atom.proxy = proxy
+  atom.uid = Math.random()
+  atom.alive = true
+  return proxy
 }

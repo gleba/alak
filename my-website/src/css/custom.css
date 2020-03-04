@@ -69,6 +69,7 @@
   width: 100%;
   /*background-color: #e6a700;*/
   word-wrap: break-word;
+  white-space: pre-wrap;
   border-radius: 0;
   /*font-size: 14px;*/
 }

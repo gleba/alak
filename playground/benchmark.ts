@@ -28,7 +28,7 @@ try {
   process.exit()
 }
 
-const instancesCount = 24000
+const instancesCount = 240000
 
 let memBefore = process.memoryUsage()
 
@@ -40,12 +40,22 @@ let i = instancesCount
 
 
 
+let calls = 0
+// const someHandler = (v)=>calls++
+
 function someHandler() {
   return calls++
 }
+
+
+
+
 while (i--) {
-  instancesList.push(A.getter(someHandler))
+  const a = A()
+  a.up(someHandler)
+  instancesList.push(a)
 }
+
 const memAfterCreate = process.memoryUsage()
 log('\ncreate')
 Object.keys(memAfterCreate).forEach(name => {
@@ -54,18 +64,14 @@ Object.keys(memAfterCreate).forEach(name => {
 knownResult(`${instancesCount} instances at`, `${Date.now() - timeBefore}ms`)
 
 global.gc()
-let calls = 0
-
-// const someHandler = (v)=>calls++
-
 memBefore = process.memoryUsage()
 
 const promises = []
-let iterations = 10000
+let iterations = 100
 while (iterations--) {
   Tick.wrap(function myFunction(done) {
     instancesList.forEach(f => {
-      f()
+      f(0)
     })
     done()
   })

@@ -1,6 +1,6 @@
 import { FState, notifyStateListeners } from './state'
-import { Atom } from './index'
-import { DECAY_ATOM_ERROR } from './utils'
+import { CoreAtom } from './index'
+import { AtomContext, DECAY_ATOM_ERROR } from './utils'
 
 type AnyFunction = {
   (...v: any[]): any
@@ -8,13 +8,12 @@ type AnyFunction = {
 
 export const debug = {} as {
   enabled: boolean
-  updateAsyncStart(atom: Atom, context?: string)
-  updateAsyncFinish(atom: Atom)
-  updateValue(atom: Atom, context: string)
+  updateAsyncStart(atom: CoreAtom, context?: string)
+  updateAsyncFinish(atom: CoreAtom)
+  updateValue(atom: CoreAtom, context: string)
 }
 
-export function setAtomValue(atom: Atom, ...a) {
-  let [value, context] = a
+export function setAtomValue(atom: CoreAtom, value, context?) {
   const setValue = finalValue => {
     if (atom.wrapperFn) {
       let wrappedValue = atom.wrapperFn(finalValue, atom.value[0])
@@ -35,20 +34,20 @@ export function setAtomValue(atom: Atom, ...a) {
   return setValue(value)
 }
 
-async function setAsyncValue(atom: Atom, promise: PromiseLike<any>) {
+async function setAsyncValue(atom: CoreAtom, promise: PromiseLike<any>) {
   notifyStateListeners(atom, FState.AWAIT, true)
-  atom._isAwaiting = promise
-  atom._isAsync = true
+  atom.isAwaiting = promise
+  atom.isAsync = true
   let v = await promise
   atom.value = [v]
-  atom._isAwaiting = false
+  atom.isAwaiting = false
   notifyStateListeners(atom, FState.AWAIT, false)
   debug.enabled && debug.updateAsyncFinish(atom)
   notifyChildes(atom)
   return v
 }
 
-export function notifyChildes(atom: Atom) {
+export function notifyChildes(atom: CoreAtom) {
   const v = atom.value[0]
   atom.children.size > 0 && atom.children.forEach(f => f.call(atom.proxy, v))
   atom.grandChildren &&
@@ -58,7 +57,7 @@ export function notifyChildes(atom: Atom) {
     })
 }
 
-export function grandUpFn(atom: Atom, keyFun: AnyFunction, grandFun: AnyFunction): any {
+export function grandUpFn(atom: CoreAtom, keyFun: AnyFunction, grandFun: AnyFunction): any {
   if (!atom.grandChildren) atom.grandChildren = new Map()
   const grandUpFun = grandFun(keyFun.bind(atom.proxy))
   atom.grandChildren.set(keyFun, grandUpFun)
@@ -67,23 +66,24 @@ export function grandUpFn(atom: Atom, keyFun: AnyFunction, grandFun: AnyFunction
 }
 
 export const createAtom = (...a) => {
-  const atom = function() {
+  const atom = function(value, context) {
     if (!atom.children) {
       throw DECAY_ATOM_ERROR
     }
     if (arguments.length) {
-      return setAtomValue(atom, ...arguments)
+      if (debug.enabled) return setAtomValue(atom, value, context ? context : AtomContext.direct)
+      else return setAtomValue(atom, value)
     } else {
-      if (atom._isAwaiting) {
-        return atom._isAwaiting
+      if (atom.isAwaiting) {
+        return atom.isAwaiting
       }
       if (atom.getterFn) {
-        return setAtomValue(atom, atom.getterFn(), 'getter')
+        return setAtomValue(atom, atom.getterFn(), AtomContext.getter)
       }
       let v = atom.value
       return v && v.length ? v[0] : undefined
     }
-  } as Atom
+  } as CoreAtom
   atom.children = new Set<AnyFunction>()
   // atom.grandChildren = new Map<AnyFunction, AnyFunction>()
   // atom.stateListeners = new Map<string, Set<AnyFunction>>()

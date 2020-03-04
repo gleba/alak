@@ -54,28 +54,10 @@ export const tsc = async () => {
     `node ${path.resolve('node_modules/typescript/lib/tsc')} -d --outDir ../`,
     path.resolve('packages'),
   )
-  //
-  // info('compiling typescript packages as UMD module...')
-  // rm(tsconfigPath)
-  // // tsconfig.compilerOptions.module = 'UMD'
-  // tsconfig.compilerOptions.moduleResolution = "Node"
-  // writeFileSync(tsconfigPath, JSON.stringify({compilerOptions:{
-  //   "sourceMap": false,
-  //   // "module": "umd",
-  //   // "target": "es6",
-  //   "removeComments": true,
-  //   "moduleResolution": "Node"
-  // }}))
-  // await prepare('umd-ts')
-  // await executeCommand(
-  //   `node ${path.resolve('node_modules/typescript/lib/tsc')} --downlevelIteration --outDir ../umd-ts`,
-  //   path.resolve('packages'),
-  // )
-  // // rm(tsconfigPath)
+  rm(tsconfigPath)
   info('rollup...')
   await packUmd('umd', 'alak')
   await packUmd('umd', 'alak.core')
-  // packUmd('facade', 'alak')
   info('done')
 }
 

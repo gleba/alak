@@ -1,8 +1,8 @@
-import { Atom } from '../core'
+import { CoreAtom } from '../core'
 
 export type AtomSnap = [number, string, string, string[], any, number]
 const orNone = v => (v != undefined ? v : '-')
-export function atomSnapshot(atom: Atom): AtomSnap {
+export function atomSnapshot(atom: CoreAtom): AtomSnap {
   const { uid, id, flowName, metaMap, children, grandChildren } = atom
   const meta = metaMap ? [...metaMap.keys()] : '-'
   let size = children.size

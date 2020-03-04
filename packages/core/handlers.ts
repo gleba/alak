@@ -1,11 +1,20 @@
-import { grandUpFn, notifyChildes, setAtomValue } from './atom'
+import { debug, grandUpFn, notifyChildes, setAtomValue } from './atom'
 import {
   addStateEventListener,
   FState,
   notifyStateListeners,
   removeStateEventListener,
 } from './state'
-import { alive, deleteParams, falseFilter, noneFilter, someFalseFilter, someFilter, trueFilter } from './utils'
+import {
+  alive,
+  AtomContext,
+  deleteParams,
+  falseFilter,
+  noneFilter,
+  someFalseFilter,
+  someFilter,
+  trueFilter,
+} from './utils'
 import { FlowHandlers } from './index'
 
 export const properties: FlowHandlers = {
@@ -26,13 +35,13 @@ export const properties: FlowHandlers = {
     else return this.uid
   },
   isAsync() {
-    return this._isAsync
+    return this.isAsync
   },
-  isComposite(){
-    return !!this.getterFn
-  },
+  // isComposite() {
+  //   return !!this.getterFn
+  // },
   isAwaiting() {
-    return !!this._isAwaiting
+    return !!this.isAwaiting
   },
 }
 
@@ -154,25 +163,27 @@ export const allHandlers: FlowHandlers = {
   // },
   useGetter(getterFunction, isAsync) {
     this.getterFn = getterFunction
-    this._isAsync = isAsync
+    this.isAsync = isAsync
     return this.proxy
   },
   useOnceGet(getterFunction, isAsync) {
-    this.getterFn = ()=> {
+    this.getterFn = () => {
       delete this.getterFn
-      delete this._isAsync
+      delete this.isAsync
       return getterFunction()
     }
-    this._isAsync = isAsync
+    this.isAsync = isAsync
     return this.proxy
   },
   useWrapper(wrapperFunction, isAsync) {
     this.wrapperFn = wrapperFunction
-    this._isAsync = isAsync
+    this.isAsync = isAsync
     return this.proxy
   },
   fmap(fun) {
-    setAtomValue(this, fun(...this.value))
+    const v = fun(...this.value)
+    const context = debug.enabled ? [AtomContext.fmap, fun.name()] : undefined
+    setAtomValue(this, v, context)
     return this.proxy
   },
   injectOnce(o, key) {

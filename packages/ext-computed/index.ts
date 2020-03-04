@@ -32,7 +32,7 @@
 
 import { setAtomValue } from '../core/atom'
 import { alive, isPromise } from '../core/utils'
-import { Atom, installAtomExtension, ProxyAtom } from '../core/index'
+import { CoreAtom, installAtomExtension, Atom } from '../core/index'
 import { createPrivateKey } from 'crypto'
 
 /** Установить расширение вычисления множеств прокси-атома*/
@@ -84,7 +84,7 @@ type ComputeInOut<IN extends any[], OUT> = {
   (...v: ReturnArrayTypes<IN>): OUT
 }
 type ComputeAtom<IN extends any[]> = {
-  <OUT>(fn: ComputeInOut<IN, OUT>): ProxyAtom<OUT>
+  <OUT>(fn: ComputeInOut<IN, OUT>): Atom<OUT>
 }
 
 /** @internal */
@@ -92,9 +92,11 @@ export type ComputeStrategicAtom<IN extends any[]> = {
   [K in keyof ComputeStrategy<any, IN>]: ComputeAtom<IN>
 }
 
+const computedContext = "computed"
+
 /** @internal */
-export function from(...fromAtoms: ProxyAtom<any>[]) {
-  const atom: Atom = this
+export function from(...fromAtoms: Atom<any>[]) {
+  const atom: CoreAtom = this
   if (atom.haveFrom) {
     throw `from atoms already has a assigned`
   } else {
@@ -110,17 +112,17 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
     if (isPromise(mixedValue)) {
       mixedValue.then(v => {
         freeWaiters(v)
-        setAtomValue(atom, v)
+        setAtomValue(atom, v, computedContext)
       })
     } else {
       freeWaiters(mixedValue)
-      setAtomValue(atom, mixedValue)
+      setAtomValue(atom, mixedValue, computedContext)
     }
-    atom._isAwaiting && delete atom._isAwaiting
+    atom.isAwaiting && delete atom.isAwaiting
     return mixedValue
   }
   const makeMix = mixFn => {
-    const inAwaiting: ProxyAtom<any>[] = []
+    const inAwaiting: Atom<any>[] = []
     const { strong, some } = mixFn
     const needFull = strong || some
     let values = fromAtoms.map(a => {
@@ -133,7 +135,7 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
     })
     if (inAwaiting.length > 0) {
       atom.getterFn = addWaiter
-      return (atom._isAwaiting = addWaiter())
+      return (atom.isAwaiting = addWaiter())
     }
     atom.getterFn = () => mixFn(...values)
     return applyValue(mixFn(...values))
@@ -197,7 +199,7 @@ export function from(...fromAtoms: ProxyAtom<any>[]) {
 
       if (waiters.length > 0) {
         atom.getterFn = addWaiter
-        return (atom._isAwaiting = addWaiter())
+        return (atom.isAwaiting = addWaiter())
       }
       atom.getterFn = getterFn
       getting = {}

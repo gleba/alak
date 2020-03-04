@@ -1,6 +1,6 @@
 {
   "name": "alak",
-  "version": "2.0.0",
+  "version": "2.0.1-next.0",
   "description": "Alak - Reactive Atom",
   "main": "./facade/index.js",
   "typings": "./facade/index.d.ts",
@@ -8,7 +8,8 @@
     "/core",
     "/facade",
     "/ext-computed",
-    "/ext-matching"
+    "/ext-matching",
+    "/debug"
   ],
   "keywords": [
     "dependency free",
