@@ -24,6 +24,56 @@ module.exports = {
         },
       ],
     },
+
+    footer: {
+      style: 'dark',
+      links: [
+        {
+          title: 'Docs',
+          items: [
+            {
+              label: 'Style Guide',
+              to: 'docs/doc1',
+            },
+            {
+              label: 'Second Doc',
+              to: 'docs/doc2',
+            },
+          ],
+        },
+        {
+          title: 'Community',
+          items: [
+            {
+              label: 'Stack Overflow',
+              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+            },
+            {
+              label: 'Discord',
+              href: 'https://discordapp.com/invite/docusaurus',
+            },
+          ],
+        },
+        {
+          title: 'Social',
+          items: [
+            {
+              label: 'Blog',
+              to: 'blog',
+            },
+            {
+              label: 'GitHub',
+              href: 'https://github.com/facebook/docusaurus',
+            },
+            {
+              label: 'Twitter',
+              href: 'https://twitter.com/docusaurus',
+            },
+          ],
+        },
+      ],
+      copyright: `Copyright © ${new Date().getFullYear()} Alak Reactive Atom - Open Source.`,
+    },
   },
   scripts: [
     //"/alak.js",
@@ -32,7 +82,6 @@ module.exports = {
     "https://unpkg.com/jshint@2.9.6/dist/jshint.js",
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/addon/lint/lint.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/addon/lint/javascript-lint.min.js",
-
   ],
   themes: ['@docusaurus/theme-live-codeblock'],
   presets: [
