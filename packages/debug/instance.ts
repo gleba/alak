@@ -1,7 +1,7 @@
 import { AtomSnap, atomSnapshot } from './receiveTools'
 
 export type AtomLog = [number, string, number, any, string, string,  string[], number, string?]
-const logsHead = ['time', 'event', 'uid', 'value', 'name', 'id', 'meta', 'children', 'context']
+const logsHead = ['time', 'event', 'uid', 'name', 'id', 'meta', 'value', 'children', 'context']
 export function debugInstance() {
   let isCollecting = false
   let collection: AtomLog[] = []

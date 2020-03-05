@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React from 'react'
 
 export function ABox() {
   const values = {}
@@ -9,6 +9,9 @@ export function ABox() {
       if (ar) {
         ar.forEach(iterator)
       }
+    },
+    mapAll(iterator) {
+      return Object.values(values).map(v=>iterator(v))
     },
     push(key, value) {
       all.push(value)
@@ -46,30 +49,29 @@ export function ABox() {
   }
 }
 
-function AtomCol() {
+function AtomCol({row}) {
   const atomSelect = () => {
     console.log('selected')
   }
   return (
     <tr onClick={atomSelect}>
-      <td>x</td>
-      <td>x</td>
-      <td>x</td>
-      <td>x</td>
+      <td>{row[0]}</td>
+      <td>{row[1]}</td>
+      <td>{row[2]}</td>
+      <td>{row[3]}</td>
+      {/*<td>ч</td>*/}
     </tr>
   )
 }
 
 const iUid = 2
-const iValue = 3
+const iValue = 6
 const iChildren = 7
 
-export function DebugTable({ debug, head }) {
+export function DebugTable({ debug }) {
 
   const atomRows = ABox()
   debug && debug.forEach(c => atomRows.push(c[iUid], c))
-  console.log("zz", atomRows.size())
-
   return (
     <table>
       <thead>
@@ -81,9 +83,11 @@ export function DebugTable({ debug, head }) {
         </tr>
       </thead>
       <tbody>
-        {[0, 2, 3, 4, 5].map(i => (
-          <AtomCol key={i} />
-        ))}
+        {atomRows.mapAll(tail => {
+          const l = tail[tail.length-1]
+          const uid = l[iUid]
+          return <AtomCol key={uid} row={[uid, l[iValue], l[iChildren], tail.length]} />
+        })}
       </tbody>
     </table>
   )

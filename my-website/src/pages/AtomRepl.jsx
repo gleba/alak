@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MirrorRepl } from './Mirror'
 import { installAtomDebuggerTool } from 'alak/debug'
 import A from 'alak'
@@ -31,7 +31,7 @@ ERROR: ${e.toString()}`)
     }, 200)
   }
   useEffect(() => runCode(startCode), [])
-  return [log, debugLog, debugTool. runCode]
+  return [log, debugLog, runCode]
 }
 
 export function AtomRepl(props) {

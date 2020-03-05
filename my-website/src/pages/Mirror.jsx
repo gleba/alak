@@ -1,6 +1,4 @@
 import React from 'react'
-import A from 'alak'
-import { installAtomDebuggerTool } from 'alak/debug'
 
 export class MirrorRepl extends React.Component {
   constructor(props) {

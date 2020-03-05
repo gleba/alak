@@ -1,5 +1,5 @@
 import { executeCommand, info, prepare, rm } from './helpers'
-import resolve from 'rollup-plugin-node-resolve'
+
 import * as path from 'path'
 import { copyFileSync, readFileSync, writeFileSync } from 'fs'
 import { removeSync } from 'fs-extra'
