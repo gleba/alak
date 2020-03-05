@@ -12,6 +12,8 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/theme/nord.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/addon/lint/lint.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.0/addon/hint/show-hint.min.css');
+@import url('https://fonts.googleapis.com/css?family=Fira+Code');
+
 :root {
   --ifm-color-primary: #c926ff;
   --ifm-color-primary-dark: #d98b2b;
@@ -58,30 +60,73 @@
 }
 
 
-.atom-stats {
-  display: flex;
-  /*background-color: #4c566a;*/
 
+
+.debug-log {
+  width: 100%;
+  /*background-color: #3b4252;*/
+
+}
+.atom-stats {
+  /*font-family: 'Fira Code', monospace !important;*/
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr;
+  grid-template-areas: ". .";
+}
+.atom-stats .controls {
+  height: 100%;
+  width: 80px;
+  background-color: yellow;
+  /*font-family: 'Fira Code', monospace;*/
+  font-size: 10px;
 }
 .atom-stats pre {
   margin: 0 0;
   padding: 5px 4px;
-  width: 100%;
-  /*background-color: #e6a700;*/
+  /*justify-self: stretch;*/
+  /*align-self: stretch;*/
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
   word-wrap: break-word;
   white-space: pre-wrap;
   border-radius: 0;
-  /*font-size: 14px;*/
+}
+.atom-stats .table-con {
+  display: flex;
+  justify-content: center;
+  /*align-items: center;*/
+  /*background-color: #8fbcbb;*/
 }
 .atom-stats table {
+  width: auto !important;
+  /*background-color: red;*/
+  justify-self: right;
   font-size: 12px;
   padding: 0 0 !important;
   margin: 0 0 !important;
+}
+.atom-stats tr .norm {
+  padding: 2px 4px !important;
+  margin: 2px 4px !important;
+  font-weight: normal !important;
+}
+.atom-stats th {
+  padding: 0 0 !important;
+  margin: 0 0 !important;
+}
+
+.atom-stats td .code {
+  font-family: 'Fira Code', monospace;
 }
 .atom-stats td {
   padding: 3px 7px;
 }
 
+.cm-s-nord {
+  font-family: 'Fira Code', monospace !important;
+}
 .cm-s-nord.CodeMirror {
   background: #2e3440;
   color: #d8dee9;

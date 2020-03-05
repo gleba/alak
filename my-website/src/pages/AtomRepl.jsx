@@ -3,6 +3,8 @@ import { MirrorRepl } from './Mirror'
 import { installAtomDebuggerTool } from 'alak/debug'
 import A from 'alak'
 import { DebugTable } from './DebugTable'
+import { DebugLog } from './DebugLog'
+import { ABox } from './Abox'
 
 const debugTool = installAtomDebuggerTool.instance()
 global.A = A
@@ -14,7 +16,7 @@ global.trace = function(...a) {
 let lastChange
 export function useRpl(startCode) {
   const [log, setLog] = useState()
-  const [debugLog, setDebug] = useState()
+  const [debugBox, setDebug] = useState()
   function runCode(code) {
     clearTimeout(lastChange)
     lastChange = setTimeout(() => {
@@ -23,7 +25,9 @@ export function useRpl(startCode) {
         debugTool.startCollect()
         eval(code)
         setLog(traced.join('\n'))
-        setDebug(debugTool.stopCollect())
+        const box = ABox()
+        debugTool.stopCollect().forEach(c => box.push(c[2], c))
+        setDebug(box)
       } catch (e) {
         setLog(`${traced.join('\n')}
 ERROR: ${e.toString()}`)
@@ -31,19 +35,23 @@ ERROR: ${e.toString()}`)
     }, 200)
   }
   useEffect(() => runCode(startCode), [])
-  return [log, debugLog, runCode]
+  return [log, debugBox, runCode]
 }
 
 export function AtomRepl(props) {
-  const [log, debug, codeChange] = useRpl(props.code)
-
+  const [log, debugBox, codeChange] = useRpl(props.code)
 
   return (
     <>
+      {/*<div className='full-width'>*/}
       <MirrorRepl code={props.code} onCodeChange={codeChange} />
+      {/*<DebugLog box={debugBox} head={debugTool.logsHead}/>*/}
+      {/*</div>*/}
       <div className='atom-stats'>
         <pre>{log}</pre>
-        <DebugTable debug={debug} head={debugTool.logsHead}/>
+        <div className='table-con'>
+          <DebugTable box={debugBox} />
+        </div>
       </div>
     </>
   )
