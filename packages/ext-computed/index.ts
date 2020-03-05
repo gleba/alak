@@ -32,7 +32,7 @@
 
 import { setAtomValue } from '../core/atom'
 import { alive, isPromise } from '../core/utils'
-import { CoreAtom, installAtomExtension, Atom } from '../core/index'
+import { Core, installAtomExtension, Atom } from '../core/index'
 import { createPrivateKey } from 'crypto'
 
 /** Установить расширение вычисления множеств прокси-атома*/
@@ -45,8 +45,8 @@ export function installComputedExtension() {
 }
 // @ts-ignore
 declare module 'alak/core' {
-  interface ProxyAtom<T> {
-    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
+  interface Atom<T> {
+    from<A extends Atom<any>[]>(...a: A): ComputeStrategy<T, A>
   }
 }
 
@@ -92,11 +92,11 @@ export type ComputeStrategicAtom<IN extends any[]> = {
   [K in keyof ComputeStrategy<any, IN>]: ComputeAtom<IN>
 }
 
-const computedContext = "computed"
+const computedContext = 'computed'
 
 /** @internal */
 export function from(...fromAtoms: Atom<any>[]) {
-  const atom: CoreAtom = this
+  const atom: Core = this
   if (atom.haveFrom) {
     throw `from atoms already has a assigned`
   } else {
@@ -105,7 +105,9 @@ export function from(...fromAtoms: Atom<any>[]) {
   let someoneIsWaiting = []
   const addWaiter = () => new Promise(_ => someoneIsWaiting.push(_))
   const freeWaiters = v => {
-    while (someoneIsWaiting.length) someoneIsWaiting.pop()(v)
+    while (someoneIsWaiting.length) {
+      someoneIsWaiting.pop()(v)
+    }
   }
 
   function applyValue(mixedValue) {
@@ -150,13 +152,13 @@ export function from(...fromAtoms: Atom<any>[]) {
       }
     }
     fromAtoms.forEach(a => {
-      if (a !== atom.proxy) {
+      if (a !== atom._) {
         linkedValues[a.id] = a.value
         a.next(mixer)
       }
     })
     makeMix(mixFn)
-    return atom.proxy
+    return atom._
   }
 
   function some(mixFn) {
@@ -165,44 +167,45 @@ export function from(...fromAtoms: Atom<any>[]) {
   }
 
   function strong(mixFn) {
-    let firstRun = true
+    // let firstRun = true
     let getting = {}
-    function getterFn(){
+    function getterFn() {
       // console.log('---------')
-      // console.log("getting", getting)
-      const waiters = []
+      // console.log('getting', getting)
+      const waiters = {}
+      const isWaiting = ()=> Object.keys(waiters).length
       const values = fromAtoms.map(a => {
-        let v: any = getting[a.id]
+        let v: any = getting[a.uid]
         if (v) return v
         else v = a()
         if (isPromise(v)) {
-          waiters.push(a)
-          // console.log(a.id, 'is promise')
+          waiters[a.uid] = true
+          // console.log(a.id, 'is promise', isWaiting())
           v.then(v => {
-            getting[a.id] = v
-            linkedValues[a.id] = v
-            // console.log('resolve promise', v)
-            const deepValue = getterFn()
-            if (!isPromise(deepValue) &&firstRun){
-              applyValue(deepValue)
-              firstRun = false
-            } else {
-              freeWaiters(deepValue)
+            getting[a.uid] = v
+            linkedValues[a.uid] = v
+            delete waiters[a.uid]
+            // console.log(a.id, 'resolve', isWaiting())
+            if (!isWaiting()) {
+              const deepValue = getterFn()
+              if (!isPromise(deepValue)) {
+                freeWaiters(deepValue)
+              }
             }
           })
         } else {
-          linkedValues[a.id] = v
+          linkedValues[a.uid] = v
         }
         return v
       })
-      // console.log("waiters", waiters.length)
 
-      if (waiters.length > 0) {
+      if (isWaiting()) {
         atom.getterFn = addWaiter
         return (atom.isAwaiting = addWaiter())
       }
       atom.getterFn = getterFn
       getting = {}
+      // console.log('mix')
       return mixFn(...values)
     }
 
@@ -213,20 +216,14 @@ export function from(...fromAtoms: Atom<any>[]) {
       }
     }
     fromAtoms.forEach(a => {
-      if (a !== atom.proxy) {
+      if (a !== atom._) {
         a.next(mixer)
       }
     })
-    const firstValue = getterFn()
-    if (!isPromise(firstValue)) {
-      // firstValue.then(v=>{
-      //   // console.log("first value")
-      //   // applyValue(v)
-      // })
-    // } else {
-      applyValue(firstValue)
+    atom.getterFn = () => {
+      return getterFn()
     }
-    return atom.proxy
+    return atom._
   }
 
   return {

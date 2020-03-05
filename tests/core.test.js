@@ -1,4 +1,4 @@
-//const { AC } = require('../core')
+
 const { A } = require('../facade')
 
 const startValue = 0
@@ -126,11 +126,14 @@ test('clear', () => {
 })
 
 test('close', () => {
-  let a = A(startValue)
-  expect(!!a.id).toBeTruthy()
-  expect(() => a.illusion).toThrowError()
+  let a = A.proto(startValue)
+  expect(!!a.uid).toBeTruthy()
   a.decay()
   expect(() => a()).toThrowError()
-  expect(() => a.id).toThrowError()
-  expect(() => a.up).toThrowError()
+  expect(a.uid).toBeUndefined()
+  let b = A.proxy(startValue)
+  expect(()=> b.wow).toThrowError()
+  b.decay()
+  expect(() => b()).toThrowError()
+  expect(()=> b.uid).toThrowError()
 })

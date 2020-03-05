@@ -17,64 +17,81 @@ import {
 } from './utils'
 import { FlowHandlers } from './index'
 
-export const properties: FlowHandlers = {
+const valueProp = 'value'
+
+export const coreProps = {
+  isEmpty: {
+    get() {
+      return !this.hasOwnProperty(valueProp)
+    },
+  },
+  // id: {
+  //   get() {
+  //     if (this._id) return this._id
+  //     else return this.uid
+  //   },
+  // },
+  // name: {
+  //   get() {
+  //     return this._name
+  //   },
+  // },
+}
+
+export const proxyProps = {
   value() {
-    return this.value.length ? this.value[0] : undefined
+    return this.value
   },
   isEmpty() {
-    return !this.value.length
-  },
-  name() {
-    return this.flowName
+    return !this.hasOwnProperty(valueProp)
   },
   uid() {
     return this.uid
   },
   id() {
-    if (this.id) return this.id
+    if (this._id) return this._id
     else return this.uid
+  },
+  name() {
+    return this._name
   },
   isAsync() {
     return this.isAsync
   },
-  // isComposite() {
-  //   return !!this.getterFn
-  // },
   isAwaiting() {
     return !!this.isAwaiting
   },
 }
 
-export const objectHandlers: FlowHandlers = {
+const applyValue = (a, f) => (!a.isEmpty ? (f(a.value, a), true) : false)
+
+export const handlers: FlowHandlers = {
   up(f) {
     this.children.add(f)
-    if (this.value && this.value.length) f.apply(this.proxy, this.value)
-    return this.proxy
+    applyValue(this._, f)
+    return this._
   },
   down(f) {
     if (this.children.has(f)) this.children.delete(f)
     else if (this.grandChildren && this.grandChildren.has(f)) this.grandChildren.delete(f)
-    return this.proxy
+    return this._
   },
   clear() {
-    this.value = []
+    delete this.value
     this.children.clear()
     this.grandChildren && this.grandChildren.clear()
     this.stateListeners && this.stateListeners.clear()
     this.haveFrom && delete this.haveFrom
-    return this.proxy
+    return this._
   },
   decay() {
-    this.proxy.clear()
+    this._.clear()
     deleteParams(this)
   },
-}
-
-export const allHandlers: FlowHandlers = {
   clearValue() {
     notifyStateListeners(this, 'empty')
-    this.value = []
-    return this.proxy
+    delete this.value
+    return this._
   },
   onAwait(fun) {
     addStateEventListener(this, FState.AWAIT, fun)
@@ -84,57 +101,58 @@ export const allHandlers: FlowHandlers = {
   },
   resend() {
     notifyChildes(this)
-    return this.proxy
+    return this._
   },
   next(f) {
     this.children.add(f)
-    return this.proxy
+    return this._
   },
   once(f) {
-    if (this.value && this.value.length) f.apply(this.proxy, this.value)
-    else {
+    if (!applyValue(this._, f)) {
       const once = v => {
-        f.apply(f, this.value)
         this.children.delete(once)
+        console.log(this.children.has(once))
+        f(v)
       }
       this.children.add(once)
     }
-    return this.proxy
+    return this._
   },
   is(value) {
-    if (this.value && this.value.length) {
-      return this.value[0] === value
+    if (!this._.isEmpty) {
+      return this.value === value
     } else {
       return value === undefined
     }
   },
   upSome(fun) {
     grandUpFn(this, fun, someFilter)
-    return this.proxy
+    return this._
   },
   upTrue(fun) {
     grandUpFn(this, fun, trueFilter)
-    return this.proxy
+    return this._
   },
   upFalse(fun) {
     grandUpFn(this, fun, falseFilter)
-    return this.proxy
+    return this._
   },
   upSomeFalse(fun) {
     grandUpFn(this, fun, someFalseFilter)
-    return this.proxy
+    return this._
   },
   upNone(fun) {
     grandUpFn(this, fun, noneFilter)
-    return this.proxy
+    return this._
   },
   setId(id) {
     this.id = id
-    return this.proxy
+    return this._
   },
-  setName(name) {
-    this.flowName = name
-    return this.proxy
+  setName(value) {
+    this._name = value
+    Object.defineProperty(this, "name", { value });
+    return this._
   },
   // apply(context, v) {
   //   this.bind(context)
@@ -143,7 +161,7 @@ export const allHandlers: FlowHandlers = {
   addMeta(metaName, value?) {
     if (!this.metaMap) this.metaMap = new Map<string, any>()
     this.metaMap.set(metaName, value ? value : null)
-    return this.proxy
+    return this._
   },
   hasMeta(metaName) {
     if (!this.metaMap) return false
@@ -155,16 +173,16 @@ export const allHandlers: FlowHandlers = {
   },
   // on(stateEvent, fn) {
   //   addStateEventListener(this, stateEvent, fn)
-  //   return this.proxy
+  //   return this._
   // },
   // off(stateEvent, fn) {
   //   removeStateEventListener(this, stateEvent, fn)
-  //   return this.proxy
+  //   return this._
   // },
   useGetter(getterFunction, isAsync) {
     this.getterFn = getterFunction
     this.isAsync = isAsync
-    return this.proxy
+    return this._
   },
   useOnceGet(getterFunction, isAsync) {
     this.getterFn = () => {
@@ -173,28 +191,28 @@ export const allHandlers: FlowHandlers = {
       return getterFunction()
     }
     this.isAsync = isAsync
-    return this.proxy
+    return this._
   },
   useWrapper(wrapperFunction, isAsync) {
     this.wrapperFn = wrapperFunction
     this.isAsync = isAsync
-    return this.proxy
+    return this._
   },
   fmap(fun) {
-    const v = fun(...this.value)
+    const v = fun(this.value)
     const context = debug.enabled ? [AtomContext.fmap, fun.name()] : undefined
     setAtomValue(this, v, context)
-    return this.proxy
+    return this._
   },
   injectOnce(o, key) {
     if (!key) {
-      key = this.flowName ? this.flowName : this.id ? this.id : this.uid
+      key = this._name ? this._name : this.id ? this.id : this.uid
     }
     if (!o) throw 'trying inject atom to null object'
-    o[key] = this.value[0]
-    return this.proxy
+    o[key] = this.value
+    return this._
   },
   cloneValue() {
-    return this.value.length ? JSON.parse(JSON.stringify(this.value[0])) : undefined
+    return JSON.parse(JSON.stringify(this.value))
   },
 }

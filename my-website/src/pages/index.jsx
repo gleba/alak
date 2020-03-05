@@ -6,6 +6,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from './styles.module.css'
 import { AtomRepl } from './AtomRepl'
+import { codeSamples } from './codeSamples'
 
 const features = [
   {
@@ -14,9 +15,8 @@ const features = [
     description: (
       <>
         ● Отсутствие сторонних зависимостей, размер библиотеки : <code>gzip 3кб</code>.
-        <br />
-        ▪ Атомарные обновления в 1000 раз быстрее
-        flyd и RxJS. Максимальная скорость, минимальный расход памяти.
+        <br />▪ Атомарные обновления в 1000 раз быстрее flyd и RxJS. Максимальная скорость,
+        минимальный расход памяти.
         {/*Ядро атома gzip - 3кб, min.js - 8кб. С плагинами и фасадом gzip - 4кб, min.js - 18кб.*/}
       </>
     ),
@@ -27,8 +27,8 @@ const features = [
     description: (
       <>
         ● Атом - это функция-контейнер содержащая значение и транслирующая его в дочерние
-        функции-подписчики. <br />
-        ▪ Дополнение свойств атомов возможно через создание расширяющих методов.
+        функции-подписчики. <br />▪ Дополнение свойств атомов возможно через создание расширяющих
+        методов.
       </>
     ),
   },
@@ -37,10 +37,10 @@ const features = [
     imageUrl: 'img/dna-tee.jpg',
     description: (
       <>
-        ● Атом распространяет данные по графу приложения реактивно.
-        Отсутствие оператора присваивания освобождает от перекладывания данных по переменными.
-        <br /> ▪ Идея наследовения реализиована в методах расширяющих
-        функциональные возможности атома.
+        ● Атом распространяет данные по графу приложения реактивно. Отсутствие оператора
+        присваивания освобождает от перекладывания данных по переменными.
+        <br /> ▪ Идея наследовения реализиована в методах расширяющих функциональные возможности
+        атома.
       </>
     ),
   },
@@ -61,11 +61,22 @@ function Feature({ imageUrl, title, description }) {
   )
 }
 
-//console.log(useEffect)
+function useCodeSamples() {
+  //const [sampleName, setSampleName] = useState()
+  const [sampleCode, setSampleCode] = useState(codeSamples[0].code)
+  const [selectedId, setSelectedId] = useState(0)
+  const [samples, setSamples] = useState(codeSamples)
+  function select(id) {
+    setSelectedId(id)
+    setSampleCode(codeSamples[id].code)
+  }
+  return [samples, sampleCode, selectedId, select]
+}
 
 function Home() {
   const context = useDocusaurusContext()
   const { siteConfig = {} } = context
+  const [samples, code, id, selectSample] = useCodeSamples()
   return (
     <Layout title={`Landing`} description='Description will go into a meta tag in <head />'>
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
@@ -77,8 +88,7 @@ function Home() {
               className={classnames('button button--outline button--secondary button--lg start')}
               to={useBaseUrl('docs/start')}
             >
-              {' '}
-              Инструкции{' '}
+              Инструкции
             </Link>
           </div>
         </div>
@@ -103,24 +113,20 @@ function Home() {
             <div className='try'>
               <h4>Попробуй</h4>
               <div>
-                <li className='selected'>Основа</li>
-                <li>Асинхронность</li>
-                <li>Комбинация</li>
-                <li>Матчинг</li>
+                {samples.map((v, idx) => (
+                  <li
+                    className={idx == id ? 'selected' : ''}
+                    key={idx}
+                    onClick={() => selectSample(idx)}
+                  >
+                    {v.title}
+                  </li>
+                ))}
               </div>
             </div>
 
             <div className='full-width'>
-              <AtomRepl
-                code={`const a = A();
-a('some things');
-trace(a());
-trace(a());
-a.up(v=> {
-  trace("update listener:", v);
-});
-a('Hello World');`}
-              />
+              <AtomRepl code={code}/>
             </div>
           </div>
         </div>

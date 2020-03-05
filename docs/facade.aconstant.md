@@ -20,7 +20,7 @@ export interface AConstant<D> extends AtomCreator
 
 
 ```javascript
-const atom = A() // сокращённая запись A.proxy()
+const atom = A() // сокращённая запись A._()
 
 ```
 

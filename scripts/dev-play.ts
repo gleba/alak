@@ -1,5 +1,5 @@
 import { fork } from 'child_process'
-import { tsc } from './make-lib'
+import { tsc } from './tsc'
 
 var nodemon = require('nodemon')
 

@@ -47,7 +47,7 @@ test('some async strategy', async () => {
   expect(someMix).toHaveBeenCalledTimes(1)
 })
 
-test('strong get sync strategy', () => {
+test('strong sync strategy', () => {
   const aGetter = jest.fn()
   const bOnceGetter = jest.fn()
   const a = A.getter(() => {
@@ -62,12 +62,13 @@ test('strong get sync strategy', () => {
   const cUpReceiver = jest.fn()
   c.up(cUpReceiver)
   c()
-  expect(aGetter).toHaveBeenCalledTimes(2)
+  c()
   expect(bOnceGetter).toHaveBeenCalledTimes(1)
+  expect(aGetter).toHaveBeenCalledTimes(2)
   expect(cUpReceiver).toHaveBeenCalledTimes(2)
 })
 
-test('strong get async strategy', async () => {
+test('strong async strategy', async () => {
   const aGetter = jest.fn()
   const bOnceGetter = jest.fn()
   const a = A.getter(() => {
@@ -84,13 +85,23 @@ test('strong get async strategy', async () => {
   c.up(cUpReceiver)
   await c()
   await c()
-  expect(aGetter).toHaveBeenCalledTimes(2)
   expect(bOnceGetter).toHaveBeenCalledTimes(1)
+  expect(aGetter).toHaveBeenCalledTimes(2)
   expect(cUpReceiver).toHaveBeenCalledTimes(2)
+})
+
+test('strong async wait', async () => {
+  const asyncFn = () => new Promise(fin => setTimeout(fin, 1))
+  const asyncWait = () => new Promise(fin => setTimeout(fin, 24))
+  const atomA = A.getter(asyncFn)
+  const atomB = A.getter(asyncFn)
+  A.from(atomA, atomB).strong(() => expect.anything())
+  await asyncWait()
+  expect.assertions(0)
 })
 
 test('error strategy', async () => {
   const a = A()
   const c = A.from(a).weak(a_V => a_V)
-  expect(()=>c.from(a).weak).toThrowError()
+  expect(() => c.from(a).weak).toThrowError()
 })

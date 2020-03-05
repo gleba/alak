@@ -16,7 +16,7 @@ export interface AtomCreator
 
 
 ```javascript
-const flow = AC() // сокращённая запись AC.proxy()
+const flow = AC() // сокращённая запись AC._()
 
 ```
 
@@ -25,5 +25,5 @@ const flow = AC() // сокращённая запись AC.proxy()
 |  Method | Description |
 |  --- | --- |
 |  [object(value)](./core.atomcreator.object.md) | Создать [ObjectAtom](./core.objectatom.md) с необязательным аргументом как стартовое значение |
-|  [proxy(value)](./core.atomcreator.proxy.md) | Создать [ProxyAtom](./core.proxyatom.md) с необязательным аргументом как стартовое значение |
+|  [_(value)](./core.atomcreator.proxy.md) | Создать [ProxyAtom](./core.proxyatom.md) с необязательным аргументом как стартовое значение |
 

@@ -9,14 +9,14 @@
 <b>Signature:</b>
 
 ```typescript
-setName(name: string): ProxyAtom<T>;
+setName(_name: string): ProxyAtom<T>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  name | <code>string</code> | имя |
+|  _name | <code>string</code> | имя |
 
 <b>Returns:</b>
 

@@ -25,7 +25,7 @@ export interface ProxyAtom<T>
 |  [isAwaiting](./facade.proxyatom.isawaiting.md) | <code>Boolean</code> | Находится ли атом в процессе получения значения от асинхронного добытчика [ProxyAtom.useGetter()](./facade.proxyatom.usegetter.md) |
 |  [isComposite](./facade.proxyatom.iscomposite.md) | <code>boolean</code> | Вернёт <code>true</code> при наличии функции-добытчика |
 |  [isEmpty](./facade.proxyatom.isempty.md) | <code>boolean</code> | Вернёт <code>true</code> при отсутствующем значении в контейнере |
-|  [name](./facade.proxyatom.name.md) | <code>string</code> | Имя заданное [ProxyAtom.setName()](./facade.proxyatom.setname.md) |
+|  [_name](./facade.proxyatom.name.md) | <code>string</code> | Имя заданное [ProxyAtom.setName()](./facade.proxyatom.setname.md) |
 |  [uid](./facade.proxyatom.uid.md) | <code>string</code> | Уникальный идентификатор генерируется при создании. |
 |  [value](./facade.proxyatom.value.md) | <code>T</code> | Текущее значение контейнера |
 
@@ -50,7 +50,7 @@ export interface ProxyAtom<T>
 |  [once(receiver)](./facade.proxyatom.once.md) | Передать один раз в функцию-получатель значение контейнера, текущее если оно есть или как появится |
 |  [resend()](./facade.proxyatom.resend.md) | Повторно отправить значение всем функциям-получателям |
 |  [setId(id)](./facade.proxyatom.setid.md) | Установить идентификатор |
-|  [setName(name)](./facade.proxyatom.setname.md) | Установить имя |
+|  [setName(_name)](./facade.proxyatom.setname.md) | Установить имя |
 |  [up(receiver)](./facade.proxyatom.up.md) | Добавить функцию-получатель обновлений значения контейнера и передать текущее значение контейнера, если оно есть |
 |  [upFalse(receiver)](./facade.proxyatom.upfalse.md) | Добавить функцию-получатель значений равных <code>false</code> после приведения значения к типу <code>boolean</code> методом <code>!value</code> |
 |  [upNone(receiver)](./facade.proxyatom.upnone.md) | Добавить функцию-получатель значений равных <code>null</code> и <code>undefined</code> |

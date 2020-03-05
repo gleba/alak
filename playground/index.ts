@@ -1,10 +1,13 @@
-import './benchmark'
-// import A from '../packages/facade'
-// import chalk from 'chalk'
-// import { ComputeStrategy, installComputedExtension } from '../packages/ext-computed'
+// import './benchmark'
+
+
+
+import A from '../packages/facade'
+import chalk from 'chalk'
+import { ComputeStrategy, installComputedExtension } from '../packages/ext-computed'
 // import { AC } from '../packages/core'
-// import { installMatchingExtension } from '../packages/ext-matching'
-// import { installAtomDebuggerTool } from '../packages/debug'
+import { installMatchingExtension } from '../packages/ext-matching'
+import { installAtomDebuggerTool } from '../packages/debug'
 // const inAwaiting = atom =>
 //   typeof atom().then === 'function'
 //     ? console.log(chalk.green('async'))
@@ -12,16 +15,52 @@ import './benchmark'
 //
 // installComputedExtension()
 // installMatchingExtension()
-//
+// //
 // declare module '../packages/core' {
-//   interface ProxyAtom<T> {
-//     match(...pattern: any[]): ProxyAtom<T>
-//     from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
+//   interface Atom<T> {
+//     match(...pattern: any[]): Atom<T>
+//     from<A extends Atom<any>[]>(...a: A): ComputeStrategy<T, A>
 //   }
 // }
-// let a = A()
+
+const a = A.id("statr",10)
+console.log(a['match'])
+
+// // console.log(a)
+// // // console.log(a.id)
+// // //
+// // // a(10)
+// // // a.once(v=>{
+// // //   console.log("once", v)
+// // // })
+// // // a(20)
+// // // a.setName("ok")
+// // const o = {}
+// // a.injectOnce(o)
+// //
+// console.log(o)
 //
-// console.log("?")
+
+// console.log(a['gimmeFive'])
+
+// console.log(o.gimmeFive); // 5
+// const asyncHello = () => new Promise(fin => setTimeout(() => fin('hello'), 200))
+// const asyncWorld = () => new Promise(fin => setTimeout(() => fin('word'), 500))
+//
+// const atomA = A.getter(asyncHello).setId('a')
+// const atomB = A.getter(asyncWorld).setId('b')
+// const atomAB = A.id('c')
+//   .from(atomA, atomB)
+//   .strong((valueA, valueB) => {
+//     console.log("... in fn", valueB, valueB)
+//     return `${valueA} ${valueB}`
+//   })
+//
+// atomAB.up(v=>{
+//   console.log("up", v)
+// })
+// console.log(atomAB())
+
 //
 // const debugInstance = installAtomDebuggerTool.instance()
 // debugInstance.onRecord(log => {

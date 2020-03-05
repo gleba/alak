@@ -31,11 +31,11 @@ export interface ExtensionOptions {
   properties?: FlowHandlers
 }
 
-/** Функция с контекстом {@link CoreAtom | атома}
+/** Функция с контекстом {@link Core | атома}
  * @remarks
  * смотрите так же: {@link ExtensionOptions}*/
 export type FlowHandler = {
-  (this: CoreAtom, ...a: any[]): any
+  (this: Core, ...a: any[]): any
 }
 /** Объект с обработчиками {@link FlowHandler}
  * @remarks
@@ -46,26 +46,26 @@ export type FlowHandlers = {
 export { installAtomExtension } from './create'
 
 /** {@link AtomCreator} */
-export const AC: AtomCreator = Object.assign(createProxyAtom, {
+export const AC: AtomCreator = Object.assign(createProtoAtom, {
   proxy: createProxyAtom,
   proto: createProtoAtom,
 })
 /** Функция-контейнер*/
-export type CoreAtom = {
+export type Core = {
   children: Set<AnyFunction>
   grandChildren: Map<AnyFunction, AnyFunction>
   stateListeners: Map<string, Set<AnyFunction>>
   getterFn: any
   wrapperFn: any
   meta: any
-  // metaSet: Set<string>
   metaMap?: Map<string, any>
-  proxy: any
+  _: any
   value: any
   uid: number
   id: string
-  flowName: string
+  _name: string
   haveFrom: boolean
+  isEmpty: boolean
   isAsync: boolean
   isAwaiting: boolean | any
   (...a: any[]): void

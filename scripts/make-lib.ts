@@ -10,6 +10,7 @@ const chalk = require('chalk')
 import commonjs from 'rollup-plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 import { rollup } from 'rollup'
+import { tsc } from './tsc'
 
 console.log({ commonjs })
 
@@ -39,31 +40,14 @@ const packUmd = (packName, outName) =>
     ),
   )
 
-export const tsc = async () => {
-  info('compiling typescript packages...')
-  rm('lib')
-  const tsconfigPath = path.join('packages', 'tsconfig.json')
-  const tsconfData = readFileSync('tsconfig.json', {
-    encoding: 'UTF-8',
-  })
-  const tsconfig = JSON.parse(tsconfData)
-  delete tsconfig.files
-  delete tsconfig.include
-  writeFileSync(tsconfigPath, JSON.stringify(tsconfig))
-  await executeCommand(
-    `node ${path.resolve('node_modules/typescript/lib/tsc')} -d --outDir ../`,
-    path.resolve('packages'),
-  )
-  rm(tsconfigPath)
-  info('rollup...')
+async function lib(){
+  await tsc()
   await packUmd('umd', 'alak')
   await packUmd('umd', 'alak.core')
   info('done')
 }
-
+lib()
 // rollup(rolupConfing("facade", "alak"))
 // executeCommand(`node ${path.resolve('node_modules/jest/bin/jest')}`, path.resolve('.'))
-
-tsc()
 
 // info('done')

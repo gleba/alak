@@ -1,5 +1,5 @@
 import { fork } from 'child_process'
-import { tsc } from './make-lib'
+import { tsc } from './tsc'
 
 var nodemon = require('nodemon')
 
@@ -16,7 +16,10 @@ const runTests = () => {
 }
 
 nodemon
-  .on('start', () => tsc().then(runTests))
+  .on('start', () => {
+    console.log("---")
+    tsc().then(runTests)
+  })
   .on('restart', function(files) {
     console.log('Tests restarted : ', files)
     fork('node_modules/jest/bin/jest')

@@ -63,7 +63,7 @@ function parsePattern(pattern) {
 }
 export function match(...pattern) {
   const matcher = matching(...pattern)
-  this.proxy.up(matcher)
+  this._.up(matcher)
 }
 
 function matching(...args) {

@@ -32,11 +32,6 @@ export function DebugLog({ box }) {
       {/*</thead>*/}
       <tbody>
         {box && box.mapAll(l => {
-          console.log(l)
-          //const l = tail[tail.length-1]
-          //const uid = l[iUid]
-          //return null
-          //return <AtomCol key={uid} row={[uid, l[iValue], l[iChildren], tail.length]} />
           return <AtomCol key={l[0] + l[1]} row={l} />
         })}
       </tbody>

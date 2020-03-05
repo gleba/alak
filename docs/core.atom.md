@@ -17,7 +17,7 @@ export declare type Atom = {
     wrapperFn: any;
     meta: any;
     metaMap?: Map<string, any>;
-    proxy: any;
+    _: any;
     value: any;
     uid: number;
     id: string;
