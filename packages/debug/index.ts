@@ -1,5 +1,5 @@
-import { debug } from '../core/atom'
-import { Core } from '../core'
+import { debug } from '../atom/core'
+import { Core } from '../atom'
 import { DebugEvent } from './events'
 import { debugInstance } from './instance'
 

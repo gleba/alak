@@ -8,9 +8,9 @@
  * @packageDocumentation
  */
 
-import { AC, AtomCreator, installAtomExtension, MaybeAny, Atom } from '../core/index'
+import { AC, AtomCreator, installAtomExtension, MaybeAny, Atom } from '../atom/index'
 import { ComputeStrategicAtom, from, installComputedExtension } from '../ext-computed/index'
-import { alive } from '../core/utils'
+import { alive } from '../atom/utils'
 import { installMatchingExtension } from '../ext-matching/index'
 
 installComputedExtension()
@@ -118,4 +118,4 @@ export const A = (Object.assign(AC, {
 export default A
 
 
-export { Atom } from '../core/index'
+export { Atom } from '../atom/index'

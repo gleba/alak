@@ -1,4 +1,4 @@
-import { AC, installAtomExtension } from '../core'
+import { AC, installAtomExtension } from '../atom'
 const A = Object.assign(AC, {
   installExtension: installAtomExtension,
 })

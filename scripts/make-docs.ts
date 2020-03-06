@@ -11,7 +11,7 @@ import * as path from 'path'
 import { exec, execSync, fork } from 'child_process'
 import { mkdirSync, readdirSync, renameSync, rmdirSync, unlinkSync } from 'fs'
 import { info, log0, rm, prepare, executeCommand } from './helpers'
-import { tsc } from './make-lib'
+import { tsc } from './tsc'
 const chalk = require('chalk')
 const { log } = console
 
@@ -64,7 +64,7 @@ async function make() {
   prepare(workDir)
 
   await Promise.all([
-    extractApi('core'),
+    extractApi('atom'),
     extractApi('facade'),
     extractApi('ext-matching'),
     extractApi('ext-computed'),

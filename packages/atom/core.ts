@@ -61,7 +61,7 @@ export function grandUpFn(atom: Core, keyFun: AnyFunction, grandFun: AnyFunction
   if (!atom.grandChildren) atom.grandChildren = new Map()
   const grandUpFun = grandFun(keyFun.bind(atom._))
   atom.grandChildren.set(keyFun, grandUpFun)
-  !atom.isEmpty && grandUpFun(atom.value)
+  !atom._.isEmpty && grandUpFun(atom.value)
 }
 
 export const createCore = (...a) => {

@@ -1,4 +1,4 @@
-import { debug, grandUpFn, notifyChildes, setAtomValue } from './atom'
+import { debug, grandUpFn, notifyChildes, setAtomValue } from './core'
 import {
   addStateEventListener,
   FState,
@@ -49,7 +49,7 @@ export const proxyProps = {
     return this.uid
   },
   id() {
-    if (this._id) return this._id
+    if (this.id) return this.id
     else return this.uid
   },
   name() {

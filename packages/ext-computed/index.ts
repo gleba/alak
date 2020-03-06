@@ -30,9 +30,9 @@
  * @packageDocumentation
  */
 
-import { setAtomValue } from '../core/atom'
-import { alive, isPromise } from '../core/utils'
-import { Core, installAtomExtension, Atom } from '../core/index'
+import { setAtomValue } from '../atom/core'
+import { alive, isPromise } from '../atom/utils'
+import { Core, installAtomExtension, Atom } from '../atom/index'
 import { createPrivateKey } from 'crypto'
 
 /** Установить расширение вычисления множеств прокси-атома*/

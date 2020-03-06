@@ -1,4 +1,4 @@
-import { createCore } from './atom'
+import { createCore } from './core'
 import { coreProps, handlers, proxyProps } from './handlers'
 import { Core } from './index'
 import { DECAY_ATOM_ERROR, PROPERTY_ATOM_ERROR } from './utils'

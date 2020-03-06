@@ -1,4 +1,4 @@
-import A from '../packages/core'
+import A from '../packages/atom'
 import { Tick, timers } from 'exectimer'
 import chalk from 'chalk'
 

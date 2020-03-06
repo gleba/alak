@@ -12,7 +12,7 @@ export function clearJs() {
 }
 
 export async function tsc() {
-  clearJs()
+  // clearJs()
   info('compiling typescript packages...')
   const tsconfigPath = path.join('packages', 'tsconfig.json')
   const tsconfData = readFileSync('tsconfig.json', {

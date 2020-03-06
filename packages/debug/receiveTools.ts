@@ -1,4 +1,4 @@
-import { Core } from '../core'
+import { Core } from '../atom'
 
 export type AtomSnap = [number, string, string, string[], any, number]
 const orNone = v => (v != undefined ? v : '-')
