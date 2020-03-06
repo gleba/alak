@@ -8,7 +8,7 @@
 
 |  Package | Description |
 |  --- | --- |
-|  [core](./core.md) | Ядро атома |
+|  [atom](./atom.md) | Ядро атома |
 |  [ext-computed](./ext-computed.md) | Расширение вычисления множеств |
 |  [ext-matching](./ext-matching.md) | Расширение паттерн-матчинга |
 |  [facade](./facade.md) | Корневой модуль библиотеки. |

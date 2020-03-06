@@ -39,7 +39,7 @@ export function createProtoAtom<T>(value?: T) {
 }
 
 const proxyHandler: ProxyHandler<Core> = { get }
-export function createProxyAtom<T>(value?: T) {
+export function createAtom<T>(value?: T) {
   const atom = createCore(...arguments)
   const proxy = new Proxy(atom, proxyHandler)
   atom._ = proxy

@@ -8,12 +8,12 @@
 
 ## Remarks
 
-импорт модуля расширяет интерфейс `ProxyAtom`
+импорт модуля расширяет интерфейс `Atom`
 
 ```typescript
 declare module 'alak/core' {
-  interface ProxyAtom<T> {
-    from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
+  interface Atom<T> {
+    from<A extends Atom<any>[]>(...a: A): ComputeStrategy<T, A>
   }
 }
 

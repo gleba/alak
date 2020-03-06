@@ -11,10 +11,10 @@ module.exports = {
     API: [
       //'start',
       'api/index',
+      'api/atom',
       'api/facade',
-      'api/core',
-      'api/facade.proxyatom',
-      'api/facade.aconstant',
+      //'api/facade.proxyatom',
+      //'api/facade.aconstant',
     ],
 
     Extensions: [

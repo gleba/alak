@@ -16,12 +16,12 @@
 
 |  Interface | Description |
 |  --- | --- |
-|  [AConstant](./facade.aconstant.md) | Конструктор атома |
-|  [ProxyAtom](./facade.proxyatom.md) | Контейнер прокси-атома |
+|  [AConstructor](./facade.aconstant.md) | Конструктор атома |
+|  [Atom](./facade.atom.md) | Экземпляр атома |
 
 ## Variables
 
 |  Variable | Description |
 |  --- | --- |
-|  [A](./facade.a.md) | [AConstant](./facade.aconstant.md) |
+|  [A](./facade.a.md) | [AConstructor](./facade.aconstant.md) |
 

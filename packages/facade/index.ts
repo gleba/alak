@@ -1,14 +1,14 @@
 /**
  * Корневой модуль библиотеки.
  * @remarks
- * Сборка всех частей библиотеки в {@link AConstant| A} константе.
+ * Сборка всех частей библиотеки в {@link AConstructor| A} константе.
  *
  * Импорт модуля устанавливает все модули-расширения библиотеки.
  * @public
  * @packageDocumentation
  */
 
-import { AC, AtomCreator, installAtomExtension, MaybeAny, Atom } from '../atom/index'
+import { AC, AtomCoreConstructor, installAtomExtension, MaybeAny, Atom } from '../atom/index'
 import { ComputeStrategicAtom, from, installComputedExtension } from '../ext-computed/index'
 import { alive } from '../atom/utils'
 import { installMatchingExtension } from '../ext-matching/index'
@@ -21,9 +21,9 @@ installMatchingExtension()
 // declare module 'alak/core' {
 //   // @ts-ignore
 //   import { ComputeStrategy } from 'alak/ext-computed'
-//   interface ProxyAtom<T> {
-//     match(...pattern: any[]): ProxyAtom<T>
-//     from<A extends ProxyAtom<any>[]>(...a: A): ComputeStrategy<T, A>
+//   interface Atom<T> {
+//     match(...pattern: any[]): Atom<T>
+//     from<A extends Atom<any>[]>(...a: A): ComputeStrategy<T, A>
 //   }
 // }
 // installExtension({
@@ -33,13 +33,13 @@ installMatchingExtension()
 // })
 /** Конструктор атома
  * @remarks
- * Функция-константа, расширяет {@link core#AtomCreator}
+ * Функция-константа, расширяет {@link atom#AtomCreator}
  * @example
  * ```javascript
  * const atom = A() // сокращённая запись A.proxy()
  * ```
  * */
-export interface AConstant<D> extends AtomCreator {
+export interface AConstructor<D> extends AtomCoreConstructor {
   <T>(value?: T): Atom<MaybeAny<T>>
 
   /**
@@ -91,7 +91,7 @@ export interface AConstant<D> extends AtomCreator {
    */
   from<IN extends Atom<any>[]>(...atoms: IN): ComputeStrategicAtom<IN>
 }
-/**{@link AConstant}*/
+/**{@link AConstructor}*/
 export const A = (Object.assign(AC, {
   useOnceGet(getterFun) {
     return A().useOnceGet(getterFun)
@@ -113,7 +113,7 @@ export const A = (Object.assign(AC, {
     alive(v) && a(v)
     return  a
   }
-}) as any) as AConstant<any>
+}) as any) as AConstructor<any>
 
 export default A
 

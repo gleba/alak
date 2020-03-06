@@ -12,7 +12,7 @@
     "@docusaurus/core": "^2.0.0-alpha.43",
     "@docusaurus/preset-classic": "^2.0.0-alpha.43",
     "@docusaurus/theme-live-codeblock": "^2.0.0-alpha.39",
-    "alak": "^2.0.1-next.6",
+    "alak": "^2.0.1-next.8",
     "classnames": "^2.2.6",
     "codemirror": "^5.52.0",
     "monaco-editor": "^0.20.0",

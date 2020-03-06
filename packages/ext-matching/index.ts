@@ -11,8 +11,8 @@ import { installAtomExtension } from '../atom/create'
 
 // @ts-ignore
 declare module 'alak/core' {
-  interface ProxyAtom<T> {
-    match(...pattern: any[]): ProxyAtom<T>
+  interface Atom<T> {
+    match(...pattern: any[]): Atom<T>
   }
 }
 

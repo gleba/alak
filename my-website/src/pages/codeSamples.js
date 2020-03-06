@@ -22,7 +22,7 @@ a('Hello World')
     code: `// В атом можно ложить функцию
 const asyncGetter = () => {
   trace('call getterFn')
-  return new Promise(fin => setTimeout(() => fin('hello world'), 2500))
+  return new Promise(fin => setTimeout(() => fin('hello world'), 500))
 }
 const a = A.useGetter(asyncGetter) //создание атома с функцией-добычи значения
 trace("a is:", a()) // инициализировать получение значения
@@ -49,7 +49,7 @@ trace(atomAB.value)`,
   },
   {
     id: 3,
-    title: 'Матчинг',
+    title: 'Совпадения',
     code: `const a = A(1)
 a.match(
   2, () => trace("два"),

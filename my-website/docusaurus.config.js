@@ -14,46 +14,46 @@ module.exports = {
         src: 'img/logo.svg',
       },
       links: [
-        { to: 'docs/start', label: 'Docs', position: 'left' },
-        { to: 'docs/api/facade', label: 'API', position: 'left' },
-        { to: 'blog', label: 'Blog', position: 'left' },
-        {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
-          position: 'right',
-        },
+        //{ to: 'docs/start', label: 'Docs', position: 'left' },
+        { to: 'docs/api/index', label: 'API', position: 'left' },
+        //{ to: 'blog', label: 'Blog', position: 'left' },
+        //{
+        //  href: 'https://github.com/facebook/docusaurus',
+        //  label: 'GitHub',
+        //  position: 'right',
+        //},
       ],
     },
 
     footer: {
       style: 'dark',
       links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Style Guide',
-              to: 'docs/doc1',
-            },
-            {
-              label: 'Second Doc',
-              to: 'docs/doc2',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-          ],
-        },
+        //{
+        //  title: 'Docs',
+        //  items: [
+        //    {
+        //      label: 'Style Guide',
+        //      to: 'docs/doc1',
+        //    },
+        //    {
+        //      label: 'Second Doc',
+        //      to: 'docs/doc2',
+        //    },
+        //  ],
+        //},
+        //{
+        //  title: 'Community',
+        //  items: [
+        //    {
+        //      label: 'Stack Overflow',
+        //      href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+        //    },
+        //    {
+        //      label: 'Discord',
+        //      href: 'https://discordapp.com/invite/docusaurus',
+        //    },
+        //  ],
+        //},
         {
           title: 'Social',
           items: [
@@ -63,11 +63,11 @@ module.exports = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/facebook/glebyp',
             },
             {
               label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              href: 'https://twitter.com/glebyp',
             },
           ],
         },
