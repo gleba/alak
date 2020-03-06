@@ -40,13 +40,14 @@ const packUmd = (packName, outName) =>
     ),
   )
 
-async function lib(){
+export async function lib(){
+  info('make library...')
   await tsc()
   await packUmd('umd', 'alak')
   await packUmd('umd', 'alak.core')
-  info('done')
+  info('library created')
 }
-lib()
+
 // rollup(rolupConfing("facade", "alak"))
 // executeCommand(`node ${path.resolve('node_modules/jest/bin/jest')}`, path.resolve('.'))
 

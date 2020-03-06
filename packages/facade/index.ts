@@ -57,14 +57,14 @@ export interface AConstant<D> extends AtomCreator {
    * Сокращённая запись `A().useWrapper(wrapperFun)`
    * @param wrapperFun - функция-обёртка
    */
-  wrap<T>(wrapperFun: (v:D) => T): Atom<MaybeAny<T>>
+  useWrapper<T>(wrapperFun: (v:D) => T): Atom<MaybeAny<T>>
   /**
    * Создать атом c функцией добытчика {@link Atom.useGetter}.
    * @remarks
    * Сокращённая запись `A().useGetter(fun)`
    * @param getterFn - функция-добытчик
    */
-  getter<T>(getterFn: () => T): Atom<T>
+  useGetter<T>(getterFn: () => T): Atom<T>
 
   /**
    * Создать атом c функцией добытчика {@link Atom.useGetter}.
@@ -72,7 +72,7 @@ export interface AConstant<D> extends AtomCreator {
    * Сокращённая запись `A().useOnceGet(fun)`
    * @param getterFn - функция-добытчик
    */
-  getOnce<D>(getterFn: () => D): Atom<D>
+  useOnceGet<D>(getterFn: () => D): Atom<D>
 
   /**
    * Создать атом из нескольких других атомов и стратегии вычисления.
@@ -93,15 +93,15 @@ export interface AConstant<D> extends AtomCreator {
 }
 /**{@link AConstant}*/
 export const A = (Object.assign(AC, {
-  getOnce(getterFun) {
+  useOnceGet(getterFun) {
     return A().useOnceGet(getterFun)
   },
-  getter(getterFun) {
+  useGetter(getterFun) {
     const a = A()
     a.useGetter(getterFun)
     return a
   },
-  wrap(wrapperFun) {
+  useWrapper(wrapperFun) {
     return A().useWrapper(wrapperFun)
   },
   from(...atoms){

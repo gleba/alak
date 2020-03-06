@@ -2,9 +2,9 @@ import { executeCommand, info, rm } from './helpers'
 import path from 'path'
 import { readFileSync, writeFileSync } from 'fs'
 
-export function clearJs() {
+export function clearLib() {
   info('clear js...')
-  rm('core')
+  rm('atom')
   rm('facade')
   rm('ext-matching')
   rm('ext-computed')

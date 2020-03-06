@@ -1,5 +1,5 @@
 {
   "watch": ["scripts"],
   "ext": "ts, js",
-  "exec": "node --expose-gc build"
+  "exec": "node --expose-gc run"
 }

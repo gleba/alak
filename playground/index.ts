@@ -16,16 +16,30 @@ import { installAtomDebuggerTool } from '../packages/debug'
 // installComputedExtension()
 // installMatchingExtension()
 // //
-// declare module '../packages/core' {
-//   interface Atom<T> {
-//     match(...pattern: any[]): Atom<T>
-//     from<A extends Atom<any>[]>(...a: A): ComputeStrategy<T, A>
-//   }
-// }
+declare module '../packages/facade' {
+  interface Atom<T> {
+    match(...pattern: any[]): Atom<T>
+    from<A extends Atom<any>[]>(...a: A): ComputeStrategy<T, A>
+  }
+}
 
-const a = A.id("statr",10)
-console.log(a['match'])
+// const a = A.id("statr",10)
+// console.log(a['match'])
+// console.log("?")
 
+const asyncHello = () => new Promise(fin => setTimeout(() => fin('hello'), 2500))
+const asyncWorld = () => new Promise(fin => setTimeout(() => fin('word'), 500))
+
+const atomA = A.id('a').useGetter(asyncHello)
+const atomB = A.id('b').useGetter(asyncWorld)
+const atomAB = A.id('c')
+  .from(atomA, atomB)
+  .strong((valueA, valueB) => {
+    console.log("aa")
+    return `${valueA} ${valueB}`
+  })
+
+atomAB()
 // // console.log(a)
 // // // console.log(a.id)
 // // //

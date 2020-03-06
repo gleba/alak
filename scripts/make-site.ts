@@ -11,7 +11,7 @@ import * as path from 'path'
 import { exec, execSync, fork } from 'child_process'
 import { mkdirSync, readdirSync, readFileSync, readSync, renameSync, rmdirSync, unlinkSync, writeFileSync } from 'fs'
 import { info, log0, rm, prepare, executeCommand } from './helpers'
-import { tsc } from './make-lib'
+import { tsc } from './tsc'
 const chalk = require('chalk')
 const { log } = console
 
@@ -49,6 +49,6 @@ async function make() {
 
   })
 
-  info('documentation ready?')
+  info('documentation ready')
 }
 make()

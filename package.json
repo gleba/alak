@@ -1,11 +1,11 @@
 {
   "name": "alak",
-  "version": "2.0.1-next.0",
-  "description": "Alak - Reactive Atom",
+  "version": "2.0.1-next.6",
+  "description": "Alak Reactive Atom",
   "main": "./facade/index.js",
   "typings": "./facade/index.d.ts",
   "files": [
-    "/core",
+    "/atom",
     "/facade",
     "/ext-computed",
     "/ext-matching",

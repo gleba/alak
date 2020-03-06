@@ -1,11 +1,6 @@
+const a = A()
 
 
-
-
-
-//const h = A.id("h-atom").getter(asyncHello)
-//trace(h())
-//await h()
 
 export const codeSamples = [
   {
@@ -29,7 +24,7 @@ const asyncGetter = () => {
   trace('call getterFn')
   return new Promise(fin => setTimeout(() => fin('hello world'), 2500))
 }
-const a = A.getter(asyncGetter) //создание атома с функцией-добычи значения
+const a = A.useGetter(asyncGetter) //создание атома с функцией-добычи значения
 trace("a is:", a()) // инициализировать получение значения
 a() // пока значение получается, функция геттер-повторно не вызовится
 a().then(v => trace("then:",v))
@@ -38,23 +33,30 @@ trace(a.value)`,
   },
   {
     title: 'Комбинации',
-    code: `
-const asyncHello = () => new Promise(fin => setTimeout(() => fin('hello'), 2500))
-const asyncWorld = () => new Promise(fin => setTimeout(() => fin('word'), 500))
-    
-const atomA = A.id('a').getter(asyncHello)
-const atomB = A.id('b').getter(asyncWorld)
+    code: `const asyncHello = () => new Promise(fin => setTimeout(() => fin('hello'), 200))
+const asyncWorld = () => new Promise(fin => setTimeout(() => fin('word'), 500))    
+const atomA = A.id('a').useGetter(asyncHello)
+const atomB = A.id('b').useGetter(asyncWorld)
 const atomAB = A.id('c')
-  .from(atomA, atomB)
-  .some((valueA, valueB) => {
+  .from(atomA, atomB) 
+  .strong((valueA, valueB) => {  
     trace("дожидаемся заполнения атомов a и b")    
 `+"    return `${valueA} ${valueB}`"+`
   })
-`,
+trace(atomAB())
+await atomAB()
+trace(atomAB.value)`,
   },
   {
     id: 3,
     title: 'Матчинг',
-    code: `const a = A()`,
+    code: `const a = A(1)
+a.match(
+  2, () => trace("два"),
+  Array.isArray, v => trace("массив:", v),
+  v => trace("иное:", v)
+)
+a(2)
+a(["."])`,
   },
 ]
