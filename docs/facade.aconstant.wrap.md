@@ -4,7 +4,7 @@
 
 ## AConstant.wrap() method
 
-Создать атом c функцией обёртки [ProxyAtom.useWrapper()](./facade.proxyatom.usewrapper.md)<!-- -->.
+Создать атом c функцией обёртки [ProxyAtom.setWrapper()](./facade.proxyatom.setwrapper.md)<!-- -->.
 
 <b>Signature:</b>
 
@@ -24,5 +24,5 @@ wrap<T>(wrapperFun: (v: D) => T): ProxyAtom<MaybeAny<T>>;
 
 ## Remarks
 
-Сокращённая запись `A().useWrapper(wrapperFun)`
+Сокращённая запись `A().setWrapper(wrapperFun)`
 

@@ -19,19 +19,22 @@ declare module '../packages/core' {
 }
 let a = A()
 
+
 a.match(
   3, v => console.log("is 3"),
   Array.isArray, v=> console.log("is array", v),
   _ => console.log("мимо")
 )
 
+console.log(a.value)
+
+a.setStateless()
 a(1)
 a(3)
 a('8')
 a([0])
+console.log(a.value)
 
-
-console.log(a.match)
 
 
 // console.log(a.children)

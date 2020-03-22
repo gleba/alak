@@ -24,6 +24,7 @@ export declare type Atom = {
     flowName: string;
     haveFrom: boolean;
     _isAsync: boolean;
+    _isStateless: boolean;
     _isAwaiting: boolean | any;
     (...a: any[]): void;
 };

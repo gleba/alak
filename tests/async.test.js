@@ -12,7 +12,7 @@ function asyncFn() {
 
 test('async getter', async () => {
   let a = A(startValue)
-  a.useGetter(asyncFn)
+  a.setGetter(asyncFn)
   expect(a.isComposite).toBeTruthy()
   expect(a.isAsync).toBeFalsy()
   a()
@@ -25,7 +25,7 @@ test('async getter', async () => {
 
 test('async onAwait', async () => {
   let a = A(startValue)
-  a.useGetter(asyncFn)
+  a.setGetter(asyncFn)
   let isWait = true
   a.onAwait(isAwaiting=>{
     expect(isAwaiting).toBe(isWait)

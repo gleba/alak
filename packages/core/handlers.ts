@@ -34,6 +34,9 @@ export const properties: FlowHandlers = {
   isAwaiting() {
     return !!this._isAwaiting
   },
+  isStateless() {
+    return !!this._isStateless
+  }
 }
 
 export const objectHandlers: FlowHandlers = {
@@ -127,6 +130,15 @@ export const allHandlers: FlowHandlers = {
     this.flowName = name
     return this.proxy
   },
+  setStateless(v) {
+    if (v == undefined)
+      this._isStateless = true
+    else
+      this._isStateless = v
+    if (this._isStateless)
+      this.value = []
+    return this.proxy
+  },
   // apply(context, v) {
   //   this.bind(context)
   //   setAtomValue(this, v[0])
@@ -152,12 +164,12 @@ export const allHandlers: FlowHandlers = {
   //   removeStateEventListener(this, stateEvent, fn)
   //   return this.proxy
   // },
-  useGetter(getterFunction, isAsync) {
+  setGetter(getterFunction, isAsync) {
     this.getterFn = getterFunction
     this._isAsync = isAsync
     return this.proxy
   },
-  useOnceGet(getterFunction, isAsync) {
+  setOnceGet(getterFunction, isAsync) {
     this.getterFn = ()=> {
       delete this.getterFn
       delete this._isAsync
@@ -166,7 +178,7 @@ export const allHandlers: FlowHandlers = {
     this._isAsync = isAsync
     return this.proxy
   },
-  useWrapper(wrapperFunction, isAsync) {
+  setWrapper(wrapperFunction, isAsync) {
     this.wrapperFn = wrapperFunction
     this._isAsync = isAsync
     return this.proxy

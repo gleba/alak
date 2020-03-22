@@ -4,7 +4,7 @@
 
 ## AConstant.getter() method
 
-Создать атом c функцией добытчика [ProxyAtom.useGetter()](./facade.proxyatom.usegetter.md)<!-- -->.
+Создать атом c функцией добытчика [ProxyAtom.setGetter()](./facade.proxyatom.setgetter.md)<!-- -->.
 
 <b>Signature:</b>
 
@@ -24,5 +24,5 @@ getter<T>(getterFn: () => T): ProxyAtom<T>;
 
 ## Remarks
 
-Сокращённая запись `A().useGetter(fun)`
+Сокращённая запись `A().setGetter(fun)`
 

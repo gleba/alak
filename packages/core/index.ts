@@ -67,6 +67,7 @@ export type Atom = {
   flowName: string
   haveFrom: boolean
   _isAsync: boolean
+  _isStateless: boolean
   _isAwaiting: boolean | any
   (...a: any[]): void
 }
@@ -168,11 +169,15 @@ export interface ProxyAtom<T> {
   // off: FlowStateListner
 
   /** check 'from' or 'warp' function are async*/
-  /** Является ли уставленный добытчик {@link ProxyAtom.useGetter} асинхронным */
+  /** Является ли уставленный добытчик {@link ProxyAtom.setGetter} асинхронным */
   readonly isAsync: Boolean
   /** Находится ли атом в процессе получения значения от асинхронного добытчика
-   * {@link ProxyAtom.useGetter}*/
+   * {@link ProxyAtom.setGetter}*/
   readonly isAwaiting: Boolean
+
+  /** Находится ли атом в процессе получения значения от асинхронного добытчика
+   * {@link ProxyAtom.setGetter}*/
+  readonly isStateless: Boolean
 
   /** Добавить функцию-получатель обновлений значения контейнера
    * и передать текущее значение контейнера, если оно есть
@@ -230,7 +235,7 @@ export interface ProxyAtom<T> {
    * @returns положительно при соответствии заданного значения значению контейнера*/
   is(compareValue: T): boolean
 
-  /** Добавить слушатель изменения асинхронного состояния функции добычи значения {@link ProxyAtom.useGetter}
+  /** Добавить слушатель изменения асинхронного состояния функции добычи значения {@link ProxyAtom.setGetter}
    * @param listener - функция-слушатель
    * @returns {@link ProxyAtom}*/
   onAwait(listener: (isAwaiting: boolean) => void): ProxyAtom<T>
@@ -263,6 +268,7 @@ export interface ProxyAtom<T> {
    * @returns {@link ProxyAtom} */
   setName(name: string): ProxyAtom<T>
 
+
   /** Добавить мета-данные
    * @param metaName - название-ключ мета-данных
    * @param value - необязательное значение мета-данных
@@ -285,12 +291,19 @@ export interface ProxyAtom<T> {
    * @param getter - функция-добытчик
    * @param isAsync - установить значение {@link ProxyAtom.isAsync}
    * @returns {@link ProxyAtom} */
-  useGetter(getter: () => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
+  setGetter(getter: () => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
   /** Использовать функцию-добытчик только один раз
    * @param getter - функция-добытчик
    * @param isAsync - установить значение {@link ProxyAtom.isAsync}
    * @returns {@link ProxyAtom} */
-  useOnceGet(getter: () => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
+  setOnceGet(getter: () => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
+
+  /**
+   * @param Сделать конетейнер всегда пустым.
+   * Значение переданное в атом, доставится в функции-получатели минуя контейнер.
+   * @param bool? - по умолчанию `true`
+   * @returns {@link ProxyAtom} */
+  setStateless(bool?:boolean): ProxyAtom<T>
 
   /** Использовать функцию-обёртку
    * Каждое новое обновление значение контейнера атома,
@@ -298,7 +311,7 @@ export interface ProxyAtom<T> {
    * @param wrapper - функция-обёртка
    * @param isAsync - установить значение returns {@link ProxyAtom.isAsync}
    * @returns {@link ProxyAtom} */
-  useWrapper(wrapper: (newValue: T, prevValue: T) => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
+  setWrapper(wrapper: (newValue: T, prevValue: T) => T | Promise<T>, isAsync?:boolean): ProxyAtom<T>
 
   /** Применить функцию к значению в контейнере
    * @param fun - функция принимающая текущее значение и возвращающей

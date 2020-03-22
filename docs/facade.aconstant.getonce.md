@@ -4,7 +4,7 @@
 
 ## AConstant.getOnce() method
 
-Создать атом c функцией добытчика [ProxyAtom.useGetter()](./facade.proxyatom.usegetter.md)<!-- -->.
+Создать атом c функцией добытчика [ProxyAtom.setGetter()](./facade.proxyatom.setgetter.md)<!-- -->.
 
 <b>Signature:</b>
 
@@ -24,5 +24,5 @@ getOnce<D>(getterFn: () => D): ProxyAtom<D>;
 
 ## Remarks
 
-Сокращённая запись `A().useOnceGet(fun)`
+Сокращённая запись `A().setOnceGet(fun)`
 

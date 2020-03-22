@@ -4,7 +4,7 @@
 
 ## ProxyAtom.isAwaiting property
 
-Находится ли атом в процессе получения значения от асинхронного добытчика [ProxyAtom.useGetter()](./core.proxyatom.usegetter.md)
+Находится ли атом в процессе получения значения от асинхронного добытчика [ProxyAtom.setGetter()](./core.proxyatom.setgetter.md)
 
 <b>Signature:</b>
 

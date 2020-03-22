@@ -4,7 +4,7 @@
 
 ## ProxyAtom.onAwait() method
 
-Добавить слушатель изменения асинхронного состояния функции добычи значения [ProxyAtom.useGetter()](./core.proxyatom.usegetter.md)
+Добавить слушатель изменения асинхронного состояния функции добычи значения [ProxyAtom.setGetter()](./core.proxyatom.setgetter.md)
 
 <b>Signature:</b>
 

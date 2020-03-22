@@ -14,7 +14,8 @@ export function setAtomValue(atom: Atom, ...a) {
       if (wrappedValue.then) return setAsyncValue(atom, wrappedValue)
       finalValue = wrappedValue
     }
-    atom.value = [finalValue]
+    if (!atom._isStateless)
+      atom.value = [finalValue]
     notifyChildes(atom)
     return finalValue
   }
@@ -29,7 +30,8 @@ async function setAsyncValue(atom: Atom, promise: PromiseLike<any>) {
   atom._isAwaiting = promise
   atom._isAsync = true
   let v = await promise
-  atom.value = [v]
+  if (!atom._isStateless)
+    atom.value = [v]
   atom._isAwaiting = false
   notifyStateListeners(atom, FState.AWAIT, false)
   // if (dev.debug) dev.updatingFinished(atom.uid, v)

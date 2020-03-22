@@ -87,6 +87,15 @@ test('fmap', () => {
   expect(a()).toBe(5)
 })
 
+test('stateless', async () => {
+  const a = A.stateless()
+  a(startValue)
+  expect(a()).toBe(undefined)
+  a.setStateless(false)
+  a(finalValue)
+  expect(a()).toBe(finalValue)
+})
+
 test('wrap', async () => {
   const a = A.wrap(v => v * v)
   a(2)

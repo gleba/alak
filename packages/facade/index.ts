@@ -50,24 +50,32 @@ export interface AConstant<D> extends AtomCreator {
   id<T>(id: string | number, startValue?:T): ProxyAtom<MaybeAny<T>>
 
   /**
-   * Создать атом c функцией обёртки {@link ProxyAtom.useWrapper}.
+   * Создать атом c функцией обёртки {@link ProxyAtom.setWrapper}.
    * @remarks
-   * Сокращённая запись `A().useWrapper(wrapperFun)`
+   * Сокращённая запись `A().setWrapper(wrapperFun)`
    * @param wrapperFun - функция-обёртка
    */
   wrap<T>(wrapperFun: (v:D) => T): ProxyAtom<MaybeAny<T>>
+
   /**
-   * Создать атом c функцией добытчика {@link ProxyAtom.useGetter}.
+   * Создать атом, с контейнерем не запоминающием значение.
+   * {@link ProxyAtom.setStateless}.
    * @remarks
-   * Сокращённая запись `A().useGetter(fun)`
+   * Сокращённая запись `A().setStateless()`
+   */
+  stateless(bool?:boolean): ProxyAtom<MaybeAny<D>>
+  /**
+   * Создать атом c функцией добытчика {@link ProxyAtom.setGetter}.
+   * @remarks
+   * Сокращённая запись `A().setGetter(fun)`
    * @param getterFn - функция-добытчик
    */
   getter<T>(getterFn: () => T): ProxyAtom<T>
 
   /**
-   * Создать атом c функцией добытчика {@link ProxyAtom.useGetter}.
+   * Создать атом c функцией добытчика {@link ProxyAtom.setGetter}.
    * @remarks
-   * Сокращённая запись `A().useOnceGet(fun)`
+   * Сокращённая запись `A().setOnceGet(fun)`
    * @param getterFn - функция-добытчик
    */
   getOnce<D>(getterFn: () => D): ProxyAtom<D>
@@ -92,15 +100,18 @@ export interface AConstant<D> extends AtomCreator {
 /**{@link AConstant}*/
 export const A = (Object.assign(AC, {
   getOnce(getterFun) {
-    return A().useOnceGet(getterFun)
+    return A().setOnceGet(getterFun)
   },
   getter(getterFun) {
     const a = A()
-    a.useGetter(getterFun)
+    a.setGetter(getterFun)
     return a
   },
   wrap(wrapperFun) {
-    return A().useWrapper(wrapperFun)
+    return A().setWrapper(wrapperFun)
+  },
+  stateless() {
+    return A().setStateless()
   },
   from(...atoms){
     const a = A()

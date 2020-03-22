@@ -4,7 +4,7 @@
 
 ## ProxyAtom.isAsync property
 
-Является ли уставленный добытчик [ProxyAtom.useGetter()](./core.proxyatom.usegetter.md) асинхронным
+Является ли уставленный добытчик [ProxyAtom.setGetter()](./core.proxyatom.setgetter.md) асинхронным
 
 <b>Signature:</b>
 
